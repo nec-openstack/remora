@@ -29,7 +29,7 @@ ExecStart=/usr/bin/docker run --net=host --rm --name %n \
     /usr/local/bin/etcd \
     --addr=${NODE_IP}:2379 \
     --bind-addr=0.0.0.0:2379 \
-    --data-dir=/var/etcd/data \
+    --data-dir=/var/etcd/data
 
 [Install]
 WantedBy=multi-user.target

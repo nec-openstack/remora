@@ -14,4 +14,4 @@ kube-ssh "${TARGET}" "mkdir -p ${KUBE_TEMP}"
 
 kube-scp ${TARGET} "${ROOT}/etcd/*" "${KUBE_TEMP}"
 
-kube-ssh "${TARGET}" "sudo bash ${KUBE_TEMP}/configure.sh"
+kube-ssh "${TARGET}" "sudo bash ${KUBE_TEMP}/configure.sh ${TARGET_IP}"
