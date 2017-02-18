@@ -5,6 +5,9 @@ NODE_IP=$1
 set -eu
 export LC_ALL=C
 
+readonly ROOT=$(dirname "${BASH_SOURCE}")
+source ${ROOT}/env.sh
+
 if [ -z "$NODE_IP" ]; then
     # FIXME(yuanying): Set KUBE_NODE_IP correctly
     NODE_IP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)

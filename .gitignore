@@ -56,3 +56,6 @@ ChangeLog
 
 # Files created by releasenotes build
 releasenotes/build
+
+# Project
+tools/env.sh

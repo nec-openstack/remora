@@ -27,7 +27,7 @@ Requires=docker.service
 [Service]
 TimeoutStartSec=0
 Restart=always
-ExecStartPre=/usr/bin/mkdir -p /etc/kubernetes/manifests
+ExecReload=/usr/bin/docker restart %n
 ExecStartPre=-/usr/bin/docker stop %n
 ExecStartPre=-/usr/bin/docker rm %n
 ExecStartPre=/usr/bin/docker pull ${HYPERKUBE_IMAGE_REPO}:${K8S_VER}
