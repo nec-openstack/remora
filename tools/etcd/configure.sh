@@ -5,7 +5,7 @@ NODE_IP=$1
 set -eu
 export LC_ALL=C
 
-readonly ROOT=$(dirname "${BASH_SOURCE}")
+ROOT=$(dirname "${BASH_SOURCE}")
 source ${ROOT}/env.sh
 
 if [ -z "$NODE_IP" ]; then
@@ -23,15 +23,15 @@ Requires=docker.service
 [Service]
 TimeoutStartSec=0
 Restart=always
-ExecStartPre=-/usr/bin/docker stop %n
-ExecStartPre=-/usr/bin/docker rm %n
-ExecStartPre=/usr/bin/docker pull gcr.io/google_containers/etcd:2.2.5
-ExecStart=/usr/bin/docker run --net=host --rm --name %n \
+ExecStartPre=-/usr/bin/docker stop etcd
+ExecStartPre=-/usr/bin/docker rm etcd
+ExecStartPre=/usr/bin/docker pull gcr.io/google_containers/etcd:3.0.14
+ExecStart=/usr/bin/docker run --net=host --rm --name etcd \
     --volume=/var/etcd/data:/var/etcd/data:rw \
-    gcr.io/google_containers/etcd:2.2.5 \
+    gcr.io/google_containers/etcd:3.0.14 \
     /usr/local/bin/etcd \
-    --addr=${NODE_IP}:2379 \
-    --bind-addr=0.0.0.0:2379 \
+    --listen-client-urls=http://0.0.0.0:2379 \
+    --advertise-client-urls=http://10.0.0.6:2379 \
     --data-dir=/var/etcd/data
 
 [Install]
@@ -40,3 +40,4 @@ EOF
 
 systemctl daemon-reload
 systemctl enable etcd
+systemctl restart etcd

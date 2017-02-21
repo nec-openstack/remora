@@ -15,7 +15,7 @@ function boot_servers {
         nova boot --key-name default \
             --image ubuntu-docker \
             --flavor=k2.master \
-            --nic net-name=private \
+            --nic net-name=private,v4-fixed-ip="10.0.0.6" \
             etcd
     fi
 
@@ -23,7 +23,7 @@ function boot_servers {
         nova boot --key-name default \
             --image ubuntu-docker \
             --flavor=k2.master \
-            --nic net-name=private \
+            --nic net-name=private,v4-fixed-ip="10.0.0.3" \
             master
     fi
 
@@ -31,7 +31,7 @@ function boot_servers {
         nova boot --key-name default \
             --image ubuntu-docker \
             --flavor=k2.worker \
-            --nic net-name=private \
+            --nic net-name=private,v4-fixed-ip="10.0.0.5" \
             worker01
     fi
 
@@ -39,10 +39,26 @@ function boot_servers {
         nova boot --key-name default \
             --image ubuntu-docker \
             --flavor=k2.worker \
-            --nic net-name=private \
+            --nic net-name=private,v4-fixed-ip="10.0.0.15" \
             worker02
     fi
 }
 
+function configure_security_group {
+  if ! neutron security-group-rule-list | grep -q "1-65535/tcp"; then
+    neutron security-group-rule-create \
+      --direction ingress \
+      --protocol icmp \
+      default
+    neutron security-group-rule-create \
+      --direction ingress \
+      --protocol tcp \
+      --port_range_min 1 \
+      --port_range_max 65535 \
+      default
+    fi
+}
+
 create_flavors
+configure_security_group
 boot_servers

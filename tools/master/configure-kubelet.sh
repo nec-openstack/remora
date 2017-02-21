@@ -27,9 +27,9 @@ Requires=docker.service
 [Service]
 TimeoutStartSec=0
 Restart=always
-ExecReload=/usr/bin/docker restart %n
-ExecStartPre=-/usr/bin/docker stop %n
-ExecStartPre=-/usr/bin/docker rm %n
+ExecReload=/usr/bin/docker restart kubelet
+ExecStartPre=-/usr/bin/docker stop kubelet
+ExecStartPre=-/usr/bin/docker rm kubelet
 ExecStartPre=/usr/bin/docker pull ${HYPERKUBE_IMAGE_REPO}:${K8S_VER}
 ExecStart=/usr/bin/docker run \
     --name=kubelet \
@@ -55,8 +55,9 @@ ExecStart=/usr/bin/docker run \
         --pod-cidr=10.253.0.0/24 \
         --non-masquerade-cidr=${POD_NETWORK} \
         --cluster-dns=${DNS_SERVER_IP} \
-        --cluster-domain=cluster.local
-
+        --cluster-domain=cluster.local \
+        --cloud-provider=openstack \
+        --cloud-config=/etc/kubernetes/openstack.conf
 [Install]
 WantedBy=multi-user.target
 EOF

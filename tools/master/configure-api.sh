@@ -15,8 +15,6 @@ export LC_ALL=C
 # export K8S_SERVICE_IP=10.254.0.1
 # export DNS_SERVER_IP=10.254.0.10
 
-# TODO(yuanying): Set --cloud-provider=openstack --cloud-config=/etc/kubernetes/openstack.conf
-
 export KUBE_API_TEMPLATE=/etc/kubernetes/manifests/kube-apiserver.yaml
 mkdir -p $(dirname $KUBE_API_TEMPLATE)
 cat << EOF > $KUBE_API_TEMPLATE
@@ -47,6 +45,8 @@ spec:
     - --service-account-key-file=${API_KEY_PATH}
     - --runtime-config=extensions/v1beta1/networkpolicies=true
     - --anonymous-auth=false
+    - --cloud-provider=openstack
+    - --cloud-config=/etc/kubernetes/openstack.conf
     livenessProbe:
       httpGet:
         host: 127.0.0.1

@@ -15,7 +15,6 @@ export LC_ALL=C
 # export K8S_SERVICE_IP=10.254.0.1
 # export DNS_SERVER_IP=10.254.0.10
 
-# TODO(yuanying): Set --cloud-provider=openstack --cloud-config=/etc/kubernetes/openstack.conf
 
 KUBELET_SERVICE=/etc/systemd/system/kubelet.service
 cat << EOF > ${KUBELET_SERVICE}
@@ -27,9 +26,9 @@ Requires=docker.service
 [Service]
 TimeoutStartSec=0
 Restart=always
-ExecReload=/usr/bin/docker restart %n
-ExecStartPre=-/usr/bin/docker stop %n
-ExecStartPre=-/usr/bin/docker rm %n
+ExecReload=/usr/bin/docker restart kubelet
+ExecStartPre=-/usr/bin/docker stop kubelet
+ExecStartPre=-/usr/bin/docker rm kubelet
 ExecStartPre=/usr/bin/docker pull ${HYPERKUBE_IMAGE_REPO}:${K8S_VER}
 ExecStart=/usr/bin/docker run \
     --name=kubelet \
@@ -49,12 +48,13 @@ ExecStart=/usr/bin/docker run \
         --allow-privileged=true \
         --register-node=true \
         --network-plugin=kubenet \
-        --hairpin-mode=promiscuous-bridge \
         --hostname-override=${NODE_IP} \
         --pod-manifest-path=/etc/kubernetes/manifests \
         --non-masquerade-cidr=${POD_NETWORK} \
         --cluster-dns=${DNS_SERVER_IP} \
-        --cluster-domain=cluster.local
+        --cluster-domain=cluster.local \
+        --cloud-provider=openstack \
+        --cloud-config=/etc/kubernetes/openstack.conf
 
 [Install]
 WantedBy=multi-user.target

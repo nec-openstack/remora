@@ -3,7 +3,7 @@
 set -eu
 export LC_ALL=C
 
-readonly ROOT=$(dirname "${BASH_SOURCE}")
+ROOT=$(dirname "${BASH_SOURCE}")
 source ${ROOT}/env.sh
 
 source ${ROOT}/configure-node.sh etcd ${ETCD_ADDRESS}

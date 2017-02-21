@@ -15,7 +15,6 @@ export LC_ALL=C
 # export K8S_SERVICE_IP=10.254.0.1
 # export DNS_SERVER_IP=10.254.0.10
 
-# TODO(yuanying): Set --cloud-provider=openstack --cloud-config=/etc/kubernetes/openstack.conf
 
 CM_TEMPLATE=/etc/kubernetes/manifests/kube-controller-manager.yaml
 mkdir -p $(dirname $CM_TEMPLATE)
@@ -40,6 +39,8 @@ spec:
     - --service-account-private-key-file=${API_KEY_PATH}
     - --allocate-node-cidrs=true
     - --cluster-cidr=${POD_NETWORK}
+    - --cloud-provider=openstack
+    - --cloud-config=/etc/kubernetes/openstack.conf
     resources:
       requests:
         cpu: 200m

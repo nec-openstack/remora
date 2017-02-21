@@ -5,7 +5,7 @@ export LC_ALL=C
 
 export NODE_IP=$1
 
-readonly ROOT=$(dirname "${BASH_SOURCE}")
+ROOT=$(dirname "${BASH_SOURCE}")
 source ${ROOT}/env.sh
 
 function generate_api_key {
@@ -15,11 +15,16 @@ function generate_api_key {
     fi
 }
 
-/usr/bin/mkdir -p /etc/kubernetes/manifests
+mkdir -p /etc/kubernetes/manifests
 
 generate_api_key
+source ${ROOT}/configure-cloud.sh
 source ${ROOT}/configure-api.sh
 source ${ROOT}/configure-scheduler.sh
 source ${ROOT}/configure-proxy.sh
 source ${ROOT}/configure-cm.sh
 source ${ROOT}/configure-kubelet.sh
+
+systemctl daemon-reload
+systemctl enable kubelet
+systemctl restart kubelet
