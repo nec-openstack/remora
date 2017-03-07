@@ -4,18 +4,10 @@ set -eu
 export LC_ALL=C
 
 # export NODE_IP=$1
-# export ETCD_ADDRESS=$2
-#
-# export ETCD_ENDPOINTS=http://${ETCD_ADDRESS}:2379
-# export K8S_VER=v1.5.3
-# export HYPERKUBE_IMAGE_REPO=gcr.io/google_containers/hyperkube
-#
-# export POD_NETWORK=10.2.0.0/16
-# export SERVICE_IP_RANGE=10.254.0.0/24
-# export K8S_SERVICE_IP=10.254.0.1
-# export DNS_SERVER_IP=10.254.0.10
 
-# TODO(yuanying): Set --cloud-provider=openstack --cloud-config=/etc/kubernetes/openstack.conf
+# TODO(yuanying): Add below
+# --cloud-provider=${CLOUD_PROVIDER} \
+# --cloud-config=${CLOUD_CONFIG}
 
 KUBELET_SERVICE=/etc/systemd/system/kubelet.service
 cat << EOF > ${KUBELET_SERVICE}
@@ -27,37 +19,41 @@ Requires=docker.service
 [Service]
 TimeoutStartSec=0
 Restart=always
-ExecReload=/usr/bin/docker restart kubelet
-ExecStartPre=-/usr/bin/docker stop kubelet
-ExecStartPre=-/usr/bin/docker rm kubelet
-ExecStartPre=/usr/bin/docker pull ${HYPERKUBE_IMAGE_REPO}:${K8S_VER}
-ExecStart=/usr/bin/docker run \
+ExecReload=${DOCKER_PATH} restart kubelet
+ExecStartPre=-${DOCKER_PATH} stop kubelet
+ExecStartPre=-${DOCKER_PATH} rm kubelet
+ExecStartPre=${DOCKER_PATH} pull ${HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
+ExecStartPre=${DOCKER_PATH} run --rm -v /opt/cni/bin:/cnibindir \
+    ${HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION} \
+        /bin/cp -r /opt/cni/bin/. /cnibindir/
+ExecStart=${DOCKER_PATH} run \
     --name=kubelet \
     --volume=/:/rootfs:ro \
     --volume=/sys:/sys:ro \
     --volume=/dev:/dev \
-    --volume=/var/lib/docker/:/var/lib/docker:ro \
-    --volume=/var/lib/kubelet/:/var/lib/kubelet:rw \
+    --volume=/var/lib/docker/:/var/lib/docker:rw \
+    --volume=/var/lib/kubelet/:/var/lib/kubelet:shared \
     --volume=/var/run:/var/run:rw \
     --volume=/etc/kubernetes:/etc/kubernetes:ro \
+    --volume=/etc/cni/net.d:/etc/cni/net.d:ro \
+    --volume=/opt/cni/bin:/opt/cni/bin:ro \
     --net=host \
     --pid=host \
     --privileged=true \
-    ${HYPERKUBE_IMAGE_REPO}:${K8S_VER} \
+    --restart=on-failure:5 \
+    ${HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION} \
     /hyperkube kubelet \
-        --api-servers=http://127.0.0.1:8080 \
         --allow-privileged=true \
         --register-schedulable=false \
-        --network-plugin=kubenet \
-        --hairpin-mode=promiscuous-bridge \
         --hostname-override=${NODE_IP} \
         --pod-manifest-path=/etc/kubernetes/manifests \
-        --pod-cidr=10.253.0.0/24 \
-        --non-masquerade-cidr=${POD_NETWORK} \
-        --cluster-dns=${DNS_SERVER_IP} \
+        --network-plugin=cni \
+        --cni-conf-dir=/etc/cni/net.d \
+        --cluster-dns=${KUBE_DNS_SERVER_IP} \
         --cluster-domain=cluster.local \
-        --cloud-provider=openstack \
-        --cloud-config=/etc/kubernetes/openstack.conf
+        --kubeconfig=/etc/kubernetes/kubelet.yaml \
+        --require-kubeconfig=true
+
 [Install]
 WantedBy=multi-user.target
 EOF

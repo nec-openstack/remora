@@ -6,25 +6,29 @@ export LC_ALL=C
 export NODE_IP=$1
 
 ROOT=$(dirname "${BASH_SOURCE}")
-source ${ROOT}/env.sh
-
-function generate_api_key {
-    if [ ! -f ${API_KEY_PATH} ]; then
-        mkdir -p $(dirname ${API_KEY_PATH})
-        openssl genrsa 4096 > ${API_KEY_PATH}
-    fi
-}
+source ${ROOT}/default-env.sh
 
 mkdir -p /etc/kubernetes/manifests
 
-generate_api_key
 source ${ROOT}/configure-cloud.sh
+source ${ROOT}/configure-kubeconfig.sh
 source ${ROOT}/configure-api.sh
 source ${ROOT}/configure-scheduler.sh
-source ${ROOT}/configure-proxy.sh
 source ${ROOT}/configure-cm.sh
 source ${ROOT}/configure-kubelet.sh
+
+source ${ROOT}/configure-proxy.sh
+source ${ROOT}/configure-dns.sh
+source ${ROOT}/configure-flannel.sh
+source ${ROOT}/configure-weave.sh
+
+while ! curl -sf ${ETCD_ENDPOINT}/v2/machines; do
+    echo "Waiting for etcd.."
+    sleep 5
+done
 
 systemctl daemon-reload
 systemctl enable kubelet
 systemctl restart kubelet
+
+source ${ROOT}/configure-addons.sh

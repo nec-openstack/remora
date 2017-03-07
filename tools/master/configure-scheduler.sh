@@ -4,16 +4,6 @@ set -eu
 export LC_ALL=C
 
 # export NODE_IP=$1
-# export ETCD_ADDRESS=$2
-#
-# export ETCD_ENDPOINTS=http://${ETCD_ADDRESS}:2379
-# export K8S_VER=v1.5.3
-# export HYPERKUBE_IMAGE_REPO=gcr.io/google_containers/hyperkube
-#
-# export POD_NETWORK=10.2.0.0/16
-# export SERVICE_IP_RANGE=10.254.0.0/24
-# export K8S_SERVICE_IP=10.254.0.1
-# export DNS_SERVER_IP=10.254.0.10
 
 SCHE_TEMPLATE=/etc/kubernetes/manifests/kube-scheduler.yaml
 mkdir -p $(dirname $SCHE_TEMPLATE)
@@ -30,7 +20,7 @@ spec:
   hostNetwork: true
   containers:
   - name: kube-scheduler
-    image: ${HYPERKUBE_IMAGE_REPO}:${K8S_VER}
+    image: ${HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
     command:
     - /hyperkube
     - scheduler

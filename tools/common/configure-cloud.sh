@@ -3,9 +3,12 @@
 set -eu
 export LC_ALL=C
 
-export OPENSTACK_CONF_TEMPLATE=/etc/kubernetes/openstack.conf
-mkdir -p $(dirname $OPENSTACK_CONF_TEMPLATE)
-cat << EOF > $OPENSTACK_CONF_TEMPLATE
+CLOUD_CONFIG=""
+
+if [[ ${CLOUD_PROVIDER} == "openstack" ]]; then
+  CLOUD_CONFIG=/etc/kubernetes/openstack.conf
+  mkdir -p $(dirname $CLOUD_CONFIG)
+  cat << EOF > $CLOUD_CONFIG
 [Global]
 auth-url=$OS_AUTH_URL
 username=$OS_USERNAME
@@ -14,8 +17,9 @@ region=$OS_REGION_NAME
 tenant-name=$OS_TENANT_NAME
 domain-id=$OS_USER_DOMAIN_ID
 [LoadBalancer]
-subnet-id=$SUBNET_ID
-floating-network-id=$FLOATING_NETWORK_ID
-[Route]
-router-id=$ROUTER_ID
+subnet-id=$OS_SUBNET_ID
+floating-network-id=$OS_FLOATING_NETWORK_ID
 EOF
+fi
+
+export CLOUD_CONFIG
