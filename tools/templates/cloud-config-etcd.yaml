@@ -1,0 +1,41 @@
+#cloud-config
+# Before commit any change please validate this file @ https://coreos.com/validate/
+
+# Set hostname
+hostname: _HOSTNAME_
+
+# Set SSH Key
+ssh_authorized_keys:
+- _PUBLIC_KEY_
+
+coreos:
+  etcd2:
+    name: _HOSTNAME_
+    discovery: _DISCOVERY_URL_
+    advertise-client-urls: https://_ADDRESS_:2379
+    initial-advertise-peer-urls: https://_ADDRESS_:2380
+    listen-client-urls: https://_ADDRESS_:2379,http://127.0.0.1:2379
+    listen-peer-urls: https://_ADDRESS_:2380
+    client-cert-auth: true
+    cert-file: /etc/kubernetes/ssl/apiserver.pem
+    key-file: /etc/kubernetes/ssl/apiserver-key.pem
+    trusted-ca-file: /etc/kubernetes/ssl/ca.pem
+    ca-file: /etc/kubernetes/ssl/ca.pem
+    peer-client-cert-auth: true
+    peer-cert-file: /etc/kubernetes/ssl/apiserver.pem
+    peer-key-file: /etc/kubernetes/ssl/apiserver-key.pem
+    peer-trusted-ca-file: /etc/kubernetes/ssl/ca.pem
+    peer-ca-file: /etc/kubernetes/ssl/ca.pem
+  units:
+    - name: etcd2.service
+      command: start
+    - name: 00-_NET_DEVICE_.network
+      runtime: true
+      content: |
+        [Match]
+        Name=_NET_DEVICE_
+
+        [Network]
+        DNS=_DNS_
+        Address=_ADDRESS_/_NETWORK_RANGE_
+        Gateway=_GATEWAY_

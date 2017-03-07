@@ -1,0 +1,18 @@
+#cloud-config
+hostname: _HOSTNAME_
+
+# Set SSH Key
+ssh_authorized_keys:
+- _PUBLIC_KEY_
+
+runcmd:
+  - [ rm, -f, /etc/network/interfaces.d/_NET_DEVICE_.cfg]
+  - [ sh, -c, "echo 'auto _NET_DEVICE_' >> /etc/network/interfaces.d/_NET_DEVICE_.cfg "]
+  - [ sh, -c, "echo 'iface _NET_DEVICE_ inet static' >> /etc/network/interfaces.d/_NET_DEVICE_.cfg" ]
+  - [ sh, -c, "echo '  address _ADDRESS_' >> /etc/network/interfaces.d/_NET_DEVICE_.cfg" ]
+  - [ sh, -c, "echo '  netmask _NETMASK_' >> /etc/network/interfaces.d/_NET_DEVICE_.cfg" ]
+  - [ sh, -c, "echo '  gateway _GATEWAY_' >> /etc/network/interfaces.d/_NET_DEVICE_.cfg"]
+  - [ sh, -c, "echo '  dns-nameservers _DNS_' >> /etc/network/interfaces.d/_NET_DEVICE_.cfg"]
+  - [ ifdown, _NET_DEVICE_ ]
+  - [ ifup, _NET_DEVICE_ ]
+  - [ sh, -c, "echo '127.0.1.1  _HOSTNAME_' >> /etc/hosts"]

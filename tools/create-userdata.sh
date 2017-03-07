@@ -24,7 +24,7 @@ netmask=$(cdr2mask ${network_range})
 public_key=`cat ~/.ssh/id_rsa.pub`
 
 script_dir=`dirname $0`
-USER_DATA_TEMPLATE=$script_dir/../templates/cloud-config-${etcd_type}.yaml
+USER_DATA_TEMPLATE=$script_dir/templates/cloud-config-${etcd_type}.yaml
 
 sed "
   s|_HOSTNAME_|$host|g
