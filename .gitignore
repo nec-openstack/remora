@@ -59,3 +59,7 @@ releasenotes/build
 
 # Project
 tools/env.sh
+tools/certs/*.pem
+tools/certs/*.csr
+tools/certs/*.srl
+tools/env.sh

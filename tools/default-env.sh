@@ -15,7 +15,7 @@ export WORKERS=${WORKERS:-"192.168.1.121 192.168.1.122"}
 
 ## For certs
 
-export LOCAL_CERTS_DIR=${ROOT}/../certs
+export LOCAL_CERTS_DIR=${ROOT}/certs
 
 ## For Docker
 

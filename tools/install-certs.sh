@@ -11,6 +11,7 @@ KUBE_CERTS_REMOTE_DIR="/etc/kubernetes/ssl"
 KUBE_CERTS_TEMP_REMOTE_DIR="${KUBE_TEMP}/certs"
 
 for ADDRESS in ${MACHINES}; do
+    echo "Install certs to: ${ADDRESS}"
     TARGET="${NODE_USERNAME}@${ADDRESS}"
     kube-ssh "${TARGET}" "mkdir -p ${KUBE_TEMP}/certs"
     kube-ssh "${TARGET}" "sudo mkdir -p ${KUBE_CERTS_REMOTE_DIR}"
