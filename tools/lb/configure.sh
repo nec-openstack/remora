@@ -29,7 +29,7 @@ frontend kube_api
 backend kube_api_backend
 EOF
     local size=1
-    for address in "${MASTERS}"; do
+    for address in ${MASTERS}; do
         echo "        server api${size} ${address}:443 maxconn 2048" >> ${TEMPLATE}
         size=$((size+1))
     done
