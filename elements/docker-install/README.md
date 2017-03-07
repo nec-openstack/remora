@@ -11,6 +11,7 @@
     export ELEMENTS_PATH=${ELEMENTS_PATH}:heat-templates/hot/software-config/elements
     export ELEMENTS_PATH=${ELEMENTS_PATH}:remora/elements
 
+    export DIB_CLOUD_INIT_DATASOURCES="Ec2, NoCloud"
     export DIB_RELEASE=xenial
 
     diskimage-builder/bin/disk-image-create vm \
@@ -23,11 +24,11 @@
           heat-config-script \
           docker-install \
           pip-and-virtualenv \
-          -o ubuntu-xenial-docker.qcow2
+          -o ubuntu-xenial-docker-ec2-noclouds.qcow2
 
     glance image-create --name ubuntu-docker \
                         --os-distro ubuntu \
                         --visibility public \
                         --disk-format=qcow2 \
                         --container-format=bare \
-                        --file=ubuntu-xenial-docker.qcow2
+                        --file=ubuntu-xenial-docker-ec2-nocloud.qcow2
