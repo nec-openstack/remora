@@ -14,7 +14,7 @@ clusters:
 - name: kubernetes
   cluster:
     certificate-authority: /etc/kubernetes/ssl/ca.pem
-    server: https://${KUBERNETES_SERVICE_IP}:443
+    server: https://${KUBERNETES_SERVICE_IP}:${KUBE_PORT}
 users:
 - name: kubelet
   user:

@@ -36,7 +36,7 @@ spec:
     - --client-ca-file=/etc/kubernetes/ssl/ca.pem
     - --tls-cert-file=/etc/kubernetes/ssl/apiserver.pem
     - --tls-private-key-file=/etc/kubernetes/ssl/apiserver-key.pem
-    - --secure-port=443
+    - --secure-port=${KUBE_PORT}
     - --allow-privileged
     - --advertise-address=${NODE_IP}
     - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
@@ -50,8 +50,8 @@ spec:
       initialDelaySeconds: 15
       timeoutSeconds: 15
     ports:
-    - containerPort: 443
-      hostPort: 443
+    - containerPort: ${KUBE_PORT}
+      hostPort: ${KUBE_PORT}
       name: https
     - containerPort: 8080
       hostPort: 8080

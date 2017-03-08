@@ -24,14 +24,14 @@ defaults
         timeout connect      3000ms
         retries 3
 frontend kube_api
-        bind 0.0.0.0:443
+        bind 0.0.0.0:${KUBE_PORT}
         default_backend kube_api_backend
 backend kube_api_backend
         option ssl-hello-chk
 EOF
     local size=1
     for address in ${MASTERS}; do
-        echo "        server api${size} ${address}:443 check" >> ${TEMPLATE}
+        echo "        server api${size} ${address}:${KUBE_PORT} check" >> ${TEMPLATE}
         size=$((size+1))
     done
 
@@ -58,7 +58,7 @@ ExecStartPre=${DOCKER_PATH} pull haproxy:alpine
 
 ExecStart=${DOCKER_PATH} run --rm \
   --name haproxy \
-  -p 443:443 \
+  -p ${KUBE_PORT}:${KUBE_PORT} \
   -v /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro \
   haproxy:alpine
 
