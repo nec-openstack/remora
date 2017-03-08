@@ -45,6 +45,7 @@ export KUBE_INTERNAL_SERVICE_IP=${KUBE_INTERNAL_SERVICE_IP:-"10.254.0.1"}
 export KUBE_DNS_SERVER_IP=${KUBE_DNS_SERVER_IP:-"10.254.0.10"}
 export KUBE_CNI_PLUGIN=${KUBE_CNI_PLUGIN:-"flannel"}
 export KUBE_PORT=${KUBE_PORT:-"443"}
+export KUBE_ADMISSION_CONTROL=${KUBE_ADMISSION_CONTROL:-"NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota"}
 
 ## For cloud provider
 
