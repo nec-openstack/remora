@@ -29,3 +29,26 @@ def tar_gz_base64(dir_path):
         return base64.b64encode(f.getvalue()).decode('utf-8')
     finally:
         f.close()
+
+
+class Struct(dict):
+    """Specialized dict where you access an item like an attribute
+
+    >>> struct = Struct()
+    >>> struct['a'] = 1
+    >>> struct.b = 2
+    >>> assert struct.a == 1
+    >>> assert struct['b'] == 2
+    """
+
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(name)
+
+    def __setattr__(self, name, value):
+        try:
+            self[name] = value
+        except KeyError:
+            raise AttributeError(name)
