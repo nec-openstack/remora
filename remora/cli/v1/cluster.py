@@ -10,20 +10,22 @@
 #   WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #   License for the specific language governing permissions and limitations
 #   under the License.
-#
 
-"""Command-line interface to the Remora APIs"""
+import logging
 
-import sys
-
-from oslo_config import cfg
-
-CONF = cfg.CONF
+from osc_lib.command import command
 
 
-def main(argv=None):
-    print(CONF)
+class CreateCluster(command.Command):
+    """Create a coe cluster"""
 
+    log = logging.getLogger(__name__ + ".CreateCluster")
 
-if __name__ == "__main__":
-    sys.exit(main())
+    def get_parser(self, prog_name):
+        parser = super(CreateCluster, self).get_parser(prog_name)
+
+        return parser
+
+    def take_action(self, parsed_args):
+
+        return "aaaa"
