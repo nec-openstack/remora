@@ -11,33 +11,52 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from neutronclient.neutron import client as neutron_client
+from openstack import connection
+from openstack import profile
+from oslo_log import log as logging
 
 from remora.cluster.lb import base
 
 NEUTRON_VERSION = '2.0'
+LOG = logging.getLogger(__name__)
 
 
 class FIPPseudoLBProvider(base.BaseLBProvider):
 
     """docstring for FIPPseudoLBProvider."""
-    def __init__(self, config, env={}, parameters={}):
+    def __init__(self, env={}, params={}):
         super(FIPPseudoLBProvider, self).__init__(
-            config,
             env=env,
-            parameters=parameters,
+            params=params,
         )
-        self.neutron_client = neutron_client.Client(
-            NEUTRON_VERSION,
-            session=env.get('session', None),
-            endpoint_type=env.get('interface', 'public'),
-            region_name=env.get('region_name', None),
-            insecure=not env.get('verify', True),
-            ca_cert=env.get('ca_cert', None)
-        )
+        session = env.get('session', None)
+        interface = env.get('interface', 'public')
+        region_name = env.get('region_name', None)
+        verify = env.get('verify', True)
+        # ca_cert = env.get('ca_cert', None)
+
+        prof = profile.Profile()
+        prof.set_region("network", region_name)
+        prof.set_version("network", NEUTRON_VERSION)
+        prof.set_interface("network", interface)
+        conn = connection.Connection(authenticator=session.auth,
+                                     verify=verify,
+                                     cert=session.cert,
+                                     profile=prof)
+        LOG.debug('Connection: %s', conn)
+        LOG.debug('Network client initialized using OpenStack SDK: %s',
+                  conn.network)
+
+        self.neutron = conn.network
 
     def build(self):
-        raise NotImplementedError()
+        # TODO(yuanying): get default floating network from env and conf
+        floating_network = self.params.get('floating_network', None)
+        floating_network = self.neutron.find_network(floating_network,
+                                                     ignore_missing=False)
+        attrs = {}
+        attrs['floating_network_id'] = floating_network.id
+        return self.neutron.create_ip(**attrs)
 
     def delete(self, resource_ref):
         raise NotImplementedError()

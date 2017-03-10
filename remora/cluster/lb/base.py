@@ -52,9 +52,8 @@ class LB(object):
 @six.add_metaclass(abc.ABCMeta)
 class BaseLBProvider(base.BaseResourceTemplate, loadable.Loadable):
     """docstring for BaseLBProvider."""
-    def __init__(self, config, env={}, parameters={}):
-        super(BaseLBProvider, self).__init__(parameters)
-        super(base.BaseResourceTemplate, self).__init__(config)
+    def __init__(self, env={}, params={}):
+        super(BaseLBProvider, self).__init__(params)
         self._env = env
 
     @property

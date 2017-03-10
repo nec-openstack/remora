@@ -53,7 +53,8 @@ class DefaultLoader(base.BaseLoader):
             driver_cls = driver_manager.driver
             config = self._load_plugin_config(name, driver_cls)
 
-            driver = driver_cls(config, **kwargs)
+            driver = driver_cls(**kwargs)
+            driver.set_config(config)
         except Exception as exc:
             LOG.exception(exc)
             raise exception.LoadingError(name=name)

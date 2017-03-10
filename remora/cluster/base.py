@@ -21,5 +21,5 @@ from remora.common import template
 @six.add_metaclass(abc.ABCMeta)
 class BaseResourceTemplate(template.BaseTemplate):
 
-    def __init__(self, parameters):
-        super(BaseResourceTemplate, self).__init__(parameters)
+    def __init__(self, params):
+        super(BaseResourceTemplate, self).__init__(params)

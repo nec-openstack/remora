@@ -37,5 +37,5 @@ class CreateCluster(command.Command):
             params = yaml.load(f)
         print(params)
         c = cluster.Cluster(utils.get_client(self).env, params)
-        print(c._lb_provider())
+        print(c._lb_provider().build())
         return utils.get_client(self).region_name

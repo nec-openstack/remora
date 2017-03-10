@@ -17,18 +17,18 @@ from remora.cluster import lb
 
 class Cluster(base.BaseResourceTemplate):
     """docstring for Cluster."""
-    def __init__(self, env, parameters):
-        super(Cluster, self).__init__(parameters)
+    def __init__(self, env, params):
+        super(Cluster, self).__init__(params)
         self._env = env
 
     def _lb_provider(self):
-        lb_parameters = self.parameters.get('loadbalancer', {})
+        lb_parameters = self.params.get('loadbalancer', {})
         # TODO(yuanying): get default value from config
         lb_provider_type = lb_parameters.get('type', 'pseudo')
         return lb.DefaultLBProviderLoader().load(
             lb_provider_type,
             env=self.env,
-            parameters=lb_parameters
+            params=lb_parameters
         )
 
     @property

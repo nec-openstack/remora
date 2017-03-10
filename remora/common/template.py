@@ -19,18 +19,18 @@ import six
 @six.add_metaclass(abc.ABCMeta)
 class BaseTemplate(object):
 
-    def __init__(self, parameters):
-        self._parameters = parameters
+    def __init__(self, params):
+        self._params = params
 
     @property
-    def parameters(self):
-        return self._parameters
+    def params(self):
+        return self._params
 
     @abc.abstractproperty
     def schema(self):
         """Defines a Schema that the input parameters shall comply to
 
-        :returns: A schema declaring the input parameters this template
+        :returns: A schema declaring the input params this template
                   should be provided along with their respective constraints
         """
         raise NotImplementedError()

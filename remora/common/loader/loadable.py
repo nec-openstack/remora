@@ -27,8 +27,10 @@ class Loadable(object):
     the configuration parameters during the loading.
     """
 
-    def __init__(self, config):
+    def __init__(self):
         super(Loadable, self).__init__()
+
+    def set_config(self, config):
         self.config = config
 
     @classmethod
