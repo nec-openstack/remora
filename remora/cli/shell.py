@@ -13,6 +13,7 @@
 #
 
 """Command-line interface to the Remora APIs"""
+import copy
 import os
 import sys
 
@@ -22,6 +23,7 @@ from keystoneauth1 import loading
 
 import remora
 from remora.cli.v1 import cluster
+from remora.common import config
 from remora.v1 import client
 
 
@@ -109,6 +111,8 @@ class RemoraShell(app.App):
 def main(args=None):
     if args is None:
         args = sys.argv[1:]
+    # FIXME(yuanying)
+    config.init([])
     return RemoraShell().run(args)
 
 

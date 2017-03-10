@@ -23,7 +23,7 @@ import remora
 def init(argv, default_config_files=None, **kwargs):
     default_config_files = (
         default_config_files or cfg.find_config_files(project='remora'))
-    cfg.CONF(argv[1:],
+    cfg.CONF(argv,
              project='remora',
              version=remora.__version__,
              default_config_files=default_config_files,
