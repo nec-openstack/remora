@@ -11,9 +11,8 @@
 #   License for the specific language governing permissions and limitations
 #   under the License.
 
-import logging
-
 from osc_lib.command import command
+from oslo_log import log as logging
 
 from remora.cli import utils
 
