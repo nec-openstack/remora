@@ -11,7 +11,31 @@
 #   under the License.
 #
 
+
 class Client(object):
 
-    def __init__(self, **kwargs):
-        pass
+    def __init__(
+        self,
+        session=None,
+        region_name=None,
+        interface='public',
+        verify=True,
+        cacert=None,
+    ):
+        self.session = session
+        self.region_name = region_name
+        self.interface = interface
+        self.verify = verify
+        self.cacert = cacert
+
+    @property
+    def env(self):
+        if self._env is None:
+            self._env = {
+                'region_name': self.region_name,
+                'interface': self.interface,
+                'verify': self.verify,
+                'cacert': self.cacert,
+            }
+
+        return self._env

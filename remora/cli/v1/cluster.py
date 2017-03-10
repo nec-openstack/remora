@@ -15,6 +15,8 @@ import logging
 
 from osc_lib.command import command
 
+from remora.cli import utils
+
 
 class CreateCluster(command.Command):
     """Create a coe cluster"""
@@ -28,4 +30,4 @@ class CreateCluster(command.Command):
 
     def take_action(self, parsed_args):
 
-        return "aaaa"
+        return utils.get_client(self).region_name

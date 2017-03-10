@@ -37,9 +37,9 @@ def make_client(instance):
 
     client = remora_client(session=instance.session,
                            region_name=instance.region_name,
-                           endpoint_type=instance.interface,
-                           insecure=not instance.verify,
-                           ca_cert=instance.cacert)
+                           interface=instance.interface,
+                           verify=instance.verify,
+                           cacert=instance.cacert)
     return client
 
 

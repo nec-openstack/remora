@@ -17,7 +17,7 @@
 
 from oslo_config import cfg
 
-from remora import version
+import remora
 
 
 def init(argv, default_config_files=None, **kwargs):
@@ -25,6 +25,6 @@ def init(argv, default_config_files=None, **kwargs):
         default_config_files or cfg.find_config_files(project='remora'))
     cfg.CONF(argv[1:],
              project='remora',
-             version=version.version_info.release_string(),
+             version=remora.__version__,
              default_config_files=default_config_files,
              **kwargs)

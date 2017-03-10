@@ -1,5 +1,4 @@
-# Copyright 2011 OpenStack Foundation
-# All Rights Reserved.
+# -*- encoding: utf-8 -*-
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -13,7 +12,12 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import pbr.version
 
-version_info = pbr.version.VersionInfo('remora')
-version_string = version_info.version_string
+def get_client(obj):
+    if hasattr(obj.app, 'client_manager'):
+        # NOTE(sileht): cliff objects loaded by OSC
+        return obj.app.client_manager.coe
+    else:
+        # TODO(sileht): Remove this when OSC is able
+        # to install the gnocchi client binary itself
+        return obj.app.client
