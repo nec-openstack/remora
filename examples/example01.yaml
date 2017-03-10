@@ -1,0 +1,7 @@
+version: 2017-03-09
+
+name: test-cluster
+
+loadbalancer:
+  type: pseudo
+  floating_network: public

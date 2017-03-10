@@ -15,22 +15,24 @@ import abc
 
 import six
 
+from common import template
+
 
 @six.add_metaclass(abc.ABCMeta)
-class BaseTemplate(object):
+class BaseNodePoolTemplate(template.BaseTemplate):
 
     def __init__(self, parameters):
-        self._parameters = parameters
+        super(BaseNodePoolTemplate, self).__init__(parameters)
 
-    @property
-    def parameters(self):
-        return self._parameters
 
-    @abc.abstractproperty
-    def schema(self):
-        """Defines a Schema that the input parameters shall comply to
+@six.add_metaclass(abc.ABCMeta)
+class BaseNodePool(object):
+    """docstring for BaseNodePool."""
+    def __init__(self):
+        super(BaseNodePool, self).__init__()
 
-        :returns: A schema declaring the input parameters this template
-                  should be provided along with their respective constraints
-        """
-        raise NotImplementedError()
+
+class HeatNodePool(BaseNodePool):
+    """docstring for HeatNodePool."""
+    def __init__(self, arg):
+        super(HeatNodePool, self).__init__()

@@ -27,11 +27,13 @@ class Client(object):
         self.interface = interface
         self.verify = verify
         self.cacert = cacert
+        self._env = None
 
     @property
     def env(self):
         if self._env is None:
             self._env = {
+                'session': self.session,
                 'region_name': self.region_name,
                 'interface': self.interface,
                 'verify': self.verify,

@@ -13,8 +13,10 @@
 
 from osc_lib.command import command
 from oslo_log import log as logging
+import yaml
 
 from remora.cli import utils
+from remora.cluster import cluster
 
 
 class CreateCluster(command.Command):
@@ -24,9 +26,16 @@ class CreateCluster(command.Command):
 
     def get_parser(self, prog_name):
         parser = super(CreateCluster, self).get_parser(prog_name)
-
+        parser.add_argument("template_path",
+                            metavar="<CLUSTER_TEMPLATE_PATH>",
+                            help="Path of the cluster template")
         return parser
 
     def take_action(self, parsed_args):
 
+        with open(parsed_args.template_path) as f:
+            params = yaml.load(f)
+        print(params)
+        c = cluster.Cluster(utils.get_client(self).env, params)
+        print(c._lb_provider())
         return utils.get_client(self).region_name

@@ -15,22 +15,11 @@ import abc
 
 import six
 
+from remora.common import template
+
 
 @six.add_metaclass(abc.ABCMeta)
-class BaseTemplate(object):
+class BaseResourceTemplate(template.BaseTemplate):
 
     def __init__(self, parameters):
-        self._parameters = parameters
-
-    @property
-    def parameters(self):
-        return self._parameters
-
-    @abc.abstractproperty
-    def schema(self):
-        """Defines a Schema that the input parameters shall comply to
-
-        :returns: A schema declaring the input parameters this template
-                  should be provided along with their respective constraints
-        """
-        raise NotImplementedError()
+        super(BaseResourceTemplate, self).__init__(parameters)

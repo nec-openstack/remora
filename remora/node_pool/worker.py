@@ -11,26 +11,10 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import abc
-
-import six
+from node_pool import base
 
 
-@six.add_metaclass(abc.ABCMeta)
-class BaseTemplate(object):
-
-    def __init__(self, parameters):
-        self._parameters = parameters
-
-    @property
-    def parameters(self):
-        return self._parameters
-
-    @abc.abstractproperty
-    def schema(self):
-        """Defines a Schema that the input parameters shall comply to
-
-        :returns: A schema declaring the input parameters this template
-                  should be provided along with their respective constraints
-        """
-        raise NotImplementedError()
+class WorkerNodePool(base.HeatNodePool):
+    """docstring for WorkerNodePool."""
+    def __init__(self, arg):
+        super(WorkerNodePool, self).__init__()

@@ -13,7 +13,6 @@
 #
 
 """Command-line interface to the Remora APIs"""
-import copy
 import os
 import sys
 
