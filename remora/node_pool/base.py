@@ -21,8 +21,8 @@ from common import template
 @six.add_metaclass(abc.ABCMeta)
 class BaseNodePoolTemplate(template.BaseTemplate):
 
-    def __init__(self, parameters):
-        super(BaseNodePoolTemplate, self).__init__(parameters)
+    def __init__(self, params):
+        super(BaseNodePoolTemplate, self).__init__(params)
 
 
 @six.add_metaclass(abc.ABCMeta)

@@ -13,6 +13,7 @@
 
 from openstack import connection
 from openstack import profile
+import os
 from oslo_log import log as logging
 
 from remora.cluster.lb import base
@@ -51,12 +52,21 @@ class FIPPseudoLBProvider(base.BaseLBProvider):
 
     def build(self):
         # TODO(yuanying): get default floating network from env and conf
+        # TODO(yuanying): Use taskflow later
         floating_network = self.params.get('floating_network', None)
         floating_network = self.neutron.find_network(floating_network,
                                                      ignore_missing=False)
         attrs = {}
         attrs['floating_network_id'] = floating_network.id
-        return self.neutron.create_ip(**attrs)
+        fip = self.neutron.create_ip(**attrs)
+        return base.LB(
+            v4address=fip.floating_ip_address,
+            pool=fip.id,
+            heat_node_environment=[
+                os.path.join(base.HEAT_ENV_DIR, 'fip_pesudo_lb.yaml')
+            ],
+            configure_script_content='',
+        )
 
     def delete(self, resource_ref):
         raise NotImplementedError()

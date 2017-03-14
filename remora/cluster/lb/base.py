@@ -12,23 +12,29 @@
 #    under the License.
 
 import abc
-
+import os
 import six
 
 from remora.cluster import base
 from remora.common.loader import loadable
+
+HEAT_ENV_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__),
+    'heat',
+    'environments'
+)
 
 
 class LB(object):
     """docstring for LB."""
     def __init__(self,
                  v4address,
-                 resource_ref,
+                 pool,
                  heat_node_environment,
                  configure_script_content):
         super(LB, self).__init__()
         self._v4address = v4address
-        self._resource_ref = resource_ref
+        self._pool = pool
         self._heat_node_enviroment = heat_node_environment
         self._configure_script_content = configure_script_content
 
@@ -37,8 +43,8 @@ class LB(object):
         return self._v4address
 
     @property
-    def resource_ref(self):
-        return self._resource_ref
+    def pool(self):
+        return self._pool
 
     @property
     def heat_node_environment(self):

@@ -1,0 +1,4 @@
+# Environment file to enable LBaaS in a cluster by mapping
+# LBaaS-related resource types to the real LBaaS resource types.
+resource_registry:
+  "Remora::LB::PoolMember": "../fragments/fip_pseudo_lb.yaml"
