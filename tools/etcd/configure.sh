@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-NODE_IP=$1
+export NODE_IP=${1:-${NODE_IP}}
 
 set -eu
 export LC_ALL=C
