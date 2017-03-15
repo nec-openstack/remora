@@ -116,7 +116,6 @@ for MASTER_ADDRESS in ${MASTERS}; do
 done
 
 i=1
-HOSTNAMES=(${WORKERS_HOSTNAME})
 for WORKER_ADDRESS in ${WORKERS}; do
   HOST="worker$(printf "%02d" $i)"
   if [[ ${HOST} =~ ${host_pattern} ]]; then
