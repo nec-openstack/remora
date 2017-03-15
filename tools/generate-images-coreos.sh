@@ -74,7 +74,7 @@ function create_coreos_disk {
     ${etcd} > ${rootfs}/var/lib/coreos-install/user_data
 
   umount ${rootfs}
-  kpart -dv ${loop_device}
+  kpartx -dv ${loop_device}
   losetup -d ${loop_device}
 
   "Created: $target_dir/coreos-disk-${address}.img"
