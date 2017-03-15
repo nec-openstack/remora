@@ -10,7 +10,10 @@ source ${ROOT}/default-env.sh
 
 mkdir -p /etc/kubernetes/manifests
 
-source ${ROOT}/configure-certs.sh
+if [ -f "${ROOT}/configure-certs.sh" ]; then
+    # Execute certs plugin
+    source ${ROOT}/configure-certs.sh
+fi
 source ${ROOT}/configure-cloud.sh
 source ${ROOT}/configure-kubeconfig.sh
 source ${ROOT}/configure-api.sh
@@ -37,4 +40,7 @@ do
 done
 
 source ${ROOT}/configure-addons.sh
-source ${ROOT}/configure-network.sh
+if [ -f "${ROOT}/configure-network.sh" ]; then
+    # Execute network plugin
+    source ${ROOT}/configure-network.sh
+fi

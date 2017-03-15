@@ -10,7 +10,10 @@ source ${ROOT}/default-env.sh
 
 mkdir -p /etc/kubernetes/manifests
 
-source ${ROOT}/configure-certs.sh
+if [ -f "${ROOT}/configure-certs.sh" ]; then
+    # Execute certs plugin
+    source ${ROOT}/configure-certs.sh
+fi
 source ${ROOT}/configure-cloud.sh
 source ${ROOT}/configure-kubeconfig.sh
 source ${ROOT}/configure-kubelet.sh
