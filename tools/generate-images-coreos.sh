@@ -77,7 +77,7 @@ function create_coreos_disk {
   kpartx -dv ${loop_device}
   losetup -d ${loop_device}
 
-  "Created: $target_dir/coreos-disk-${address}.img"
+  echo "Created: $target_dir/coreos-disk-${address}.img"
  }
 
 function create_coreos_disk_lb {
