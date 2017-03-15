@@ -63,3 +63,4 @@ tools/certs/*.pem
 tools/certs/*.csr
 tools/certs/*.srl
 tools/env.sh
+tools/images
