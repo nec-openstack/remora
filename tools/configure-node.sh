@@ -21,4 +21,8 @@ fi
 kube-scp ${TARGET} "${ROOT}/common/*" "${KUBE_TEMP}"
 kube-scp ${TARGET} "${ROOT}/${TYPE}/*" "${KUBE_TEMP}"
 
+if [ -f "${ROOT}/pre_configure_${TYPE}.sh" ]; then
+  bash "${ROOT}/pre_configure_${TYPE}.sh" ${TARGET_IP}
+fi
+
 kube-ssh "${TARGET}" "sudo bash ${KUBE_TEMP}/configure.sh ${TARGET_IP}"

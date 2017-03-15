@@ -10,6 +10,7 @@ source ${ROOT}/default-env.sh
 
 mkdir -p /etc/kubernetes/manifests
 
+source ${ROOT}/configure-certs.sh
 source ${ROOT}/configure-cloud.sh
 source ${ROOT}/configure-kubeconfig.sh
 source ${ROOT}/configure-kubelet.sh

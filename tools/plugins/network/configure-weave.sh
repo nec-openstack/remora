@@ -1,3 +1,13 @@
+#!/usr/bin/env bash
+
+set -eu
+export LC_ALL=C
+
+KUBE_ADDONS_DIR=/etc/kubernetes/addons
+
+KUBE_WEAVE_TEMPLATE=${KUBE_ADDONS_DIR}/kube-cni-weave.yaml
+mkdir -p $(dirname $KUBE_WEAVE_TEMPLATE)
+cat << EOF > $KUBE_WEAVE_TEMPLATE
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
@@ -76,3 +86,12 @@ spec:
         - name: lib-modules
           hostPath:
             path: /lib/modules
+
+EOF
+
+cat ${KUBE_WEAVE_TEMPLATE} \
+    | ${DOCKER_PATH} run \
+        --net=host \
+        --rm -i \
+        ${HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION} \
+        /hyperkube kubectl apply -f -
