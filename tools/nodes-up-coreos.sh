@@ -56,6 +56,7 @@ function boot_coreos {
   mount -o rw /dev/nbd0p9 ${MOUNT_POINT}
   mkdir -p ${MOUNT_POINT}/etc/kubernetes/ssl
   cp ${LOCAL_CERTS_DIR}/ca.pem ${MOUNT_POINT}/etc/kubernetes/ssl/ca.pem
+  cp ${LOCAL_CERTS_DIR}/ca-key.pem ${MOUNT_POINT}/etc/kubernetes/ssl/ca-key.pem
   cp ${LOCAL_CERTS_DIR}/apiserver-key-${address}.pem ${MOUNT_POINT}/etc/kubernetes/ssl/apiserver-key.pem
   cp ${LOCAL_CERTS_DIR}/apiserver-${address}.pem ${MOUNT_POINT}/etc/kubernetes/ssl/apiserver.pem
   cp ${LOCAL_CERTS_DIR}/worker-key-${address}.pem ${MOUNT_POINT}/etc/kubernetes/ssl/worker-key.pem
