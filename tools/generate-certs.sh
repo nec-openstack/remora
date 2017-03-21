@@ -4,7 +4,6 @@ set -eu
 export LC_ALL=C
 
 script_dir=`dirname $0`
-LOCAL_CERTS_DIR=$script_dir/../certs
 source ${script_dir}/default-env.sh
 source ${script_dir}/utils.sh
 
