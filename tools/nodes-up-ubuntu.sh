@@ -43,11 +43,6 @@ function boot_coreos {
   bash ${ROOT}/create-userdata.sh \
     ${host} \
     ${address} \
-    ${network_range} \
-    ${gateway} \
-    ${dns} \
-    ${net_device} \
-    DUMMY_DISCOVERY_URL \
     ubuntu > $LIBVIRT_PATH/${host}/configs/user-data
 
   uuid=$(uuidgen)

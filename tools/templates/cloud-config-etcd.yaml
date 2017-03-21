@@ -1,23 +1,28 @@
+#!/usr/bin/env bash
+set -eu
+export LC_ALL=C
+
+cat <<EOF
 #cloud-config
 # Before commit any change please validate this file @ https://coreos.com/validate/
 
 # Set hostname
-hostname: _HOSTNAME_
+hostname: ${_NODE_HOSTNAME}
 
 # Set SSH Key
 ssh_authorized_keys:
-- _PUBLIC_KEY_
+- ${NODE_PUBLIC_KEY}
 
 coreos:
   update:
-    reboot-strategy: etcd-lock
+    reboot-strategy: ${COREOS_REBOOT_STRATEGY:-"etcd-lock"}
   etcd2:
-    name: _HOSTNAME_
-    discovery: _DISCOVERY_URL_
-    advertise-client-urls: https://_ADDRESS_:2379
-    initial-advertise-peer-urls: https://_ADDRESS_:2380
-    listen-client-urls: https://_ADDRESS_:2379,http://127.0.0.1:2379
-    listen-peer-urls: https://_ADDRESS_:2380
+    name: ${_NODE_HOSTNAME}
+    discovery: ${DISCOVERY_URL}
+    advertise-client-urls: https://${_NODE_ADDRESS}:2379
+    initial-advertise-peer-urls: https://${_NODE_ADDRESS}:2380
+    listen-client-urls: https://${_NODE_ADDRESS}:2379,http://127.0.0.1:2379
+    listen-peer-urls: https://${_NODE_ADDRESS}:2380
     client-cert-auth: true
     cert-file: /etc/kubernetes/ssl/apiserver.pem
     key-file: /etc/kubernetes/ssl/apiserver-key.pem
@@ -31,13 +36,14 @@ coreos:
   units:
     - name: etcd2.service
       command: start
-    - name: 00-_NET_DEVICE_.network
+    - name: 00-${NODE_NET_DEVICE}.network
       runtime: true
       content: |
         [Match]
-        Name=_NET_DEVICE_
+        Name=${NODE_NET_DEVICE}
 
         [Network]
-        DNS=_DNS_
-        Address=_ADDRESS_/_NETWORK_RANGE_
-        Gateway=_GATEWAY_
+        DNS=${NODE_DNS}
+        Address=${_NODE_ADDRESS}/${NODE_NETWORK_RANGE}
+        Gateway=${NODE_GATEWAY}
+EOF

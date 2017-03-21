@@ -1,18 +1,24 @@
+#!/usr/bin/env bash
+set -eu
+export LC_ALL=C
+
+cat <<EOF
 #cloud-config
-hostname: _HOSTNAME_
+hostname: ${_NODE_HOSTNAME}
 
 # Set SSH Key
 ssh_authorized_keys:
-- _PUBLIC_KEY_
+- ${NODE_PUBLIC_KEY}
 
 runcmd:
-  - [ rm, -f, /etc/network/interfaces.d/_NET_DEVICE_.cfg]
-  - [ sh, -c, "echo 'auto _NET_DEVICE_' >> /etc/network/interfaces.d/_NET_DEVICE_.cfg "]
-  - [ sh, -c, "echo 'iface _NET_DEVICE_ inet static' >> /etc/network/interfaces.d/_NET_DEVICE_.cfg" ]
-  - [ sh, -c, "echo '  address _ADDRESS_' >> /etc/network/interfaces.d/_NET_DEVICE_.cfg" ]
-  - [ sh, -c, "echo '  netmask _NETMASK_' >> /etc/network/interfaces.d/_NET_DEVICE_.cfg" ]
-  - [ sh, -c, "echo '  gateway _GATEWAY_' >> /etc/network/interfaces.d/_NET_DEVICE_.cfg"]
-  - [ sh, -c, "echo '  dns-nameservers _DNS_' >> /etc/network/interfaces.d/_NET_DEVICE_.cfg"]
-  - [ ifdown, _NET_DEVICE_ ]
-  - [ ifup, _NET_DEVICE_ ]
-  - [ sh, -c, "echo '127.0.1.1  _HOSTNAME_' >> /etc/hosts"]
+  - [ rm, -f, /etc/network/interfaces.d/${NODE_NET_DEVICE}.cfg]
+  - [ sh, -c, "echo 'auto ${NODE_NET_DEVICE}' >> /etc/network/interfaces.d/${NODE_NET_DEVICE}.cfg "]
+  - [ sh, -c, "echo 'iface ${NODE_NET_DEVICE} inet static' >> /etc/network/interfaces.d/${NODE_NET_DEVICE}.cfg" ]
+  - [ sh, -c, "echo '  address ${_NODE_ADDRESS}' >> /etc/network/interfaces.d/${NODE_NET_DEVICE}.cfg" ]
+  - [ sh, -c, "echo '  netmask ${NODE_NETMASK}' >> /etc/network/interfaces.d/${NODE_NET_DEVICE}.cfg" ]
+  - [ sh, -c, "echo '  gateway ${NODE_GATEWAY}' >> /etc/network/interfaces.d/${NODE_NET_DEVICE}.cfg"]
+  - [ sh, -c, "echo '  dns-nameservers ${NODE_DNS}' >> /etc/network/interfaces.d/${NODE_NET_DEVICE}.cfg"]
+  - [ ifdown, ${NODE_NET_DEVICE} ]
+  - [ ifup, ${NODE_NET_DEVICE} ]
+  - [ sh, -c, "echo '127.0.1.1  ${_NODE_HOSTNAME}' >> /etc/hosts"]
+EOF

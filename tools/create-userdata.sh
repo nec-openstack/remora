@@ -3,14 +3,14 @@
 set -eu
 export LC_ALL=C
 
-host=${1}
-address=${2}
-network_range=${3}
-gateway=${4}
-dns=${5}
-net_device=${6}
-discovery_url=${7:-""}
-etcd_type=${8:-"worker"}
+export _NODE_HOSTNAME=${1}
+export _NODE_ADDRESS=${2}
+# network_range=${3}
+# gateway=${4}
+# dns=${5}
+# net_device=${6}
+# discovery_url=${7:-""}
+etcd_type=${3:-"worker"}
 
 function cdr2mask {
     # Number of args to shift, 255..255, first non-255 byte, zeroes
@@ -19,21 +19,11 @@ function cdr2mask {
     echo ${1-0}.${2-0}.${3-0}.${4-0}
 }
 
-netmask=$(cdr2mask ${network_range})
+export NODE_NETMASK=$(cdr2mask ${NODE_NETWORK_RANGE})
 
-public_key=`cat ~/.ssh/id_rsa.pub`
+if [[ ${NODE_PUBLIC_KEY} == "" ]]; then
+    export NODE_PUBLIC_KEY=`cat ~/.ssh/id_rsa.pub`
+fi
 
 script_dir=`dirname $0`
-USER_DATA_TEMPLATE=$script_dir/templates/cloud-config-${etcd_type}.yaml
-
-sed "
-  s|_HOSTNAME_|$host|g
-  s|_DNS_|$dns|g
-  s|_ADDRESS_|$address|g
-  s|_NETWORK_RANGE_|$network_range|g
-  s|_NETMASK_|$netmask|g
-  s|_GATEWAY_|$gateway|g
-  s|_NET_DEVICE_|$net_device|g
-  s|_PUBLIC_KEY_|$public_key|g
-  s|_DISCOVERY_URL_|$discovery_url|g
-" $USER_DATA_TEMPLATE
+bash $script_dir/templates/cloud-config-${etcd_type}.yaml

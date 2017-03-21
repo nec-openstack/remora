@@ -67,11 +67,6 @@ function boot_coreos {
   bash ${ROOT}/create-userdata.sh \
     ${host} \
     ${address} \
-    ${network_range} \
-    ${gateway} \
-    ${dns} \
-    ${net_device} \
-    ${DISCOVERY_URL} \
     ${etcd} > $LIBVIRT_PATH/${host}/openstack/latest/user_data
 
   virt-install --connect qemu:///system \

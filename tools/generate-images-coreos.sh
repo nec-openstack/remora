@@ -67,11 +67,6 @@ function create_coreos_disk {
   bash ${ROOT}/create-userdata.sh \
     ${host} \
     ${address} \
-    ${network_range} \
-    ${gateway} \
-    ${dns} \
-    ${net_device} \
-    ${DISCOVERY_URL} \
     ${etcd} > ${rootfs}/var/lib/coreos-install/user_data
 
   umount ${rootfs}

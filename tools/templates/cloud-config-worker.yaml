@@ -1,19 +1,24 @@
+#!/usr/bin/env bash
+set -eu
+export LC_ALL=C
+
+cat <<EOF
 #cloud-config
 # Before commit any change please validate this file @ https://coreos.com/validate/
 
 # Set hostname
-hostname: _HOSTNAME_
+hostname: ${_NODE_HOSTNAME}
 
 # Set SSH Key
 ssh_authorized_keys:
-- _PUBLIC_KEY_
+- ${NODE_PUBLIC_KEY}
 
 coreos:
   update:
-    reboot-strategy: etcd-lock
+    reboot-strategy: ${COREOS_REBOOT_STRATEGY:-"etcd-lock"}
   etcd2:
     proxy: on
-    discovery: _DISCOVERY_URL_
+    discovery: ${DISCOVERY_URL}
     listen-client-urls: http://127.0.0.1:2379
     cert-file: /etc/kubernetes/ssl/worker.pem
     key-file: /etc/kubernetes/ssl/worker-key.pem
@@ -24,13 +29,14 @@ coreos:
   units:
     - name: etcd2.service
       command: start
-    - name: 00-_NET_DEVICE_.network
+    - name: 00-${NODE_NET_DEVICE}.network
       runtime: true
       content: |
         [Match]
-        Name=_NET_DEVICE_
+        Name=${NODE_NET_DEVICE}
 
         [Network]
-        DNS=_DNS_
-        Address=_ADDRESS_/_NETWORK_RANGE_
-        Gateway=_GATEWAY_
+        DNS=${NODE_DNS}
+        Address=${_NODE_ADDRESS}/${NODE_NETWORK_RANGE}
+        Gateway=${NODE_GATEWAY}
+EOF
