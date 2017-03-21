@@ -82,6 +82,10 @@ export WORKER_MEMORY=${WORKER_MEMORY:-"2048"}
 export WORKER_CPU=${WORKER_CPU:-"1"}
 export WORKER_DISK=${WORKER_DISK:-"20"}
 
+## For coreos
+
+export DISCOVERY_URL=${DISCOVERY_URL:-"auto"}
+
 ## For instance use
 
 MACHINES="${LB} ${ETCD} ${MASTERS} ${WORKERS}"

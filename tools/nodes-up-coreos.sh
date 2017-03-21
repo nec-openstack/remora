@@ -12,7 +12,17 @@ source ${script_dir}/utils.sh
 CHANNEL=stable
 RELEASE=current
 IMG_NAME="coreos_${CHANNEL}_${RELEASE}_qemu_image.img"
-DISCOVERY_URL=$(discovery_url)
+# https://discovery.etcd.io/new?size=${cluster_size}
+DISCOVERY_URL=${DISCOVERY_URL}
+
+if [[ ${DISCOVERY_URL} == "" ]]; then
+    echo 'Set $DISCOVERY_URL (cf: https://discovery.etcd.io/new?size=${cluster_size})'
+    exit 1
+fi
+
+if [[ ${DISCOVERY_URL} == "auto" ]]; then
+    DISCOVERY_URL=$(discovery_url)
+fi
 
 if [ ! -d $LIBVIRT_PATH ]; then
   mkdir -p $LIBVIRT_PATH || (echo "Can not create $LIBVIRT_PATH directory" && exit 1)
