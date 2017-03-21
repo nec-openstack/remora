@@ -9,6 +9,8 @@ ssh_authorized_keys:
 - _PUBLIC_KEY_
 
 coreos:
+  update:
+    reboot-strategy: etcd-lock
   etcd2:
     name: _HOSTNAME_
     discovery: _DISCOVERY_URL_
