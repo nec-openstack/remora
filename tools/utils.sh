@@ -13,6 +13,17 @@ function calc_etcd_cluster_size {
 }
 
 function discovery_url {
+    if [[ ${DISCOVERY_URL} == '' ]]; then
+        echo 'Set $DISCOVERY_URL (cf: https://discovery.etcd.io/new?size=${cluster_size})'
+        exit 1
+    elif [[ ${DISCOVERY_URL} == "auto" ]]; then
+        discovery_url_from_web
+    else
+        echo ${DISCOVERY_URL}
+    fi
+}
+
+function discovery_url_from_web {
   local ROOT=`dirname $0`
   local cache_file=${ETCD_DISCOVERY_URL_CACHE_FILE:-"${ROOT}/.discovery_url.cache"}
   local discovery_url=''
