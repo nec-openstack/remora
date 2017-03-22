@@ -21,7 +21,7 @@ function cdr2mask {
 
 export NODE_NETMASK=$(cdr2mask ${NODE_NETWORK_RANGE})
 
-if [[ ${NODE_PUBLIC_KEY} == "" ]]; then
+if [[ ${NODE_PUBLIC_KEY} == "auto" ]]; then
     export NODE_PUBLIC_KEY=`cat ~/.ssh/id_rsa.pub`
 fi
 
