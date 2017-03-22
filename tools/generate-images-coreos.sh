@@ -57,8 +57,8 @@ function create_coreos_disk {
   mkdir -p ${rootfs}/etc/kubernetes/ssl
   cp ${LOCAL_CERTS_DIR}/ca.pem ${rootfs}/etc/kubernetes/ssl/ca.pem
   cp ${LOCAL_CERTS_DIR}/ca-key.pem ${rootfs}/etc/kubernetes/ssl/ca-key.pem
-  cp ${LOCAL_CERTS_DIR}/apiserver-key-${address}.pem ${rootfs}/etc/kubernetes/ssl/apiserver-key.pem
-  cp ${LOCAL_CERTS_DIR}/apiserver-${address}.pem ${rootfs}/etc/kubernetes/ssl/apiserver.pem
+  cp ${LOCAL_CERTS_DIR}/apiserver-key.pem ${rootfs}/etc/kubernetes/ssl/apiserver-key.pem
+  cp ${LOCAL_CERTS_DIR}/apiserver.pem ${rootfs}/etc/kubernetes/ssl/apiserver.pem
   cp ${LOCAL_CERTS_DIR}/worker-key-${address}.pem ${rootfs}/etc/kubernetes/ssl/worker-key.pem
   cp ${LOCAL_CERTS_DIR}/worker-${address}.pem ${rootfs}/etc/kubernetes/ssl/worker.pem
 

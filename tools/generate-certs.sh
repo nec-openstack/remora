@@ -15,11 +15,11 @@ if [[ ! -f ${CA_KEY} ]]; then
   bash ${script_dir}/generate-cert-ca.sh
 fi
 
+echo "Generate Server key and cert"
+bash ${ROOT}/generate-cert-server.sh
+
 for MACHINE in ${MACHINES}
 do
-  echo "Generate Server key and cert for ${MACHINE}"
-  bash ${ROOT}/generate-cert-server.sh \
-       ${MACHINE}
   echo "Generate Client key and cert for ${MACHINE}"
   bash ${ROOT}/generate-cert-client.sh \
        ${MACHINE}

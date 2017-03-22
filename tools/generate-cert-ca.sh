@@ -8,7 +8,7 @@ source ${script_dir}/utils.sh
 
 CA_KEY=${CA_KEY:-"${LOCAL_CERTS_DIR}/ca-key.pem"}
 CA_CERT=${CA_CERT:-"${LOCAL_CERTS_DIR}/ca.pem"}
-openssl genrsa -out "${CA_KEY}" 2048
+openssl genrsa -out "${CA_KEY}" 4096
 openssl req -x509 -new -nodes \
             -key "${CA_KEY}" \
             -days 10000 \

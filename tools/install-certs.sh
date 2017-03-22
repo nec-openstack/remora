@@ -21,10 +21,10 @@ for ADDRESS in ${MACHINES}; do
     kube-scp "${TARGET}" "${LOCAL_CERTS_DIR}/ca-key.pem" \
                          "${KUBE_CERTS_TEMP_REMOTE_DIR}/ca-key.pem"
     kube-ssh "${TARGET}" "sudo cp ${KUBE_CERTS_TEMP_REMOTE_DIR}/ca-key.pem ${KUBE_CERTS_REMOTE_DIR}/ca-key.pem"
-    kube-scp "${TARGET}" "${LOCAL_CERTS_DIR}/apiserver-key-${ADDRESS}.pem" \
+    kube-scp "${TARGET}" "${LOCAL_CERTS_DIR}/apiserver-key.pem" \
                          "${KUBE_CERTS_TEMP_REMOTE_DIR}/apiserver-key.pem"
     kube-ssh "${TARGET}" "sudo cp ${KUBE_CERTS_TEMP_REMOTE_DIR}/apiserver-key.pem ${KUBE_CERTS_REMOTE_DIR}/apiserver-key.pem"
-    kube-scp "${TARGET}" "${LOCAL_CERTS_DIR}/apiserver-${ADDRESS}.pem" \
+    kube-scp "${TARGET}" "${LOCAL_CERTS_DIR}/apiserver.pem" \
                          "${KUBE_CERTS_TEMP_REMOTE_DIR}/apiserver.pem"
     kube-ssh "${TARGET}" "sudo cp ${KUBE_CERTS_TEMP_REMOTE_DIR}/apiserver.pem ${KUBE_CERTS_REMOTE_DIR}/apiserver.pem"
     kube-scp "${TARGET}" "${LOCAL_CERTS_DIR}/worker-key-${ADDRESS}.pem" \

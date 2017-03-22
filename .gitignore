@@ -64,3 +64,4 @@ tools/certs/*.csr
 tools/certs/*.srl
 tools/env.sh*
 tools/images
+tools/certs/*.cnf

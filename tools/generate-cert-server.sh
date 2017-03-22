@@ -3,27 +3,50 @@
 set -eu
 export LC_ALL=C
 
-export KUBERNETES_FQDN=${KUBERNETES_FQDN:-"k8s.example.com"}
-export KUBERNETES_SERVICE_IP=${KUBERNETES_SERVICE_IP:-"192.168.1.101"}
-MASTER_IP=${1:-"192.168.1.111"}
-
 script_dir=`dirname $0`
 source ${script_dir}/utils.sh
 
 CA_KEY=${CA_KEY:-"${LOCAL_CERTS_DIR}/ca-key.pem"}
 CA_CERT=${CA_CERT:-"${LOCAL_CERTS_DIR}/ca.pem"}
-KUBE_KEY=${KUBE_KEY:-"${LOCAL_CERTS_DIR}/apiserver-key-${MASTER_IP}.pem"}
-KUBE_CERT_REQ=${KUBE_CERT_REQ:-"${LOCAL_CERTS_DIR}/apiserver-${MASTER_IP}.csr"}
-KUBE_CERT=${KUBE_CERT:-"${LOCAL_CERTS_DIR}/apiserver-${MASTER_IP}.pem"}
+KUBE_KEY=${KUBE_KEY:-"${LOCAL_CERTS_DIR}/apiserver-key.pem"}
+KUBE_CERT_REQ=${KUBE_CERT_REQ:-"${LOCAL_CERTS_DIR}/apiserver.csr"}
+KUBE_CERT=${KUBE_CERT:-"${LOCAL_CERTS_DIR}/apiserver.pem"}
+OPENSSL_CONFIG="${LOCAL_CERTS_DIR}/openssl-server.cnf"
 
-openssl genrsa -out "${KUBE_KEY}" 2048
-MASTER_IP=${MASTER_IP} \
+sans="DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster.local"
+sans="${sans},DNS:${KUBERNETES_SERVICE_IP},DNS:${KUBE_INTERNAL_SERVICE_IP}"
+for HOSTNAME in ${KUBE_ADDITIONAL_HOSTNAMES}
+do
+    sans="${sans},DNS:${HOSTNAME}"
+done
+for IP in ${KUBE_ADDITIONAL_SERVICE_IPS}
+do
+    sans="${sans},IP:${IP}"
+done
+for MASTER in ${MASTERS}
+do
+    sans="${sans},IP:${MASTER}"
+done
+
+# Create config for server's csr
+cat > ${LOCAL_CERTS_DIR}/openssl-server.cnf <<EOF
+[req]
+req_extensions      = v3_req
+distinguished_name  = req_distinguished_name
+[req_distinguished_name]
+[ v3_req ]
+basicConstraints    = CA:FALSE
+keyUsage            = nonRepudiation, digitalSignature, keyEncipherment
+subjectAltName      = ${sans}
+EOF
+
+
+openssl genrsa -out "${KUBE_KEY}" 4096
 openssl req -new -key "${KUBE_KEY}" \
             -out "${KUBE_CERT_REQ}" \
             -subj "/CN=kube-server" \
-            -config ${script_dir}/openssl-server.cnf
+            -config ${LOCAL_CERTS_DIR}/openssl-server.cnf
 
-MASTER_IP=${MASTER_IP} \
 openssl x509 -req -in "${KUBE_CERT_REQ}" \
              -CA "${CA_CERT}" \
              -CAkey "${CA_KEY}" \
@@ -31,4 +54,4 @@ openssl x509 -req -in "${KUBE_CERT_REQ}" \
              -out "${KUBE_CERT}" \
              -days 365 \
              -extensions v3_req \
-             -extfile ${script_dir}/openssl-server.cnf
+             -extfile ${LOCAL_CERTS_DIR}/openssl-server.cnf

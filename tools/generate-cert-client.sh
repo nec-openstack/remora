@@ -13,7 +13,7 @@ KUBE_CLIENT_KEY=${KUBE_CLIENT_KEY:-"${LOCAL_CERTS_DIR}/worker-key-${WORKER_IP}.p
 KUBE_CLIENT_CERT_REQ=${KUBE_CLIENT_CERT_REQ:-"${LOCAL_CERTS_DIR}/worker-${WORKER_IP}.csr"}
 KUBE_CLIENT_CERT=${KUBE_CLIENT_CERT:-"${LOCAL_CERTS_DIR}/worker-${WORKER_IP}.pem"}
 
-openssl genrsa -out "${KUBE_CLIENT_KEY}" 2048
+openssl genrsa -out "${KUBE_CLIENT_KEY}" 4096
 WORKER_IP=${WORKER_IP} \
 openssl req -new -key "${KUBE_CLIENT_KEY}" \
             -out "${KUBE_CLIENT_CERT_REQ}" \
