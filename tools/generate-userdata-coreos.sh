@@ -7,10 +7,7 @@ script_dir=`dirname $0`
 source ${script_dir}/default-env.sh
 source ${script_dir}/utils.sh
 
-if [[ ${DISCOVERY_URL} == "auto" ]]; then
-    echo "Set correct DISCOVERY_URL (cf: https://discovery.etcd.io/new?size=${cluster_size})"
-    exit 1
-fi
+DISCOVERY_URL=$(discovery_url)
 
 function generate_userdata {
     local host=$1
