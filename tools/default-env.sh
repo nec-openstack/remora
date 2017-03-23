@@ -7,6 +7,9 @@ ROOT=$(dirname "${BASH_SOURCE}")
 if [ -f "${ROOT}/env.sh" ]; then
     source "${ROOT}/env.sh"
 fi
+if [ -f "${ROOT}/env.${CLUSTER_NAME}.sh" ]; then
+    source "${ROOT}/env.${CLUSTER_NAME}.sh"
+fi
 
 export LB=${LB:-"192.168.1.101"}
 export ETCD=${ETCD:-${LB}}

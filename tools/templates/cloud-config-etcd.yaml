@@ -36,6 +36,12 @@ coreos:
   units:
     - name: etcd2.service
       command: start
+    - name: docker.service
+      drop-ins:
+      - name: 20-docker-opts.conf
+        content: |
+          [Service]
+          Environment="DOCKER_OPTS=--log-opt max-size=50m --log-opt max-file=5"
     - name: 00-${NODE_NET_DEVICE}.network
       runtime: true
       content: |
