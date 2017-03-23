@@ -47,6 +47,7 @@ addresses.
 Kubernetes uses TLS to comunicate between node to node. So you have to
 create these assets.
 
+    $ export CLUSTER_NAME=my-cluster
     $ bash tools/generate-certs.sh
     $ bash tools/install-certs.sh
 
@@ -57,6 +58,7 @@ copied to correct node.
 
 If you want to build multi master node cluster, then LB is required.
 
+    $ export CLUSTER_NAME=my-cluster
     $ bash tools/install-lb.sh
 
 ### 4. Install Etcd
@@ -65,10 +67,12 @@ Etcd is also essential component for Kubernetes, but installing Etcd is
 out of scope. So this script only install single node etcd for testing
 purpose.
 
+    $ export CLUSTER_NAME=my-cluster
     $ bash tools/install-etcd.sh
 
 ### 5. Install Kubernetes
 
 Following command install Kubernetes masters and workers.
 
+    $ export CLUSTER_NAME=my-cluster
     $ bash tools/install-k8s.sh
