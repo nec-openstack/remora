@@ -3,6 +3,20 @@
 set -eu
 export LC_ALL=C
 
+CLUSTER_NAME=${CLUSTER_NAME:-""}
+
+if [[ ${CLUSTER_NAME} == "" ]]; then
+    echo "CLUSTER_NAME isn't specified"
+    read -p "Do you want to procede? (y/n)? " answer
+    if echo "$answer" | grep -iq "^y" ;then
+        export CLUSTER_NAME="anonymous"
+    else
+        exit
+    fi
+fi
+
+echo "Starting configuration: ${CLUSTER_NAME}"
+
 ROOT=$(dirname "${BASH_SOURCE}")
 if [ -f "${ROOT}/env.sh" ]; then
     source "${ROOT}/env.sh"
