@@ -4,7 +4,6 @@ set -eu
 export LC_ALL=C
 
 ROOT=$(dirname "${BASH_SOURCE}")
-source ${ROOT}/default-env.sh
 source ${ROOT}/utils.sh
 
 TARGET_IP=$1

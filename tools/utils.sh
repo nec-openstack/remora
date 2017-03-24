@@ -38,7 +38,6 @@ function discovery_url_from_web {
   echo ${discovery_url}
 }
 
-KUBE_TEMP="~/kube_temp"
 SSH_OPTS="-oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -oLogLevel=ERROR"
 
 # Run command over ssh
