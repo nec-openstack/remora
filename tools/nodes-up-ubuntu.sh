@@ -38,6 +38,7 @@ function boot_coreos {
 
   if [ ! -f $LIBVIRT_PATH/$host.qcow2 ]; then
     cp $LIBVIRT_PATH/$IMG_NAME $LIBVIRT_PATH/$host.qcow2
+    qemu-img resize $LIBVIRT_PATH/$host.qcow2 ${disk}G
   fi
 
   bash ${ROOT}/create-userdata.sh \

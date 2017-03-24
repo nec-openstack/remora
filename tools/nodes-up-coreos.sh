@@ -44,6 +44,7 @@ function boot_coreos {
 
   if [ ! -f $LIBVIRT_PATH/$host.qcow2 ]; then
     qemu-img create -f qcow2 -b $LIBVIRT_PATH/$IMG_NAME $LIBVIRT_PATH/$host.qcow2
+    qemu-img resize $LIBVIRT_PATH/$host.qcow2 ${disk}G
   fi
 
   ## Copy certs
