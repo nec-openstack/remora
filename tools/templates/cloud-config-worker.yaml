@@ -35,6 +35,8 @@ coreos:
         content: |
           [Service]
           Environment="DOCKER_OPTS=--log-opt max-size=50m --log-opt max-file=5"
+    - name: systemd-networkd.service
+      command: stop
     - name: 00-${NODE_NET_DEVICE}.network
       runtime: true
       content: |
@@ -45,4 +47,13 @@ coreos:
         DNS=${NODE_DNS}
         Address=${_NODE_ADDRESS}/${NODE_NETWORK_RANGE}
         Gateway=${NODE_GATEWAY}
+    - name: down-interfaces.service
+      command: start
+      content: |
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/bin/ip link set ${NODE_NET_DEVICE} down
+        ExecStart=/usr/bin/ip addr flush dev ${NODE_NET_DEVICE}
+    - name: systemd-networkd.service
+      command: restart
 EOF
