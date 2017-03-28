@@ -22,12 +22,12 @@ ExecStartPre=-${DOCKER_PATH} stop etcd
 ExecStartPre=-${DOCKER_PATH} rm etcd
 ExecStartPre=${DOCKER_PATH} pull gcr.io/google_containers/etcd:3.0.14
 ExecStart=${DOCKER_PATH} run --net=host --rm --name etcd \
-    --volume=/var/etcd/data:/var/etcd/data:rw \
+    --volume=/var/lib/etcd2:/var/lib/etcd2:rw \
     gcr.io/google_containers/etcd:3.0.14 \
     /usr/local/bin/etcd \
     --listen-client-urls=http://0.0.0.0:2379 \
     --advertise-client-urls=http://${NODE_IP}:2379 \
-    --data-dir=/var/etcd/data
+    --data-dir=/var/lib/etcd2
 
 [Install]
 WantedBy=multi-user.target
