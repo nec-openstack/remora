@@ -41,7 +41,9 @@ subjectAltName      = ${sans}
 EOF
 
 
-openssl genrsa -out "${KUBE_KEY}" 4096
+if [[ ! -f ${KUBE_KEY} ]]; then
+    openssl genrsa -out "${KUBE_KEY}" 4096
+fi
 openssl req -new -key "${KUBE_KEY}" \
             -out "${KUBE_CERT_REQ}" \
             -subj "/CN=kube-server" \
