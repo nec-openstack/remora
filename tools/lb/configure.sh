@@ -31,7 +31,7 @@ backend kube_api_backend
 EOF
     local size=1
     for address in ${MASTERS}; do
-        echo "        server api${size} ${address}:${KUBE_PORT} check" >> ${TEMPLATE}
+        echo "        server api${size} ${address}:${KUBE_INTERNAL_PORT} check" >> ${TEMPLATE}
         size=$((size+1))
     done
 
