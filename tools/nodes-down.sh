@@ -3,7 +3,8 @@
 set -eu
 export LC_ALL=C
 
-host_pattern=${1:-".*"}
+DEFAULT_PATTERN="master.*|worker.*"
+host_pattern=${1:-${DEFAULT_PATTERN}}
 
 script_dir=`dirname $0`
 source ${script_dir}/default-env.sh
@@ -31,9 +32,7 @@ function delete_host {
 }
 
 if [[ 'lb' =~ ${host_pattern} ]]; then
-    if [[ ${LB} != "" ]]; then
-      delete_host 'lb' ""
-    fi
+    delete_host 'lb' ""
 fi
 
 i=1
@@ -54,7 +53,7 @@ for HOST in ${WORKERS}; do
     i=$((i+1))
 done
 
-if [[ ${host_pattern} = ".*" ]]; then
+if [[ ${host_pattern} = ${DEFAULT_PATTERN} ]]; then
     echo "Delete cached discovery_url"
     cache_file=${ETCD_DISCOVERY_URL_CACHE_FILE:-"${ROOT}/.discovery_url.cache"}
     if [[ -f ${cache_file} ]]; then

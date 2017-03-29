@@ -3,7 +3,8 @@
 set -eu
 export LC_ALL=C
 
-host_pattern=${1:-".*"}
+DEFAULT_PATTERN="master.*|worker.*"
+host_pattern=${1:-${DEFAULT_PATTERN}}
 
 script_dir=`dirname $0`
 source ${script_dir}/default-env.sh
@@ -98,9 +99,7 @@ function boot_coreos {
 }
 
 function boot_coreos_lb {
-  if [[ ${LB} != "" ]]; then
-    boot_coreos 'lb' ${LB} ${LB_CPU} ${LB_MEMORY} ${LB_DISK} ""
-  fi
+  boot_coreos 'lb' ${LB} ${LB_CPU} ${LB_MEMORY} ${LB_DISK} ""
 }
 
 function boot_coreos_master {
