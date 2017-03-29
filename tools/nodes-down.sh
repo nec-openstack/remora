@@ -31,7 +31,9 @@ function delete_host {
 }
 
 if [[ 'lb' =~ ${host_pattern} ]]; then
-    delete_host 'lb' ""
+    if [[ ${LB} != "" ]]; then
+      delete_host 'lb' ""
+    fi
 fi
 
 i=1

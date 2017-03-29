@@ -98,7 +98,9 @@ function boot_coreos {
 }
 
 function boot_coreos_lb {
-  boot_coreos 'lb' ${LB} ${LB_CPU} ${LB_MEMORY} ${LB_DISK} ""
+  if [[ ${LB} != "" ]]; then
+    boot_coreos 'lb' ${LB} ${LB_CPU} ${LB_MEMORY} ${LB_DISK} ""
+  fi
 }
 
 function boot_coreos_master {

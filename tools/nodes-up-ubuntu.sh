@@ -90,7 +90,9 @@ EOF
 }
 
 function boot_ubuntu_lb {
-  boot_coreos lb ${LB} ${LB_CPU} ${LB_MEMORY} ${LB_DISK} ""
+  if [[ ${LB} != "" ]]; then
+    boot_coreos lb ${LB} ${LB_CPU} ${LB_MEMORY} ${LB_DISK} ""
+  fi
 }
 
 function boot_ubuntu_master {
