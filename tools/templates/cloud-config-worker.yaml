@@ -24,6 +24,7 @@ coreos:
         content: |
           [Service]
           Environment="ETCD_IMAGE_TAG=${ETCD_V3_VERSION_TAG}"
+          Environment="ETCD_SSL_DIR=/etc/kubernetes/ssl"
           Environment="ETCD_PROXY=on"
           Environment="ETCD_DISCOVERY=${DISCOVERY_URL}"
           Environment="ETCD_LISTEN_CLIENT_URLS=http://127.0.0.1:2379"

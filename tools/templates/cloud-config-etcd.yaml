@@ -23,7 +23,8 @@ coreos:
       - name: 00-override.conf
         content: |
           [Service]
-          Environment="ETCD_IMAGE_TAG=v3.1.2"
+          Environment="ETCD_IMAGE_TAG=${ETCD_V3_VERSION_TAG}"
+          Environment="ETCD_SSL_DIR=/etc/kubernetes/ssl"
           Environment="ETCD_NAME=${_NODE_HOSTNAME}"
           Environment="ETCD_DISCOVERY=${DISCOVERY_URL}"
           Environment="ETCD_ADVERTISE_CLIENT_URLS=https://${_NODE_ADDRESS}:2379"
