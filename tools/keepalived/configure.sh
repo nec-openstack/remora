@@ -50,7 +50,7 @@ EnvironmentFile=/etc/environment
 
 ExecStartPre=-${DOCKER_PATH} kill keepalived
 ExecStartPre=-${DOCKER_PATH} rm keepalived
-ExecStartPre=${DOCKER_PATH} pull cbolt/keepalived
+ExecStartPre=${DOCKER_PATH} pull yuanying/keepalived:latest
 
 ExecStart=${DOCKER_PATH} run --rm \
   --name keepalived \
