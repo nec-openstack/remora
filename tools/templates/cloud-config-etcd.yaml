@@ -32,15 +32,15 @@ coreos:
           Environment="ETCD_LISTEN_CLIENT_URLS=https://${_NODE_ADDRESS}:2379,http://127.0.0.1:2379"
           Environment="ETCD_LISTEN_PEER_URLS=https://${_NODE_ADDRESS}:2380"
           Environment="ETCD_CLIENT_CERT_AUTH=true"
-          Environment="ETCD_CERT_FILE=/etc/kubernetes/ssl/apiserver.pem"
-          Environment="ETCD_KEY_FILE=/etc/kubernetes/ssl/apiserver-key.pem"
-          Environment="ETCD_TRUSTED_CA_FILE=/etc/kubernetes/ssl/ca.pem"
-          Environment="ETCD_CA_FILE=/etc/kubernetes/ssl/ca.pem"
+          Environment="ETCD_CERT_FILE=/etc/ssl/certs/apiserver.pem"
+          Environment="ETCD_KEY_FILE=/etc/ssl/certs/apiserver-key.pem"
+          Environment="ETCD_TRUSTED_CA_FILE=/etc/ssl/certs/ca.pem"
+          Environment="ETCD_CA_FILE=/etc/ssl/certs/ca.pem"
           Environment="ETCD_PEER_CLIENT_CERT_AUTH=true"
-          Environment="ETCD_PEER_CERT_FILE=/etc/kubernetes/ssl/apiserver.pem"
-          Environment="ETCD_PEER_KEY_FILE=/etc/kubernetes/ssl/apiserver-key.pem"
-          Environment="ETCD_PEER_TRUSTED_CA_FILE=/etc/kubernetes/ssl/ca.pem"
-          Environment="ETCD_PEER_CA_FILE=/etc/kubernetes/ssl/ca.pem"
+          Environment="ETCD_PEER_CERT_FILE=/etc/ssl/certs/apiserver.pem"
+          Environment="ETCD_PEER_KEY_FILE=/etc/ssl/certs/apiserver-key.pem"
+          Environment="ETCD_PEER_TRUSTED_CA_FILE=/etc/ssl/certs/ca.pem"
+          Environment="ETCD_PEER_CA_FILE=/etc/ssl/certs/ca.pem"
     - name: docker.service
       drop-ins:
       - name: 20-docker-opts.conf

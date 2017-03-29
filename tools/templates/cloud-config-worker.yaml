@@ -28,12 +28,12 @@ coreos:
           Environment="ETCD_PROXY=on"
           Environment="ETCD_DISCOVERY=${DISCOVERY_URL}"
           Environment="ETCD_LISTEN_CLIENT_URLS=http://127.0.0.1:2379"
-          Environment="ETCD_CERT_FILE=/etc/kubernetes/ssl/worker.pem"
-          Environment="ETCD_KEY_FILE=/etc/kubernetes/ssl/worker-key.pem"
-          Environment="ETCD_TRUSTED_CA_FILE=/etc/kubernetes/ssl/ca.pem"
-          Environment="ETCD_PEER_CERT_FILE=/etc/kubernetes/ssl/worker.pem"
-          Environment="ETCD_PEER_KEY_FILE=/etc/kubernetes/ssl/worker-key.pem"
-          Environment="ETCD_PEER_TRUSTED_CA_FILE=/etc/kubernetes/ssl/ca.pem"
+          Environment="ETCD_CERT_FILE=/etc/ssl/certs/worker.pem"
+          Environment="ETCD_KEY_FILE=/etc/ssl/certs/worker-key.pem"
+          Environment="ETCD_TRUSTED_CA_FILE=/etc/ssl/certs/ca.pem"
+          Environment="ETCD_PEER_CERT_FILE=/etc/ssl/certs/worker.pem"
+          Environment="ETCD_PEER_KEY_FILE=/etc/ssl/certs/worker-key.pem"
+          Environment="ETCD_PEER_TRUSTED_CA_FILE=/etc/ssl/certs/ca.pem"
     - name: docker.service
       drop-ins:
       - name: 20-docker-opts.conf
