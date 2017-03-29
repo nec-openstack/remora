@@ -23,11 +23,8 @@ coreos:
       - name: 00-override.conf
         content: |
           [Service]
-          Environment="RKT_RUN_ARGS=--uuid-file-save=/var/lib/coreos/etcd-member-wrapper.uuid \
-                       --volume etc-ssl-k8s-certs,kind=host,source="/etc/kubernetes/ssl",readOnly=true \
-                       --mount volume=etc-ssl-k8s-certs,target=/etc/kubernetes/ssl"
+          Environment="RKT_RUN_ARGS=--uuid-file-save=/var/lib/coreos/etcd-member-wrapper.uuid --volume etc-ssl-k8s-certs,kind=host,source="/etc/kubernetes/ssl",readOnly=true --mount volume=etc-ssl-k8s-certs,target=/etc/kubernetes/ssl"
           Environment="ETCD_IMAGE_TAG=${ETCD_V3_VERSION_TAG}"
-          Environment="ETCD_SSL_DIR=/etc/kubernetes/ssl"
           Environment="ETCD_PROXY=on"
           Environment="ETCD_DISCOVERY=${DISCOVERY_URL}"
           Environment="ETCD_LISTEN_CLIENT_URLS=http://127.0.0.1:2379"
