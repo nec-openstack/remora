@@ -16,19 +16,23 @@ ssh_authorized_keys:
 coreos:
   update:
     reboot-strategy: ${COREOS_REBOOT_STRATEGY:-"etcd-lock"}
-  etcd2:
-    proxy: on
-    discovery: ${DISCOVERY_URL}
-    listen-client-urls: http://127.0.0.1:2379
-    cert-file: /etc/kubernetes/ssl/worker.pem
-    key-file: /etc/kubernetes/ssl/worker-key.pem
-    trusted-ca-file: /etc/kubernetes/ssl/ca.pem
-    peer-cert-file: /etc/kubernetes/ssl/worker.pem
-    peer-key-file: /etc/kubernetes/ssl/worker-key.pem
-    peer-trusted-ca-file: /etc/kubernetes/ssl/ca.pem
   units:
-    - name: etcd2.service
+    - name: etcd-member.service
       command: start
+      drop-ins:
+      - name: 00-override.conf
+        content: |
+          [Service]
+          Environment="ETCD_IMAGE_TAG=${ETCD_V3_VERSION_TAG}"
+          Environment="ETCD_PROXY=on"
+          Environment="ETCD_DISCOVERY=${DISCOVERY_URL}"
+          Environment="ETCD_LISTEN_CLIENT_URLS=http://127.0.0.1:2379"
+          Environment="ETCD_CERT_FILE=/etc/kubernetes/ssl/worker.pem"
+          Environment="ETCD_KEY_FILE=/etc/kubernetes/ssl/worker-key.pem"
+          Environment="ETCD_TRUSTED_CA_FILE=/etc/kubernetes/ssl/ca.pem"
+          Environment="ETCD_PEER_CERT_FILE=/etc/kubernetes/ssl/worker.pem"
+          Environment="ETCD_PEER_KEY_FILE=/etc/kubernetes/ssl/worker-key.pem"
+          Environment="ETCD_PEER_TRUSTED_CA_FILE=/etc/kubernetes/ssl/ca.pem"
     - name: docker.service
       drop-ins:
       - name: 20-docker-opts.conf
