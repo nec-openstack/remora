@@ -19,49 +19,21 @@ coreos:
   units:
     - name: etcd-member.service
       command: start
-      content: |
-        [Unit]
-        Description=etcd (System Application Container)
-        Documentation=https://github.com/coreos/etcd
-        Wants=network.target
-        Conflicts=etcd.service
-        Conflicts=etcd2.service
-
-        [Service]
-        Type=notify
-        Restart=on-failure
-        RestartSec=10s
-        TimeoutStartSec=0
-        LimitNOFILE=40000
-
-        Environment="ETCD_IMAGE_TAG=v3.0.10"
-        Environment="ETCD_NAME=%m"
-        Environment="ETCD_USER=etcd"
-        Environment="ETCD_DATA_DIR=/var/lib/etcd"
-        Environment="RKT_RUN_ARGS=--uuid-file-save=/var/lib/coreos/etcd-member-wrapper.uuid --volume etc-ssl-k8s-certs,kind=host,source="/etc/kubernetes/ssl",readOnly=true --mount volume=etc-ssl-k8s-certs,target=/etc/kubernetes/ssl"
-
-        ExecStartPre=/usr/bin/mkdir --parents /var/lib/coreos
-        ExecStartPre=-/usr/bin/rkt rm --uuid-file=/var/lib/coreos/etcd-member-wrapper.uuid
-        ExecStart=/usr/lib/coreos/etcd-wrapper \$ETCD_OPTS
-        ExecStop=-/usr/bin/rkt stop --uuid-file=/var/lib/coreos/etcd-member-wrapper.uuid
-
-        [Install]
-        WantedBy=multi-user.target
       drop-ins:
       - name: 00-override.conf
         content: |
           [Service]
+          Environment="RKT_RUN_ARGS=--uuid-file-save=/var/lib/coreos/etcd-member-wrapper.uuid --volume etc-ssl-k8s-certs,kind=host,source=/etc/kubernetes/ssl,readOnly=true --mount volume=etc-ssl-k8s-certs,target=/etc/kubernetes/ssl"
           Environment="ETCD_IMAGE_TAG=${ETCD_V3_VERSION_TAG}"
-          Environment="ETCD_SSL_DIR=/etc/kubernetes/ssl"
           Environment="ETCD_PROXY=on"
           Environment="ETCD_DISCOVERY=${DISCOVERY_URL}"
           Environment="ETCD_LISTEN_CLIENT_URLS=http://127.0.0.1:2379"
-          Environment="ETCD_CERT_FILE=/etc/ssl/certs/worker.pem"
-          Environment="ETCD_KEY_FILE=/etc/ssl/certs/worker-key.pem"
-          Environment="ETCD_TRUSTED_CA_FILE=/etc/ssl/certs/ca.pem"
-          Environment="ETCD_PEER_CERT_FILE=/etc/ssl/certs/worker.pem"
-          Environment="ETCD_PEER_KEY_FILE=/etc/ssl/certs/worker-key.pem"
-          Environment="ETCD_PEER_TRUSTED_CA_FILE=/etc/ssl/certs/ca.pem"
+          Environment="ETCD_CERT_FILE=/etc/kubernetes/ssl/worker.pem"
+          Environment="ETCD_KEY_FILE=/etc/kubernetes/ssl/worker-key.pem"
+          Environment="ETCD_TRUSTED_CA_FILE=/etc/kubernetes/ssl/ca.pem"
+          Environment="ETCD_PEER_CERT_FILE=/etc/kubernetes/ssl/worker.pem"
+          Environment="ETCD_PEER_KEY_FILE=/etc/kubernetes/ssl/worker-key.pem"
+          Environment="ETCD_PEER_TRUSTED_CA_FILE=/etc/kubernetes/ssl/ca.pem"
     - name: docker.service
       drop-ins:
       - name: 20-docker-opts.conf
