@@ -27,7 +27,7 @@ frontend kube_api
         bind 0.0.0.0:${KUBE_PORT}
         default_backend kube_api_backend
 backend kube_api_backend
-        option ssl-hello-chk
+        option tcp-check
 EOF
     local size=1
     for address in ${MASTERS}; do
