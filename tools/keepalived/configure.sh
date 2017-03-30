@@ -58,7 +58,7 @@ ExecStart=${DOCKER_PATH} run --rm \
   --cap-add=NET_BROADCAST \
   --net=host \
   -v /etc/keepalived/keepalived.cfg:/etc/keepalived/keepalived.cfg:ro \
-  cbolt/keepalived
+  yuanying/keepalived
 
 [Install]
 WantedBy=multi-user.target
