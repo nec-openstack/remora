@@ -7,7 +7,8 @@ script_dir=`dirname $0`
 source ${script_dir}/default-env.sh
 source ${script_dir}/utils.sh
 
-host_pattern=${1:-".*"}
+DEFAULT_PATTERN="master.*|worker.*"
+host_pattern=${1:-${DEFAULT_PATTERN}}
 target_dir=${2:-"${script_dir}/images"}
 
 CHANNEL=stable
