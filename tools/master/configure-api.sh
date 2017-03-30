@@ -42,6 +42,7 @@ spec:
     - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
     - --anonymous-auth=false
     - --etcd-servers=${ETCD_ENDPOINT}
+    - --storage-backend=${KUBE_STORAGE_BACKEND}
     livenessProbe:
       httpGet:
         host: 127.0.0.1

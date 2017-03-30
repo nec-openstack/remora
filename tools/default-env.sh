@@ -55,7 +55,7 @@ export FLANNEL_BACKEND_TYPE=${FLANNEL_BACKEND_TYPE:-"vxlan"}
 export KUBERNETES_SERVICE_IP=${KUBERNETES_SERVICE_IP:-${LB}}
 
 export HYPERKUBE_IMAGE_REPO=${HYPERKUBE_IMAGE_REPO:-"gcr.io/google_containers/hyperkube"}
-export KUBE_VERSION=${KUBE_VERSION:-"v1.5.4"}
+export KUBE_VERSION=${KUBE_VERSION:-"v1.6.0"}
 export KUBE_CLUSTER_CIDR=${KUBE_CLUSTER_CIDR:-"10.244.0.0/16"}
 export KUBE_SERVICE_IP_RANGE=${KUBE_SERVICE_IP_RANGE:-"10.254.0.0/24"}
 export KUBE_INTERNAL_SERVICE_IP=${KUBE_INTERNAL_SERVICE_IP:-"10.254.0.1"}
@@ -66,6 +66,7 @@ export KUBE_CNI_PLUGIN=${KUBE_CNI_PLUGIN:-"flannel"}
 export KUBE_PORT=${KUBE_PORT:-"443"}
 export KUBE_INTERNAL_PORT=${KUBE_INTERNAL_PORT:-"6443"}
 export KUBE_ADMISSION_CONTROL=${KUBE_ADMISSION_CONTROL:-"NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota"}
+export KUBE_STORAGE_BACKEND=${KUBE_STORAGE_BACKEND:-"etcd2"}
 export KUBE_TEMP="~/kube_temp"
 
 ## For cloud provider
