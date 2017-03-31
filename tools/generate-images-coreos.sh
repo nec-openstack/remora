@@ -14,7 +14,6 @@ target_dir=${2:-"${script_dir}/images"}
 CHANNEL=stable
 RELEASE=current
 IMG_NAME="coreos_${CHANNEL}_${RELEASE}_image.img"
-DISCOVERY_URL=$(discovery_url)
 
 if [ ! -d ${target_dir} ]; then
   mkdir -p ${target_dir} || (echo "Can not create ${target_dir} directory" && exit 1)
@@ -76,10 +75,6 @@ function create_coreos_disk {
   echo "Created: $target_dir/coreos-disk-${address}.img"
  }
 
-function create_coreos_disk_lb {
-  create_coreos_disk 'lb' ${LB} ${LB_CPU} ${LB_MEMORY} ${LB_DISK}
-}
-
 function create_coreos_disk_master {
   local host=$1
   local address=$2
@@ -91,10 +86,6 @@ function create_coreos_disk_worker {
   local address=$2
   create_coreos_disk $host $address ${WORKER_CPU} ${WORKER_MEMORY} ${WORKER_DISK}
 }
-
-if [[ "lb" =~ ${host_pattern} ]]; then
-  create_coreos_disk_lb
-fi
 
 i=1
 for MASTER_ADDRESS in ${MASTERS}; do

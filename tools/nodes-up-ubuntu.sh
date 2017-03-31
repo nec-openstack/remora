@@ -90,10 +90,6 @@ EOF
                --noautoconsole
 }
 
-function boot_ubuntu_lb {
-  boot_coreos lb ${LB} ${LB_CPU} ${LB_MEMORY} ${LB_DISK} ""
-}
-
 function boot_ubuntu_master {
   local host=$1
   local address=$2
@@ -105,10 +101,6 @@ function boot_ubuntu_worker {
   local address=$2
   boot_coreos $host $address ${WORKER_CPU} ${WORKER_MEMORY} ${WORKER_DISK} "${WORKER_ADDISIONAL_DISKS}"
 }
-
-if [[ 'lb' =~ ${host_pattern} ]]; then
-  boot_ubuntu_lb
-fi
 
 i=1
 for MASTER_ADDRESS in ${MASTERS}; do

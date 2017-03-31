@@ -13,7 +13,6 @@ source ${script_dir}/utils.sh
 CHANNEL=stable
 RELEASE=current
 IMG_NAME="coreos_${CHANNEL}_${RELEASE}_qemu_image.img"
-DISCOVERY_URL=$(discovery_url)
 
 if [ ! -d $LIBVIRT_PATH ]; then
   mkdir -p $LIBVIRT_PATH || (echo "Can not create $LIBVIRT_PATH directory" && exit 1)
@@ -97,10 +96,6 @@ function boot_coreos {
                --noautoconsole
 }
 
-function boot_coreos_lb {
-  boot_coreos 'lb' ${LB} ${LB_CPU} ${LB_MEMORY} ${LB_DISK} ""
-}
-
 function boot_coreos_master {
   local host=$1
   local address=$2
@@ -112,10 +107,6 @@ function boot_coreos_worker {
   local address=$2
   boot_coreos $host $address ${WORKER_CPU} ${WORKER_MEMORY} ${WORKER_DISK} "${WORKER_ADDISIONAL_DISKS}"
 }
-
-if [[ "lb" =~ ${host_pattern} ]]; then
-  boot_coreos_lb
-fi
 
 i=1
 for MASTER_ADDRESS in ${MASTERS}; do

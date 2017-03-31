@@ -20,5 +20,5 @@ for MASTER in ${MASTERS}; do
     echo "Install keepalived to Master Node: ${MASTER}"
     source ${ROOT}/configure-node.sh keepalived ${MASTER}
     echo "Install HAProxy to Master Node: ${MASTER}"
-    source ${ROOT}/configure-node.sh lb ${LB}
+    source ${ROOT}/configure-node.sh lb ${MASTER}
 done

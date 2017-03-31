@@ -24,10 +24,10 @@ ExecStartPre=-${DOCKER_PATH} rm etcd
 ExecStartPre=${DOCKER_PATH} pull ${ETCD_IMAGE_REPO}:${ETCD_V3_VERSION_TAG}
 ExecStart=${DOCKER_PATH} run --net=host --rm --name etcd \
     --volume=/var/lib/etcd:/var/lib/etcd:rw \
-    --volume=/etc/ssl/certs:/etc/ssl/certs:r \
-    --volume=/usr/share/ca-certificates:/usr/share/ca-certificates:r \
-    --volume=${ETCD_CERTS_DIR}:${ETCD_CERTS_DIR}:r \
-    ${ETCD_IMAGE_REPO}:${ETCD_V3_VERSION_TAG}
+    --volume=/etc/ssl/certs:/etc/ssl/certs:ro \
+    --volume=/usr/share/ca-certificates:/usr/share/ca-certificates:ro \
+    --volume=${ETCD_CERTS_DIR}:${ETCD_CERTS_DIR}:ro \
+    ${ETCD_IMAGE_REPO}:${ETCD_V3_VERSION_TAG} \
     /usr/local/bin/etcd \
     --name=${_HOSTNAME} \
     --discovery=${DISCOVERY_URL} \

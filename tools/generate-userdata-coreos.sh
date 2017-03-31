@@ -7,8 +7,6 @@ script_dir=`dirname $0`
 source ${script_dir}/default-env.sh
 source ${script_dir}/utils.sh
 
-DISCOVERY_URL=$(discovery_url)
-
 function generate_userdata {
     local host=$1
     local address=$2
@@ -18,8 +16,6 @@ function generate_userdata {
       ${address} \
       coreos > ${ROOT}/userdata/user_data-${address}.yaml
 }
-
-generate_userdata 'lb' ${LB}
 
 i=1
 for MASTER_ADDRESS in ${MASTERS}; do

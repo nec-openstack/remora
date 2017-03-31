@@ -55,8 +55,6 @@ export FLANNEL_BACKEND_TYPE=${FLANNEL_BACKEND_TYPE:-"vxlan"}
 
 ## For Kubernetes Setup
 
-export KUBERNETES_SERVICE_IP=${KUBERNETES_SERVICE_IP:-${LB}}
-
 export HYPERKUBE_IMAGE_REPO=${HYPERKUBE_IMAGE_REPO:-"gcr.io/google_containers/hyperkube"}
 export KUBE_VERSION=${KUBE_VERSION:-"v1.6.0"}
 export KUBE_CLUSTER_CIDR=${KUBE_CLUSTER_CIDR:-"10.244.0.0/16"}
@@ -111,9 +109,9 @@ export WORKER_ADDISIONAL_DISKS=${WORKER_ADDISIONAL_DISKS:-"40"}
 
 ## For coreos
 
-export DISCOVERY_URL=${DISCOVERY_URL:-"auto"}
+export DISCOVERY_URL=${DISCOVERY_URL:-""}
 
 ## For instance use
 
-MACHINES="${LB} ${ETCDS} ${ETCD_PROXIES} ${MASTERS} ${WORKERS}"
+MACHINES="${MASTERS} ${WORKERS}"
 export MACHINES=$(echo "${MACHINES[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ')

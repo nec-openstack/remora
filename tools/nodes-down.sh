@@ -52,11 +52,3 @@ for HOST in ${WORKERS}; do
     fi
     i=$((i+1))
 done
-
-if [[ ${host_pattern} = ${DEFAULT_PATTERN} ]]; then
-    echo "Delete cached discovery_url"
-    cache_file=${ETCD_DISCOVERY_URL_CACHE_FILE:-"${ROOT}/.discovery_url.cache"}
-    if [[ -f ${cache_file} ]]; then
-        rm -f ${cache_file}
-    fi
-fi

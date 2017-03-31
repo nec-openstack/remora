@@ -36,6 +36,7 @@ composition.
     export KUBERNETES_SERVICE_IP=${LB}
     export MASTERS="192.168.1.111 192.168.1.112"
     export WORKERS="192.168.1.121 192.168.1.122"
+    export DISCOVERY_URL=$(curl "https://discovery.etcd.io/new?size=2")
     EOF
 
 This config file specify ETCD/LB address and Kubernetes master/worker
