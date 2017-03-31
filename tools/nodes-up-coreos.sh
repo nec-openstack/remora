@@ -36,7 +36,6 @@ function boot_coreos {
   local gateway=${NODE_GATEWAY}
   local dns=${NODE_DNS}
   local net_device=${NODE_NET_DEVICE}
-  local etcd=${7:-""}
 
   echo "Creating ${host} node..."
 
@@ -82,7 +81,7 @@ function boot_coreos {
   bash ${ROOT}/create-userdata.sh \
     ${host} \
     ${address} \
-    ${etcd} > $LIBVIRT_PATH/${host}/openstack/latest/user_data
+    coreos > $LIBVIRT_PATH/${host}/openstack/latest/user_data
 
   virt-install --connect qemu:///system \
                --import \
@@ -105,7 +104,7 @@ function boot_coreos_lb {
 function boot_coreos_master {
   local host=$1
   local address=$2
-  boot_coreos $host $address ${MASTER_CPU} ${MASTER_MEMORY} ${MASTER_DISK} "" "etcd"
+  boot_coreos $host $address ${MASTER_CPU} ${MASTER_MEMORY} ${MASTER_DISK} ""
 }
 
 function boot_coreos_worker {

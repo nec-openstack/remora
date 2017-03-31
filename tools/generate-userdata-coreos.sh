@@ -12,12 +12,11 @@ DISCOVERY_URL=$(discovery_url)
 function generate_userdata {
     local host=$1
     local address=$2
-    local etcd=${3:-""}
 
     bash ${ROOT}/create-userdata.sh \
       ${host} \
       ${address} \
-      ${etcd} > ${ROOT}/userdata/user_data-${address}.yaml
+      coreos > ${ROOT}/userdata/user_data-${address}.yaml
 }
 
 generate_userdata 'lb' ${LB}
@@ -25,7 +24,7 @@ generate_userdata 'lb' ${LB}
 i=1
 for MASTER_ADDRESS in ${MASTERS}; do
     HOST="master$(printf "%02d" $i)"
-    generate_userdata ${HOST} ${MASTER_ADDRESS} 'etcd'
+    generate_userdata ${HOST} ${MASTER_ADDRESS}
     i=$((i+1))
 done
 

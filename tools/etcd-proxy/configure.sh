@@ -30,20 +30,15 @@ ExecStart=${DOCKER_PATH} run --net=host --rm --name etcd \
     ${ETCD_IMAGE_REPO}:${ETCD_V3_VERSION_TAG}
     /usr/local/bin/etcd \
     --name=${_HOSTNAME} \
+    --proxy=on \
     --discovery=${DISCOVERY_URL} \
-    --advertise-client-urls=https://${NODE_IP}:2379 \
-    --initial-advertise-peer-urls=https://${NODE_IP}:2380 \
-    --listen-client-urls=https://${NODE_IP}:2379,http://127.0.0.1:2379 \
-    --listen-peer-urls=https://${NODE_IP}:2380 \
-    --client-cert-auth=true \
-    --cert-file=${ETCD_CERTS_DIR}/apiserver.pem \
-    --key-file=${ETCD_CERTS_DIR}/apiserver-key.pem \
+    --listen-client-urls=http://127.0.0.1:2379 \
+    --cert-file=${ETCD_CERTS_DIR}/worker.pem \
+    --key-file=${ETCD_CERTS_DIR}/worker-key.pem \
     --trusted-ca-file=${ETCD_CERTS_DIR}/ca.pem \
-    --peer-client-cert-auth=true \
-    --peer-cert-file=${ETCD_CERTS_DIR}/apiserver.pem \
-    --peer-key-file=${ETCD_CERTS_DIR}/apiserver-key.pem \
-    --peer-trusted-ca-file=${ETCD_CERTS_DIR}/ca.pem \
-    --data-dir=/var/lib/etcd
+    --peer-cert-file=${ETCD_CERTS_DIR}/worker.pem \
+    --peer-key-file=${ETCD_CERTS_DIR}/worker-key.pem \
+    --peer-trusted-ca-file=${ETCD_CERTS_DIR}/ca.pem
 
 [Install]
 WantedBy=multi-user.target

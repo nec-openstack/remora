@@ -36,7 +36,6 @@ function create_coreos_disk {
   local gateway=${NODE_GATEWAY}
   local dns=${NODE_DNS}
   local net_device=${NODE_NET_DEVICE}
-  local etcd=${6:-""}
 
   local rootfs=${target_dir}/rootfs-${address}
   mkdir -p ${rootfs}
@@ -68,7 +67,7 @@ function create_coreos_disk {
   bash ${ROOT}/create-userdata.sh \
     ${host} \
     ${address} \
-    ${etcd} > ${rootfs}/var/lib/coreos-install/user_data
+    coreos > ${rootfs}/var/lib/coreos-install/user_data
 
   umount ${rootfs}
   kpartx -dv ${loop_device}
@@ -84,7 +83,7 @@ function create_coreos_disk_lb {
 function create_coreos_disk_master {
   local host=$1
   local address=$2
-  create_coreos_disk $host $address ${MASTER_CPU} ${MASTER_MEMORY} ${MASTER_DISK} "etcd"
+  create_coreos_disk $host $address ${MASTER_CPU} ${MASTER_MEMORY} ${MASTER_DISK}
 }
 
 function create_coreos_disk_worker {

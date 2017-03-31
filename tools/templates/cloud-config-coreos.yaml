@@ -17,23 +17,6 @@ coreos:
   update:
     reboot-strategy: ${COREOS_REBOOT_STRATEGY:-"etcd-lock"}
   units:
-    - name: etcd-member.service
-      command: start
-      drop-ins:
-      - name: 00-override.conf
-        content: |
-          [Service]
-          Environment="RKT_RUN_ARGS=--uuid-file-save=/var/lib/coreos/etcd-member-wrapper.uuid --volume etc-ssl-k8s-certs,kind=host,source=/etc/kubernetes/ssl,readOnly=true --mount volume=etc-ssl-k8s-certs,target=/etc/kubernetes/ssl"
-          Environment="ETCD_IMAGE_TAG=${ETCD_V3_VERSION_TAG}"
-          Environment="ETCD_PROXY=on"
-          Environment="ETCD_DISCOVERY=${DISCOVERY_URL}"
-          Environment="ETCD_LISTEN_CLIENT_URLS=http://127.0.0.1:2379"
-          Environment="ETCD_CERT_FILE=/etc/kubernetes/ssl/worker.pem"
-          Environment="ETCD_KEY_FILE=/etc/kubernetes/ssl/worker-key.pem"
-          Environment="ETCD_TRUSTED_CA_FILE=/etc/kubernetes/ssl/ca.pem"
-          Environment="ETCD_PEER_CERT_FILE=/etc/kubernetes/ssl/worker.pem"
-          Environment="ETCD_PEER_KEY_FILE=/etc/kubernetes/ssl/worker-key.pem"
-          Environment="ETCD_PEER_TRUSTED_CA_FILE=/etc/kubernetes/ssl/ca.pem"
     - name: docker.service
       drop-ins:
       - name: 20-docker-opts.conf

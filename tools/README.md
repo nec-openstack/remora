@@ -32,9 +32,8 @@ composition.
     # OS useraname which is used for ssh login.
     # This user also needs to sudo with no password.
     export NODE_USERNAME="ubuntu"
-    export ETCD="192.168.1.101"
-    export ETCD_ENDPOINT="http://${ETCD}:2379"
     export LB="192.168.1.101"
+    export KUBERNETES_SERVICE_IP=${LB}
     export MASTERS="192.168.1.111 192.168.1.112"
     export WORKERS="192.168.1.121 192.168.1.122"
     EOF

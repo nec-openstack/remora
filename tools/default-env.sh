@@ -25,10 +25,12 @@ if [ -f "${ROOT}/env.${CLUSTER_NAME}.sh" ]; then
     source "${ROOT}/env.${CLUSTER_NAME}.sh"
 fi
 
+export KUBERNETES_SERVICE_IP=${KUBERNETES_SERVICE_IP:-"192.168.1.101"}
 export LB=${LB:-"192.168.1.101"}
-export ETCD=${ETCD:-${LB}}
 export MASTERS=${MASTERS:-"192.168.1.111 192.168.1.112 192.168.1.113"}
+export ETCDS=${ETCDS:-${MASTERS}}
 export WORKERS=${WORKERS:-"192.168.1.121 192.168.1.122"}
+export ETCD_PROXIES=${ETCD_PROXIES:-${WORKERS}}
 
 ## For certs
 
@@ -40,9 +42,10 @@ export DOCKER_PATH=${DOCKER_PATH:-"/usr/bin/docker"}
 
 ## For Etcd
 
-export ETCD_INSECURE_ADDRESS=${ETCD_INSECURE_ADDRESS:-"127.0.0.1"}
-export ETCD_ENDPOINT=${ETCD_ENDPOINT:-http://${ETCD_INSECURE_ADDRESS}:2379}
-export ETCD_V3_VERSION_TAG=${ETCD_V3_VERSION_TAG:-"v3.1.2"}
+export ETCD_ENDPOINT=${ETCD_ENDPOINT:-http://127.0.0.1:2379}
+export ETCD_V3_VERSION_TAG=${ETCD_V3_VERSION_TAG:-"v3.1.5"}
+export ETCD_IMAGE_REPO=${ETCD_IMAGE_REPO:-"quay.io/coreos/etcd"}
+export ETCD_CERTS_DIR=${ETCD_CERTS_DIR:-"/etc/kubernetes/ssl"}
 
 ## For Flannel
 
@@ -66,7 +69,7 @@ export KUBE_CNI_PLUGIN=${KUBE_CNI_PLUGIN:-"flannel"}
 export KUBE_PORT=${KUBE_PORT:-"443"}
 export KUBE_INTERNAL_PORT=${KUBE_INTERNAL_PORT:-"6443"}
 export KUBE_ADMISSION_CONTROL=${KUBE_ADMISSION_CONTROL:-"NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota"}
-export KUBE_STORAGE_BACKEND=${KUBE_STORAGE_BACKEND:-"etcd2"}
+export KUBE_STORAGE_BACKEND=${KUBE_STORAGE_BACKEND:-"etcd3"}
 export KUBE_TEMP="~/kube_temp"
 
 ## For cloud provider
@@ -112,5 +115,5 @@ export DISCOVERY_URL=${DISCOVERY_URL:-"auto"}
 
 ## For instance use
 
-MACHINES="${LB} ${ETCD} ${MASTERS} ${WORKERS}"
+MACHINES="${LB} ${ETCDS} ${ETCD_PROXIES} ${MASTERS} ${WORKERS}"
 export MACHINES=$(echo "${MACHINES[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ')
