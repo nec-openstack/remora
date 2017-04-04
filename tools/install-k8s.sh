@@ -7,18 +7,5 @@ address_pattern=${1:-".*"}
 ROOT=$(dirname "${BASH_SOURCE}")
 source ${ROOT}/default-env.sh
 
-for MASTER in ${MASTERS}; do
-    if [[ ! ${MASTER} =~ ${address_pattern} ]]; then
-        continue
-    fi
-    echo "Install Master Node: ${MASTER}"
-    source ${ROOT}/configure-node.sh master ${MASTER}
-done
-
-for WORKER in ${WORKERS}; do
-    if [[ ! ${WORKER} =~ ${address_pattern} ]]; then
-        continue
-    fi
-    echo "Install Worker Node: ${WORKER}"
-    source ${ROOT}/configure-node.sh worker ${WORKER}
-done
+bash ${ROOT}/install-k8s-master.sh "${address_pattern}"
+bash ${ROOT}/install-k8s-worker.sh "${address_pattern}"
