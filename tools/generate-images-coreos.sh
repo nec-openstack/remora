@@ -28,9 +28,6 @@ bash ${ROOT}/generate-certs.sh
 function create_coreos_disk {
   local host=$1
   local address=$2
-  local cpus=$3
-  local memory=$4
-  local disk=$5
   local network_range=${NODE_NETWORK_RANGE}
   local gateway=${NODE_GATEWAY}
   local dns=${NODE_DNS}
@@ -78,13 +75,13 @@ function create_coreos_disk {
 function create_coreos_disk_master {
   local host=$1
   local address=$2
-  create_coreos_disk $host $address ${MASTER_CPU} ${MASTER_MEMORY} ${MASTER_DISK}
+  create_coreos_disk $host $address
 }
 
 function create_coreos_disk_worker {
   local host=$1
   local address=$2
-  create_coreos_disk $host $address ${WORKER_CPU} ${WORKER_MEMORY} ${WORKER_DISK}
+  create_coreos_disk $host $address
 }
 
 i=1
