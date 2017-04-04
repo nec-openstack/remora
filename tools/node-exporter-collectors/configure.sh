@@ -20,8 +20,10 @@ Type=oneshot
 ExecStartPre=-${DOCKER_PATH} stop node-exporter-smartmon
 ExecStartPre=-${DOCKER_PATH} rm node-exporter-smartmon
 ExecStartPre=${DOCKER_PATH} pull yuanying/node-exporter-smartmon:latest
-ExecStart=${DOCKER_PATH} run --rm --name node-exporter-smartmon \
-    --privileged > /var/lib/node-exporter/smartmon.prom
+ExecStart=/bin/sh -c '${DOCKER_PATH} run --rm --name node-exporter-smartmon \
+    --privileged \
+    yuanying/node-exporter-smartmon:latest \
+    2>&1 > /var/lib/node-exporter/smartmon.prom'
 
 [Install]
 WantedBy=multi-user.target
