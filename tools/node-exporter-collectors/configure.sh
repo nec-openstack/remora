@@ -17,11 +17,11 @@ Requires=docker.service
 
 [Service]
 Type=oneshot
-ExecStartPre=-mkdir -p /var/lib/node-exporter
 ExecStartPre=-${DOCKER_PATH} stop node-exporter-smartmon
 ExecStartPre=-${DOCKER_PATH} rm node-exporter-smartmon
 ExecStartPre=${DOCKER_PATH} pull yuanying/node-exporter-smartmon:latest
-ExecStart=/bin/sh -c '${DOCKER_PATH} run --rm --name node-exporter-smartmon \
+ExecStart=/bin/sh -c 'mkdir -p /var/lib/node-exporter && \
+    ${DOCKER_PATH} run --rm --name node-exporter-smartmon \
     --privileged \
     yuanying/node-exporter-smartmon:latest \
     2>&1 > /var/lib/node-exporter/smartmon.prom.tmp && \
