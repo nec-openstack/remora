@@ -17,6 +17,7 @@ Requires=docker.service
 
 [Service]
 Type=oneshot
+ExecStartPre=-mkdir -p /var/lib/node-exporter
 ExecStartPre=-${DOCKER_PATH} stop node-exporter-smartmon
 ExecStartPre=-${DOCKER_PATH} rm node-exporter-smartmon
 ExecStartPre=${DOCKER_PATH} pull yuanying/node-exporter-smartmon:latest

@@ -14,15 +14,15 @@ on your baremetal or OpenStack VMs.
 
 ## How to install Kubernetes
 
-This document assumes that you have 5 machines on which Docker 1.12 is
+This document assumes that you have 4 machines on which Docker 1.12 is
 already installed. And finally you will build a cluster of the following
 composition.
 
--   Machine01(192.168.1.101): LB/Etcd are installed
--   Machine02(192.168.1.111): Kubernetes Master
--   Machine03(192.168.1.112): Kubernetes Master
--   Machine04(192.168.1.121): Kubernetes Worker
--   Machine05(192.168.1.122): Kubernetes Worker
+-   VIP(192.168.1.101): VIP for accessing Kubernetes
+-   Machine01(192.168.1.111): Kubernetes Master
+-   Machine02(192.168.1.112): Kubernetes Master
+-   Machine03(192.168.1.121): Kubernetes Worker
+-   Machine04(192.168.1.122): Kubernetes Worker
 
 ### 1. Clone this repository and write config file
 
@@ -32,8 +32,7 @@ composition.
     # OS useraname which is used for ssh login.
     # This user also needs to sudo with no password.
     export NODE_USERNAME="ubuntu"
-    export LB="192.168.1.101"
-    export KUBERNETES_SERVICE_IP=${LB}
+    export KUBERNETES_SERVICE_IP="192.168.1.101"
     export MASTERS="192.168.1.111 192.168.1.112"
     export WORKERS="192.168.1.121 192.168.1.122"
     export DISCOVERY_URL=$(curl "https://discovery.etcd.io/new?size=2")
@@ -54,12 +53,16 @@ create these assets.
 After this procedure, TLS certs are generated in `certs` directory, and
 copied to correct node.
 
-### 3. Install LB
+### 3. Install LB/Keepalived
 
 If you want to build multi master node cluster, then LB is required.
 
     $ export CLUSTER_NAME=my-cluster
-    $ bash tools/install-lb.sh
+    $ bash tools/install-keepalived.sh
+
+Note: This script attach `VIP` to one of masters. So if your cluster is
+building under OpenStack, you have to configure `allowed-address-pairs`.
+Check how to use `keepalived` on OpenStack environment.
 
 ### 4. Install Etcd
 
