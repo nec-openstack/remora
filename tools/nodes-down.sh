@@ -17,18 +17,7 @@ function delete_host {
 
     virsh destroy ${host}
     virsh undefine ${host}
-    rm -f ${LIBVIRT_PATH}/${host}.qcow2
-    rm -rf ${LIBVIRT_PATH}/${host}
-
-    local dev_index='b'
-    local additional_disk=''
-    for disk_size in ${disks}; do
-        additional_disk=${LIBVIRT_PATH}/${host}-vd${dev_index}.qcow2
-        if [ ! -f ${additional_disk} ]; then
-            rm -f ${additional_disk}
-        fi
-        dev_index=$(echo "$dev_index" | tr "0-9a-z" "1-9a-z_")
-    done
+    rm -rf ${LIBVIRT_PATH}/${host}*
 }
 
 if [[ 'lb' =~ ${host_pattern} ]]; then
