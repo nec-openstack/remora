@@ -66,6 +66,7 @@ function create_coreos_disk {
     coreos > ${rootfs}/var/lib/coreos-install/user_data
 
   umount ${rootfs}
+  sleep 1
   kpartx -dv ${loop_device}
   losetup -d ${loop_device}
 
