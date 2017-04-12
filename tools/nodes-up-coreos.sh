@@ -51,11 +51,11 @@ function boot_coreos {
   local additional_disk=''
   local additional_disk_params=''
   for disk_size in ${disks}; do
-    additional_disk=${LIBVIRT_PATH}/${host}-vd${dev_index}.qcow2
+    additional_disk=${LIBVIRT_PATH}/${host}-vd${dev_index}.img
     if [ ! -f ${additional_disk} ]; then
-      qemu-img create -f qcow2 ${additional_disk} ${disk_size}G
+      qemu-img create ${additional_disk} ${disk_size}G
     fi
-    additional_disk_params=${additional_disk_params}" --disk path=${additional_disk},format=qcow2,bus=virtio"
+    additional_disk_params=${additional_disk_params}" --disk path=${additional_disk},format=raw,bus=virtio"
     dev_index=$(echo "$dev_index" | tr "0-9a-z" "1-9a-z_")
   done
 
