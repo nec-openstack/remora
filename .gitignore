@@ -66,3 +66,5 @@ tools/env.*
 tools/images
 tools/certs/*.cnf
 tools/userdata/*.yaml
+
+.DS_Store

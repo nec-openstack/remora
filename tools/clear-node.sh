@@ -16,6 +16,6 @@ kube-ssh "${TARGET}" "sudo systemctl stop docker && sudo systemctl disable docke
 kube-ssh "${TARGET}" "sudo rm -rf /var/lib/docker"
 kube-ssh "${TARGET}" "sudo rm -f /etc/systemd/system/kubelet.service"
 kube-ssh "${TARGET}" "sudo rm -rf /etc/kubernetes"
-kube-ssh "${TARGET}" "sudo rm -rf /var/lib/etcd2"
+kube-ssh "${TARGET}" "sudo rm -rf /var/lib/etcd*"
 
 kube-ssh "${TARGET}" "sudo systemctl enable docker && sudo systemctl start docker"
