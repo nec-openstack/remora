@@ -63,7 +63,7 @@ if [[ ${OS_DISTRO} == 'coreos' ]]; then
     bash ${ROOT}/create-userdata.sh \
         ${HOST} \
         ${ADDRESS} \
-        ${OS_DISTRO} > ${USERDATA_PATH}/user-data
+        ${OS_DISTRO} > ${USERDATA_PATH}/user_data
     USERDATA_DISK="--filesystem $LIBVIRT_PATH/$HOST/,config-2,type=mount,mode=squash"
 elif [[ ${OS_DISTRO} == 'ubuntu' ]]; then
     # setup USERDATA
