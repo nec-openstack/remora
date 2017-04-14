@@ -32,9 +32,13 @@ if [[ ${OS_DISTRO} == 'coreos' ]]; then
     # setup IMAGE
     CHANNEL=stable
     RELEASE=current
-    IMG_NAME="coreos_${CHANNEL}_${RELEASE}_qemu_image.img"
+    IMG_NAME_ORG="coreos_${CHANNEL}_${RELEASE}_qemu_image.img"
+    IMG_NAME="coreos_${CHANNEL}_${RELEASE}_qemu_image.qcow2"
+    if [ ! -f $LIBVIRT_PATH/$IMG_NAME_ORG ]; then
+        wget https://${CHANNEL}.release.core-os.net/amd64-usr/${RELEASE}/coreos_production_qemu_image.img.bz2 -O - | bzcat > $LIBVIRT_PATH/$IMG_NAME_ORG || (rm -f $LIBVIRT_PATH/$IMG_NAME_ORG && echo "Failed to download image" && exit 1)
+    fi
     if [ ! -f $LIBVIRT_PATH/$IMG_NAME ]; then
-        wget https://${CHANNEL}.release.core-os.net/amd64-usr/${RELEASE}/coreos_production_qemu_image.img.bz2 -O - | bzcat > $LIBVIRT_PATH/$IMG_NAME || (rm -f $LIBVIRT_PATH/$IMG_NAME && echo "Failed to download image" && exit 1)
+        qemu-img create -f qcow2 -b $LIBVIRT_PATH/$IMG_NAME_ORG $LIBVIRT_PATH/$IMG_NAME
     fi
 
     USERDATA_PATH=$LIBVIRT_PATH/${HOST}/openstack/latest
