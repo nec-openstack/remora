@@ -38,7 +38,7 @@ if [[ ${OS_DISTRO} == 'coreos' ]]; then
     fi
 
     # setup USERDATA
-    USERDATA_PATH=$LIBVIRT_PATH/$host/openstack/latest
+    USERDATA_PATH=$LIBVIRT_PATH/${HOST}/openstack/latest
     bash ${ROOT}/create-userdata.sh \
         ${HOST} \
         ${ADDRESS} \
@@ -52,7 +52,7 @@ elif [[ ${OS_DISTRO} == 'ubuntu' ]]; then
     fi
 
     # setup USERDATA
-    USERDATA_PATH=$LIBVIRT_PATH/$host/configs
+    USERDATA_PATH=$LIBVIRT_PATH/${HOST}/configs
     bash ${ROOT}/create-userdata.sh \
         ${HOST} \
         ${ADDRESS} \
@@ -62,8 +62,8 @@ elif [[ ${OS_DISTRO} == 'ubuntu' ]]; then
         config_image=$LIBVIRT_PATH/${HOST}/configs.iso
     cat > $LIBVIRT_PATH/${HOST}/configs/meta-data <<-EOF
 instance-id: $uuid
-hostname: $host
-local-hostname: $host
+hostname: ${HOST}
+local-hostname: ${HOST}
 public-keys:
   - |
     $ssh_key_data
