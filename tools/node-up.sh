@@ -86,7 +86,7 @@ fi
 
 echo "Creating: ${HOST} node..."
 
-if [ ! -f $LIBVIRT_PATH/${HOST}.qcow2 ]; then
+if [ ! -f $LIBVIRT_PATH/${HOST}-${OS_DISTRO}.qcow2 ]; then
     cp $LIBVIRT_PATH/$IMG_NAME $LIBVIRT_PATH/${HOST}-${OS_DISTRO}.qcow2
     qemu-img resize $LIBVIRT_PATH/${HOST}-${OS_DISTRO}.qcow2 ${DISK}G
 fi
