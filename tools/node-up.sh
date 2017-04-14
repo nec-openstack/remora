@@ -17,7 +17,7 @@ source ${script_dir}/utils.sh
 eval "CPUS=\$${TYPE_UP}_CPU"
 eval "MEMORY=\$${TYPE_UP}_MEMORY"
 eval "DISK=\$${TYPE_UP}_DISK"
-eval "DISKS=\$\{${TYPE_UP}_ADDISIONAL_DISKS:-''\}"
+eval "DISKS=\${${TYPE_UP}_ADDISIONAL_DISKS:-''}"
 
 NODE_NETWORK_RANGE=${NODE_NETWORK_RANGE:-'16'}
 NODE_GATEWAY=${NODE_GATEWAY:-'192.168.11.1'}
