@@ -37,6 +37,22 @@ if [[ ${OS_DISTRO} == 'coreos' ]]; then
         wget https://${CHANNEL}.release.core-os.net/amd64-usr/${RELEASE}/coreos_production_qemu_image.img.bz2 -O - | bzcat > $LIBVIRT_PATH/$IMG_NAME || (rm -f $LIBVIRT_PATH/$IMG_NAME && echo "Failed to download image" && exit 1)
     fi
 
+elif [[ ${OS_DISTRO} == 'ubuntu' ]]; then
+    # setup IMAGE
+    IMG_NAME="ubuntu-xenial.qcow2"
+    if [ ! -f $LIBVIRT_PATH/$IMG_NAME ]; then
+        echo "Please set ubuntu image to: $LIBVIRT_PATH/$IMG_NAME" && exit 1
+    fi
+
+fi
+
+echo "Setup USERDATA: ${HOST} node..."
+
+if [ ! -d $USERDATA_PATH ]; then
+    mkdir -p $USERDATA_PATH || (echo "Can not create $USERDATA_PATH directory" && exit 1)
+fi
+
+if [[ ${OS_DISTRO} == 'coreos' ]]; then
     # setup USERDATA
     USERDATA_PATH=$LIBVIRT_PATH/${HOST}/openstack/latest
     bash ${ROOT}/create-userdata.sh \
@@ -45,12 +61,6 @@ if [[ ${OS_DISTRO} == 'coreos' ]]; then
         ${OS_DISTRO} > ${USERDATA_PATH}/user-data
     USERDATA_DISK="--filesystem $LIBVIRT_PATH/$HOST/,config-2,type=mount,mode=squash"
 elif [[ ${OS_DISTRO} == 'ubuntu' ]]; then
-    # setup IMAGE
-    IMG_NAME="ubuntu-xenial.qcow2"
-    if [ ! -f $LIBVIRT_PATH/$IMG_NAME ]; then
-        echo "Please set ubuntu image to: $LIBVIRT_PATH/$IMG_NAME" && exit 1
-    fi
-
     # setup USERDATA
     USERDATA_PATH=$LIBVIRT_PATH/${HOST}/configs
     bash ${ROOT}/create-userdata.sh \
@@ -74,11 +84,7 @@ EOF
     USERDATA_DISK="--disk path=${config_image},bus=virtio"
 fi
 
-echo "Creating ${HOST} node..."
-
-if [ ! -d $USERDATA_PATH ]; then
-    mkdir -p $USERDATA_PATH || (echo "Can not create $USERDATA_PATH directory" && exit 1)
-fi
+echo "Creating: ${HOST} node..."
 
 if [ ! -f $LIBVIRT_PATH/${HOST}.qcow2 ]; then
     cp $LIBVIRT_PATH/$IMG_NAME $LIBVIRT_PATH/${HOST}-${OS_DISTRO}.qcow2
