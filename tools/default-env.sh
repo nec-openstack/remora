@@ -113,5 +113,5 @@ export DISCOVERY_URL=${DISCOVERY_URL:-""}
 
 ## For instance use
 
-MACHINES="${MASTERS} ${WORKERS}"
+MACHINES="${ETCDS} ${MASTERS} ${WORKERS}"
 export MACHINES=$(echo "${MACHINES[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ')

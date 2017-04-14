@@ -16,20 +16,15 @@ TYPE_UP=$(tr '[a-z]' '[A-Z]' <<<${TYPE})
 
 eval "NODES=\$${TYPE_UP}S"
 
-function delete_host {
-    local host=$1
-    echo "Deleting ${host} node..."
-
-    rm -rf ${LIBVIRT_PATH}/${host}*
-    virsh destroy ${host}
-    virsh undefine ${host}
-}
-
 i=1
 for ADDRESS in ${NODES}; do
     HOST="${TYPE}$(printf "%02d" $i)"
     if [[ ${ADDRESS} =~ ${address_pattern} ]]; then
-        delete_host ${HOST}
+        bash ${script_dir}/node-up.sh \
+            ${OS_DISTRO} \
+            ${TYPE} \
+            ${HOST} \
+            ${ADDRESS}
     fi
     i=$((i+1))
 done

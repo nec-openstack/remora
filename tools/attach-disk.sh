@@ -8,15 +8,15 @@ source ${ROOT}/default-env.sh
 source ${ROOT}/utils.sh
 
 VM_NAME=${1}
-VOL_SIZE=${2:-"100"}
+VOL_SIZE=${2:-"12"}
 VOL_DEVICE=${3:-"vdb"}
 
-VOL_FILE=${LIBVIRT_PATH}/${VM_NAME}-${VOL_DEVICE}.qcow2
+VOL_FILE=${LIBVIRT_PATH}/${VM_NAME}-${VOL_DEVICE}.img
 if [ -f ${VOL_FILE} ]; then
    echo "${VOL_FILE} : already exists"
    exit 1
 fi
-qemu-img create -f qcow2 ${VOL_FILE} ${VOL_SIZE}
+qemu-img create ${VOL_FILE} ${VOL_SIZE}G
 
 virsh attach-device ${VM_NAME} <(cat <<EOF
 <disk type='file' device='disk'>
