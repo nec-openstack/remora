@@ -23,9 +23,9 @@ for IP in ${KUBE_ADDITIONAL_SERVICE_IPS}
 do
     sans="${sans},IP:${IP}"
 done
-for MASTER in ${MASTERS}
+for SERVER in ${SERVERS}
 do
-    sans="${sans},IP:${MASTER}"
+    sans="${sans},IP:${SERVER}"
 done
 
 # Create config for server's csr
