@@ -9,6 +9,11 @@ HOST=${3:-$(uuidgen)}
 ADDRESS=${4:-'192.168.1.101'}
 
 TYPE_UP=$(tr '[a-z]' '[A-Z]' <<<${TYPE})
+
+script_dir=`dirname $0`
+source ${script_dir}/default-env.sh
+source ${script_dir}/utils.sh
+
 eval "CPUS=\$${TYPE_UP}_CPU"
 eval "MEMORY=\$${TYPE_UP}_MEMORY"
 eval "DISK=\$${TYPE_UP}_DISK"
@@ -18,10 +23,6 @@ NODE_NETWORK_RANGE=${NODE_NETWORK_RANGE:-'16'}
 NODE_GATEWAY=${NODE_GATEWAY:-'192.168.11.1'}
 NODE_DNS=${NODE_DNS:-'8.8.8.8'}
 NODE_NET_DEVICE=${NODE_NET_DEVICE:-'eth0'}
-
-script_dir=`dirname $0`
-source ${script_dir}/default-env.sh
-source ${script_dir}/utils.sh
 
 if [ ! -d $LIBVIRT_PATH ]; then
     mkdir -p $LIBVIRT_PATH || (echo "Can not create $LIBVIRT_PATH directory" && exit 1)
