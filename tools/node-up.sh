@@ -88,7 +88,7 @@ echo "Creating: ${HOST} node..."
 
 if [ ! -f $LIBVIRT_PATH/${HOST}.qcow2 ]; then
     cp $LIBVIRT_PATH/$IMG_NAME $LIBVIRT_PATH/${HOST}-${OS_DISTRO}.qcow2
-    qemu-img resize $LIBVIRT_PATH/${HOST}.qcow2 ${DISK}G
+    qemu-img resize $LIBVIRT_PATH/${HOST}-${OS_DISTRO}.qcow2 ${DISK}G
 fi
 
 local dev_index='b'
@@ -111,7 +111,7 @@ virt-install --connect qemu:///system \
              --network bridge=br0 \
              --os-type=linux \
              --os-variant=virtio26 \
-             --disk path=$LIBVIRT_PATH/$HOST-${OS_DISTRO}.qcow2,format=qcow2,bus=virtio \
+             --disk path=$LIBVIRT_PATH/${HOST}-${OS_DISTRO}.qcow2,format=qcow2,bus=virtio \
              ${additional_disk_params} \
              ${USERDATA_DISK} \
              --vnc \
