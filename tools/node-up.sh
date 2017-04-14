@@ -28,7 +28,7 @@ if [ ! -d $LIBVIRT_PATH ]; then
     mkdir -p $LIBVIRT_PATH || (echo "Can not create $LIBVIRT_PATH directory" && exit 1)
 fi
 
-if [[ OS_DISTRO == 'coreos' ]]; then
+if [[ ${OS_DISTRO} == 'coreos' ]]; then
     # setup IMAGE
     CHANNEL=stable
     RELEASE=current
@@ -44,7 +44,7 @@ if [[ OS_DISTRO == 'coreos' ]]; then
         ${ADDRESS} \
         ${OS_DISTRO} > ${USERDATA_PATH}/user-data
     USERDATA_DISK="--filesystem $LIBVIRT_PATH/$HOST/,config-2,type=mount,mode=squash"
-elif [[ OS_DISTRO == 'ubuntu' ]]; then
+elif [[ ${OS_DISTRO} == 'ubuntu' ]]; then
     # setup IMAGE
     IMG_NAME="ubuntu-xenial.qcow2"
     if [ ! -f $LIBVIRT_PATH/$IMG_NAME ]; then
