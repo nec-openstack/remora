@@ -91,9 +91,9 @@ if [ ! -f $LIBVIRT_PATH/${HOST}.qcow2 ]; then
     qemu-img resize $LIBVIRT_PATH/${HOST}-${OS_DISTRO}.qcow2 ${DISK}G
 fi
 
-local dev_index='b'
-local additional_disk=''
-local additional_disk_params=''
+dev_index='b'
+additional_disk=''
+additional_disk_params=''
 for disk_size in ${DISKS}; do
     additional_disk=${LIBVIRT_PATH}/${HOST}-vd${dev_index}.img
     if [ ! -f ${additional_disk} ]; then
