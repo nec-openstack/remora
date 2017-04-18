@@ -5,10 +5,6 @@ export LC_ALL=C
 
 # export NODE_IP=$1
 
-# TODO(yuanying): Add below
-# - --cloud-provider=${CLOUD_PROVIDER}
-# - --cloud-config=${CLOUD_CONFIG}
-
 CM_TEMPLATE=/etc/kubernetes/manifests/kube-controller-manager.yaml
 mkdir -p $(dirname $CM_TEMPLATE)
 cat << EOF > $CM_TEMPLATE
@@ -35,6 +31,8 @@ spec:
     - --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem
     - --allocate-node-cidrs=true
     - --cluster-cidr=${KUBE_CLUSTER_CIDR}
+    - --cloud-provider=${CLOUD_PROVIDER:-""}
+    - --cloud-config=${CLOUD_CONFIG:-""}
     resources:
       requests:
         cpu: 200m

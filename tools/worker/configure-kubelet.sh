@@ -5,10 +5,6 @@ export LC_ALL=C
 
 # export NODE_IP=$1
 
-# TODO(yuanying): Add below
-# --cloud-provider=${CLOUD_PROVIDER} \
-# --cloud-config=${CLOUD_CONFIG}
-
 KUBELET_SERVICE=/etc/systemd/system/kubelet.service
 cat << EOF > ${KUBELET_SERVICE}
 [Unit]
@@ -52,7 +48,9 @@ ExecStart=${DOCKER_PATH} run \
         --cluster-dns=${KUBE_DNS_SERVER_IP} \
         --cluster-domain=cluster.local \
         --kubeconfig=/etc/kubernetes/kubelet.yaml \
-        --require-kubeconfig=true
+        --require-kubeconfig=true \
+        --cloud-provider=${CLOUD_PROVIDER:-""} \
+        --cloud-config=${CLOUD_CONFIG:-""}
 
 [Install]
 WantedBy=multi-user.target

@@ -5,10 +5,6 @@ export LC_ALL=C
 
 # export NODE_IP=$1
 
-# TODO(yuanying): Add below
-# - --cloud-provider=${CLOUD_PROVIDER}
-# - --cloud-config=${CLOUD_CONFIG}
-
 export KUBE_API_TEMPLATE=/etc/kubernetes/manifests/kube-apiserver.yaml
 mkdir -p $(dirname $KUBE_API_TEMPLATE)
 cat << EOF > $KUBE_API_TEMPLATE
@@ -43,6 +39,8 @@ spec:
     - --anonymous-auth=false
     - --etcd-servers=${ETCD_ENDPOINT}
     - --storage-backend=${KUBE_STORAGE_BACKEND}
+    - --cloud-provider=${CLOUD_PROVIDER:-""}
+    - --cloud-config=${CLOUD_CONFIG:-""}
     livenessProbe:
       httpGet:
         host: 127.0.0.1

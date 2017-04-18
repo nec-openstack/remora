@@ -19,6 +19,8 @@ domain-id=$OS_USER_DOMAIN_ID
 [LoadBalancer]
 subnet-id=$OS_SUBNET_ID
 floating-network-id=$OS_FLOATING_NETWORK_ID
+[Route]
+router-id=$OS_ROUTER_ID
 EOF
 fi
 
