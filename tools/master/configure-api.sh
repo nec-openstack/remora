@@ -41,6 +41,7 @@ spec:
     - --storage-backend=${KUBE_STORAGE_BACKEND}
     - --cloud-provider=${CLOUD_PROVIDER:-""}
     - --cloud-config=${CLOUD_CONFIG:-""}
+    - --v=${KUBE_LOG_LEVEL:-"2"}
     livenessProbe:
       httpGet:
         host: 127.0.0.1

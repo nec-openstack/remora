@@ -33,6 +33,7 @@ spec:
     - --cluster-cidr=${KUBE_CLUSTER_CIDR}
     - --cloud-provider=${CLOUD_PROVIDER:-""}
     - --cloud-config=${CLOUD_CONFIG:-""}
+    - --v=${KUBE_LOG_LEVEL:-"2"}
     resources:
       requests:
         cpu: 200m

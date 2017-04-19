@@ -50,7 +50,8 @@ ExecStart=${DOCKER_PATH} run \
         --kubeconfig=/etc/kubernetes/kubelet.yaml \
         --require-kubeconfig=true \
         --cloud-provider=${CLOUD_PROVIDER:-""} \
-        --cloud-config=${CLOUD_CONFIG:-""}
+        --cloud-config=${CLOUD_CONFIG:-""} \
+        --v=${KUBE_LOG_LEVEL:-"2"}
 
 [Install]
 WantedBy=multi-user.target

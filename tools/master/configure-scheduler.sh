@@ -26,6 +26,7 @@ spec:
     - scheduler
     - --master=http://127.0.0.1:8080
     - --leader-elect=true
+    - --v=${KUBE_LOG_LEVEL:-"2"}
     resources:
       requests:
         cpu: 100m
