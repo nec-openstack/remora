@@ -14,6 +14,7 @@ if [ -f "${ROOT}/configure-certs.sh" ]; then
     # Execute certs plugin
     source ${ROOT}/configure-certs.sh
 fi
+source ${ROOT}/configure-hack.sh
 source ${ROOT}/configure-cloud.sh
 source ${ROOT}/configure-kubeconfig.sh
 source ${ROOT}/configure-kubelet.sh
