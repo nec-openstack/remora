@@ -31,6 +31,7 @@ spec:
     - --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem
     - --allocate-node-cidrs=true
     - --cluster-cidr=${KUBE_CLUSTER_CIDR}
+    - --node-cidr-mask-size=${KUBE_NODE_CIDR_MASK_SIZE}
     - --cloud-provider=${CLOUD_PROVIDER:-""}
     - --cloud-config=${CLOUD_CONFIG:-""}
     - --v=${KUBE_LOG_LEVEL:-"2"}
