@@ -60,6 +60,7 @@ releasenotes/build
 # Project
 tools/env.sh
 tools/certs/*.key
+tools/certs/*.pub
 tools/certs/*.csr
 tools/certs/*.crt
 tools/certs/*.srl
