@@ -13,7 +13,7 @@ kind: Config
 clusters:
 - name: kubernetes
   cluster:
-    certificate-authority: /etc/kubernetes/ssl/ca.pem
+    certificate-authority: /etc/kubernetes/ssl/ca.crt
     server: https://${KUBERNETES_SERVICE_IP}:${KUBE_PORT}
 users:
 - name: kubelet

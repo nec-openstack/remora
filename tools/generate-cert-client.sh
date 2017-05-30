@@ -7,8 +7,8 @@ script_dir=`dirname $0`
 source ${script_dir}/utils.sh
 WORKER_IP=${1:-"192.168.1.111"}
 
-CA_KEY=${CA_KEY:-"${LOCAL_CERTS_DIR}/ca-key.pem"}
-CA_CERT=${CA_CERT:-"${LOCAL_CERTS_DIR}/ca.pem"}
+CA_KEY=${CA_KEY:-"${LOCAL_CERTS_DIR}/ca.key"}
+CA_CERT=${CA_CERT:-"${LOCAL_CERTS_DIR}/ca.crt"}
 KUBE_CLIENT_KEY=${KUBE_CLIENT_KEY:-"${LOCAL_CERTS_DIR}/worker-key-${WORKER_IP}.pem"}
 KUBE_CLIENT_CERT_REQ=${KUBE_CLIENT_CERT_REQ:-"${LOCAL_CERTS_DIR}/worker-${WORKER_IP}.csr"}
 KUBE_CLIENT_CERT=${KUBE_CLIENT_CERT:-"${LOCAL_CERTS_DIR}/worker-${WORKER_IP}.pem"}

@@ -35,10 +35,10 @@ ExecStart=${DOCKER_PATH} run --net=host --rm --name etcd \
     --listen-client-urls=http://127.0.0.1:2379 \
     --cert-file=${ETCD_CERTS_DIR}/worker.pem \
     --key-file=${ETCD_CERTS_DIR}/worker-key.pem \
-    --trusted-ca-file=${ETCD_CERTS_DIR}/ca.pem \
+    --trusted-ca-file=${ETCD_CERTS_DIR}/ca.crt \
     --peer-cert-file=${ETCD_CERTS_DIR}/worker.pem \
     --peer-key-file=${ETCD_CERTS_DIR}/worker-key.pem \
-    --peer-trusted-ca-file=${ETCD_CERTS_DIR}/ca.pem
+    --peer-trusted-ca-file=${ETCD_CERTS_DIR}/ca.crt
 
 [Install]
 WantedBy=multi-user.target

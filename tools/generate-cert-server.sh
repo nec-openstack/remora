@@ -6,8 +6,8 @@ export LC_ALL=C
 script_dir=`dirname $0`
 source ${script_dir}/utils.sh
 
-CA_KEY=${CA_KEY:-"${LOCAL_CERTS_DIR}/ca-key.pem"}
-CA_CERT=${CA_CERT:-"${LOCAL_CERTS_DIR}/ca.pem"}
+CA_KEY=${CA_KEY:-"${LOCAL_CERTS_DIR}/ca.key"}
+CA_CERT=${CA_CERT:-"${LOCAL_CERTS_DIR}/ca.crt"}
 KUBE_KEY=${KUBE_KEY:-"${LOCAL_CERTS_DIR}/apiserver-key.pem"}
 KUBE_CERT_REQ=${KUBE_CERT_REQ:-"${LOCAL_CERTS_DIR}/apiserver.csr"}
 KUBE_CERT=${KUBE_CERT:-"${LOCAL_CERTS_DIR}/apiserver.pem"}

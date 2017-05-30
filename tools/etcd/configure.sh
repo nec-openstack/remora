@@ -38,11 +38,11 @@ ExecStart=${DOCKER_PATH} run --net=host --rm --name etcd \
     --client-cert-auth=true \
     --cert-file=${ETCD_CERTS_DIR}/apiserver.pem \
     --key-file=${ETCD_CERTS_DIR}/apiserver-key.pem \
-    --trusted-ca-file=${ETCD_CERTS_DIR}/ca.pem \
+    --trusted-ca-file=${ETCD_CERTS_DIR}/ca.crt \
     --peer-client-cert-auth=true \
     --peer-cert-file=${ETCD_CERTS_DIR}/apiserver.pem \
     --peer-key-file=${ETCD_CERTS_DIR}/apiserver-key.pem \
-    --peer-trusted-ca-file=${ETCD_CERTS_DIR}/ca.pem \
+    --peer-trusted-ca-file=${ETCD_CERTS_DIR}/ca.crt \
     --data-dir=/var/lib/etcd
 
 [Install]

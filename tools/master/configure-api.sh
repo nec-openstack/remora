@@ -29,7 +29,7 @@ spec:
     - --admission-control=${KUBE_ADMISSION_CONTROL}
     - --service-cluster-ip-range=${KUBE_SERVICE_IP_RANGE}
     - --service-account-key-file=/etc/kubernetes/ssl/apiserver-key.pem
-    - --client-ca-file=/etc/kubernetes/ssl/ca.pem
+    - --client-ca-file=/etc/kubernetes/ssl/ca.crt
     - --tls-cert-file=/etc/kubernetes/ssl/apiserver.pem
     - --tls-private-key-file=/etc/kubernetes/ssl/apiserver-key.pem
     - --secure-port=${KUBE_INTERNAL_PORT}
