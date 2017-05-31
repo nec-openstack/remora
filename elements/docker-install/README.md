@@ -31,4 +31,4 @@
                         --visibility public \
                         --disk-format=qcow2 \
                         --container-format=bare \
-                        --file=ubuntu-xenial-docker-ec2-nocloud.qcow2
+                        --file=ubuntu-xenial-docker-ec2-noclouds.qcow2
