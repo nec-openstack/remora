@@ -60,6 +60,9 @@ if [[ ${REMORA_DEFAULT_ENV_IS_LOADED:-""} != "true" ]]; then
 
     ## For Kubernetes Setup
 
+    export KUBE_APISERVERS=${KUBE_APISERVERS:-${MASTERS}}
+    export KUBE_CONTROLLER_MANAGER=${KUBE_CONTROLLER_MANAGER:-${MASTERS}}
+    export KUBE_SCHEDULER=${KUBE_SCHEDULER:-${MASTERS}}
     export HYPERKUBE_IMAGE_REPO=${HYPERKUBE_IMAGE_REPO:-"gcr.io/google_containers/hyperkube"}
     export KUBE_VERSION=${KUBE_VERSION:-"v1.6.1"}
     export KUBE_CLUSTER_CIDR=${KUBE_CLUSTER_CIDR:-"10.244.0.0/16"}
