@@ -28,10 +28,10 @@ spec:
     - --insecure-bind-address=127.0.0.1
     - --admission-control=${KUBE_ADMISSION_CONTROL}
     - --service-cluster-ip-range=${KUBE_SERVICE_IP_RANGE}
-    - --service-account-key-file=/etc/kubernetes/ssl/apiserver-key.pem
-    - --client-ca-file=/etc/kubernetes/ssl/ca.crt
-    - --tls-cert-file=/etc/kubernetes/ssl/apiserver.pem
-    - --tls-private-key-file=/etc/kubernetes/ssl/apiserver-key.pem
+    - --service-account-key-file=${KUBE_CERTS_DIR}/sa.pub
+    - --client-ca-file=${KUBE_CERTS_DIR}/ca.crt
+    - --tls-cert-file=${KUBE_CERTS_DIR}/apiserver.crt
+    - --tls-private-key-file=${KUBE_CERTS_DIR}/apiserver.key
     - --secure-port=${KUBE_INTERNAL_PORT}
     - --allow-privileged
     - --advertise-address=${NODE_IP}

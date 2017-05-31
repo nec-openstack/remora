@@ -33,11 +33,11 @@ ExecStart=${DOCKER_PATH} run --net=host --rm --name etcd \
     --proxy=on \
     --discovery=${DISCOVERY_URL} \
     --listen-client-urls=http://127.0.0.1:2379 \
-    --cert-file=${ETCD_CERTS_DIR}/worker.pem \
-    --key-file=${ETCD_CERTS_DIR}/worker-key.pem \
+    --cert-file=${ETCD_CERTS_DIR}/etcd-client.crt \
+    --key-file=${ETCD_CERTS_DIR}/etcd-client.key \
     --trusted-ca-file=${ETCD_CERTS_DIR}/ca.crt \
-    --peer-cert-file=${ETCD_CERTS_DIR}/worker.pem \
-    --peer-key-file=${ETCD_CERTS_DIR}/worker-key.pem \
+    --peer-cert-file=${ETCD_CERTS_DIR}/etcd-client.crt \
+    --peer-key-file=${ETCD_CERTS_DIR}/etcd-client.key \
     --peer-trusted-ca-file=${ETCD_CERTS_DIR}/ca.crt
 
 [Install]

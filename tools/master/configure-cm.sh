@@ -25,10 +25,10 @@ spec:
     - controller-manager
     - --leader-elect
     - --master=http://127.0.0.1:8080
-    - --root-ca-file=/etc/kubernetes/ssl/ca.crt
-    - --service-account-private-key-file=/etc/kubernetes/ssl/apiserver-key.pem
-    - --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.crt
-    - --cluster-signing-key-file=/etc/kubernetes/ssl/ca.key
+    - --root-ca-file=${KUBE_CERTS_DIR}/ca.crt
+    - --service-account-private-key-file=${KUBE_CERTS_DIR}/sa.key
+    - --cluster-signing-cert-file=${KUBE_CERTS_DIR}/ca.crt
+    - --cluster-signing-key-file=${KUBE_CERTS_DIR}/ca.key
     - --allocate-node-cidrs=true
     - --cluster-cidr=${KUBE_CLUSTER_CIDR}
     - --node-cidr-mask-size=${KUBE_NODE_CIDR_MASK_SIZE}

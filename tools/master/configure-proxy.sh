@@ -77,7 +77,7 @@ spec:
         - mountPath: /etc/kubernetes/kubelet.yaml
           name: "kubeconfig"
           readOnly: true
-        - mountPath: /etc/kubernetes/ssl
+        - mountPath: ${KUBE_CERTS_DIR}
           name: "etc-kube-ssl"
           readOnly: true
       volumes:
@@ -92,5 +92,5 @@ spec:
           path: "/etc/kubernetes/kubelet.yaml"
       - name: "etc-kube-ssl"
         hostPath:
-          path: "/etc/kubernetes/ssl"
+          path: "${KUBE_CERTS_DIR}"
 EOF

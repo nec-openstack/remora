@@ -47,10 +47,9 @@ if [[ ${REMORA_DEFAULT_ENV_IS_LOADED:-""} != "true" ]]; then
     export ETCD_ENDPOINT=${ETCD_ENDPOINT:-http://127.0.0.1:2379}
     export ETCD_V3_VERSION_TAG=${ETCD_V3_VERSION_TAG:-"v3.1.5"}
     export ETCD_IMAGE_REPO=${ETCD_IMAGE_REPO:-"quay.io/coreos/etcd"}
-    export ETCD_CERTS_DIR=${ETCD_CERTS_DIR:-"/etc/kubernetes/ssl"}
+    export ETCD_CERTS_DIR=${ETCD_CERTS_DIR:-"/etc/kubernetes/pki"}
     export ETCD_ADDITIONAL_HOSTNAMES=${ETCD_ADDITIONAL_HOSTNAMES:-""}
     export ETCD_ADDITIONAL_SERVICE_IPS=${ETCD_ADDITIONAL_SERVICE_IPS:-""}
-    export ETCD_SERVICE_IP=${ETCD_SERVICE_IP:-${KUBERNETES_SERVICE_IP}}
 
     ## For Flannel
 
@@ -61,8 +60,8 @@ if [[ ${REMORA_DEFAULT_ENV_IS_LOADED:-""} != "true" ]]; then
     ## For Kubernetes Setup
 
     export KUBE_APISERVERS=${KUBE_APISERVERS:-${MASTERS}}
-    export KUBE_CONTROLLER_MANAGER=${KUBE_CONTROLLER_MANAGER:-${MASTERS}}
-    export KUBE_SCHEDULER=${KUBE_SCHEDULER:-${MASTERS}}
+    export KUBE_CONTROLLER_MANAGERS=${KUBE_CONTROLLER_MANAGERS:-${MASTERS}}
+    export KUBE_SCHEDULERS=${KUBE_SCHEDULERS:-${MASTERS}}
     export HYPERKUBE_IMAGE_REPO=${HYPERKUBE_IMAGE_REPO:-"gcr.io/google_containers/hyperkube"}
     export KUBE_VERSION=${KUBE_VERSION:-"v1.6.1"}
     export KUBE_CLUSTER_CIDR=${KUBE_CLUSTER_CIDR:-"10.244.0.0/16"}
@@ -79,6 +78,7 @@ if [[ ${REMORA_DEFAULT_ENV_IS_LOADED:-""} != "true" ]]; then
     export KUBE_ADMISSION_CONTROL=${KUBE_ADMISSION_CONTROL:-"NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota"}
     export KUBE_STORAGE_BACKEND=${KUBE_STORAGE_BACKEND:-"etcd3"}
     export KUBE_TEMP="~/kube_temp"
+    export KUBE_CERTS_DIR=${KUBE_CERTS_DIR:-"/etc/kubernetes/pki"}
     export KUBE_LOG_LEVEL=${KUBE_LOG_LEVEL:-'2'}
 
     ## For cloud provider

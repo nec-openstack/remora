@@ -13,13 +13,13 @@ kind: Config
 clusters:
 - name: kubernetes
   cluster:
-    certificate-authority: /etc/kubernetes/ssl/ca.crt
+    certificate-authority: ${KUBE_CERTS_DIR}/ca.crt
     server: https://${KUBERNETES_SERVICE_IP}:${KUBE_PORT}
 users:
 - name: kubelet
   user:
-    client-certificate: /etc/kubernetes/ssl/worker.pem
-    client-key: /etc/kubernetes/ssl/worker-key.pem
+    client-certificate: ${KUBE_CERTS_DIR}/kubelet.crt
+    client-key: ${KUBE_CERTS_DIR}/kubelet.key
 contexts:
 - context:
     cluster: kubernetes

@@ -36,12 +36,12 @@ ExecStart=${DOCKER_PATH} run --net=host --rm --name etcd \
     --listen-client-urls=https://${NODE_IP}:2379,http://127.0.0.1:2379 \
     --listen-peer-urls=https://${NODE_IP}:2380 \
     --client-cert-auth=true \
-    --cert-file=${ETCD_CERTS_DIR}/apiserver.pem \
-    --key-file=${ETCD_CERTS_DIR}/apiserver-key.pem \
+    --cert-file=${ETCD_CERTS_DIR}/etcd.crt \
+    --key-file=${ETCD_CERTS_DIR}/etcd.key \
     --trusted-ca-file=${ETCD_CERTS_DIR}/ca.crt \
     --peer-client-cert-auth=true \
-    --peer-cert-file=${ETCD_CERTS_DIR}/apiserver.pem \
-    --peer-key-file=${ETCD_CERTS_DIR}/apiserver-key.pem \
+    --peer-cert-file=${ETCD_CERTS_DIR}/etcd.crt \
+    --peer-key-file=${ETCD_CERTS_DIR}/etcd.key \
     --peer-trusted-ca-file=${ETCD_CERTS_DIR}/ca.crt \
     --data-dir=/var/lib/etcd
 
