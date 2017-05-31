@@ -28,7 +28,6 @@ if [[ ${REMORA_DEFAULT_ENV_IS_LOADED:-""} != "true" ]]; then
     fi
 
     export KUBERNETES_SERVICE_IP=${KUBERNETES_SERVICE_IP:-"192.168.1.101"}
-    export LB=${LB:-"192.168.1.101"}
     export MASTERS=${MASTERS:-"192.168.1.111 192.168.1.112 192.168.1.113"}
     export ETCDS=${ETCDS:-${MASTERS}}
     export WORKERS=${WORKERS:-"192.168.1.121 192.168.1.122"}
@@ -93,6 +92,10 @@ if [[ ${REMORA_DEFAULT_ENV_IS_LOADED:-""} != "true" ]]; then
     export OS_SUBNET_ID=${OS_SUBNET_ID:-"d5eb5d67-1ff1-4f7a-9718-7233f30b9032"}
     export OS_FLOATING_NETWORK_ID=${OS_FLOATING_NETWORK_ID:-"affd1fff-193b-45c2-ab18-276a8435bd8c"}
     export OS_ROUTER_ID=${OS_ROUTER_ID:-"7f43c6e5-a344-4b47-8e63-eb70b414a48b"}
+
+    ## For keepalived / haproxy
+
+    export HAPROXYIES=${HAPROXYIES:-${MASTERS}}
 
     ## For Node bootstrap
 

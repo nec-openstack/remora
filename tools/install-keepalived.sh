@@ -13,7 +13,7 @@ echo '    -   ${NODE_NETWORK_RANGE}'
 echo '    -   ${NODE_NET_DEVICE}'
 echo
 
-for MASTER in ${MASTERS}; do
+for MASTER in ${HAPROXYIES}; do
     if [[ ! ${MASTER} =~ ${address_pattern} ]]; then
         continue
     fi
