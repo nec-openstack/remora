@@ -31,6 +31,18 @@ def tar_gz_base64(dir_path):
         f.close()
 
 
+def decode_env_dict(prefix, env):
+    env_list = []
+    for k, v in env.items():
+        key = "%s_%s" % (prefix.upper(), k.upper())
+        if (isinstance(v, list)):
+            v = " ".join(v)
+
+        env_list.append("export %s=\"%s\"" % (key, v))
+
+    return env_list
+
+
 class Struct(dict):
     """Specialized dict where you access an item like an attribute
 

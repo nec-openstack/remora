@@ -17,10 +17,44 @@ import remora.common.utils as utils
 import remora.tests.unit.base as base
 
 
-class TestUtils(base.TestCase):
+class TestUtilsTarGz(base.TestCase):
 
     def test_tar_gz(self):
         dirname = os.path.dirname(__file__)
         fixtures_dir = os.path.join(dirname, '..', 'fixtures', 'common')
 
         self.assertNotEqual(utils.tar_gz_base64(fixtures_dir), '')
+
+
+class TestUtilsDecodeEnvDict(base.TestCase):
+
+    def test_decode_env_dict_sigle_dict(self):
+        prefix = 'kube'
+        env = {
+            "version": "v1.6.4"
+        }
+        expected_return = ["export KUBE_VERSION=\"v1.6.4\""]
+
+        self.assertEqual(
+            utils.decode_env_dict(prefix, env), expected_return
+        )
+
+    def test_decode_env_dict_with_list(self):
+        prefix = 'kube'
+        env = {
+            "ips": ['192.168.1.11', '192.168.1.12']
+        }
+        expected_return = ["export KUBE_IPS=\"192.168.1.11 192.168.1.12\""]
+
+        self.assertEqual(
+            utils.decode_env_dict(prefix, env), expected_return
+        )
+
+    def test_decode_env_dict_multiple_value(self):
+        prefix = 'kube'
+        env = {
+            "version": "v1.6.4",
+            "ips": ['192.168.1.11', '192.168.1.12']
+        }
+
+        self.assertEqual(len(utils.decode_env_dict(prefix, env)), 2)
