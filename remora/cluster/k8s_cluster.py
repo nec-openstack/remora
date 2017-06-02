@@ -19,6 +19,5 @@ class KubernetesCluster(cluster.BaseCluster):
     def __init__(self, env, params):
         super(KubernetesCluster, self).__init__(env, params)
 
-
     def build(arg):
         pass

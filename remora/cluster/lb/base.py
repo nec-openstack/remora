@@ -19,7 +19,7 @@ from remora.cluster import base
 from remora.common.loader import loadable
 
 HEAT_ENV_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__),
+    os.path.dirname(os.path.abspath(__file__)),
     'heat',
     'environments'
 )
