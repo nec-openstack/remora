@@ -20,7 +20,7 @@ spec:
   hostNetwork: true
   containers:
   - name: kube-apiserver
-    image: ${HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
+    image: ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
     command:
     - /hyperkube
     - apiserver
@@ -39,8 +39,8 @@ spec:
     - --anonymous-auth=false
     - --etcd-servers=${ETCD_ENDPOINT}
     - --storage-backend=${KUBE_STORAGE_BACKEND}
-    - --cloud-provider=${CLOUD_PROVIDER:-""}
-    - --cloud-config=${CLOUD_CONFIG:-""}
+    - --cloud-provider=${KUBE_CLOUD_PROVIDER:-""}
+    - --cloud-config=${KUBE_CLOUD_CONFIG:-""}
     - --v=${KUBE_LOG_LEVEL:-"2"}
     livenessProbe:
       httpGet:

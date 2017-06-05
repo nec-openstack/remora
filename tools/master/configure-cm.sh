@@ -19,7 +19,7 @@ metadata:
 spec:
   containers:
   - name: kube-controller-manager
-    image: ${HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
+    image: ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
     command:
     - /hyperkube
     - controller-manager
@@ -32,8 +32,8 @@ spec:
     - --allocate-node-cidrs=true
     - --cluster-cidr=${KUBE_CLUSTER_CIDR}
     - --node-cidr-mask-size=${KUBE_NODE_CIDR_MASK_SIZE}
-    - --cloud-provider=${CLOUD_PROVIDER:-""}
-    - --cloud-config=${CLOUD_CONFIG:-""}
+    - --cloud-provider=${KUBE_CLOUD_PROVIDER:-""}
+    - --cloud-config=${KUBE_CLOUD_CONFIG:-""}
     - --v=${KUBE_LOG_LEVEL:-"2"}
     resources:
       requests:

@@ -93,5 +93,5 @@ cat ${KUBE_WEAVE_TEMPLATE} \
     | ${DOCKER_PATH} run \
         --net=host \
         --rm -i \
-        ${HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION} \
+        ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION} \
         /hyperkube kubectl apply -f -

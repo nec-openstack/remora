@@ -11,4 +11,4 @@ TARGET=${NODE_USERNAME}@${TARGET_IP}
 
 # Certs plugin
 kube-scp ${TARGET} "${ROOT}/plugins/certs/configure-noops.sh" \
-                   "${KUBE_TEMP}/configure-certs.sh"
+                   "${KUBE_TEMP_DIR}/configure-certs.sh"

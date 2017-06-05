@@ -15,8 +15,8 @@ if [[ ${KUBE_NETWORK_PLUGIN} == 'cni' ]]; then
     plugin_name=${KUBE_CNI_PLUGIN}
 fi
 kube-scp ${TARGET} "${ROOT}/plugins/network/configure-${plugin_name}.sh" \
-                   "${KUBE_TEMP}/configure-network.sh"
+                   "${KUBE_TEMP_DIR}/configure-network.sh"
 
 # Certs plugin
 kube-scp ${TARGET} "${ROOT}/plugins/certs/configure-noops.sh" \
-                   "${KUBE_TEMP}/configure-certs.sh"
+                   "${KUBE_TEMP_DIR}/configure-certs.sh"

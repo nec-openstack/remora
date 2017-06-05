@@ -14,7 +14,7 @@ clusters:
 - name: kubernetes
   cluster:
     certificate-authority: ${KUBE_CERTS_DIR}/ca.crt
-    server: https://${KUBERNETES_SERVICE_IP}:${KUBE_PORT}
+    server: https://${KUBE_PUBLIC_SERVICE_IP}:${KUBE_PORT}
 users:
 - name: kubelet
   user:

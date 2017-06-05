@@ -18,9 +18,9 @@ Restart=always
 ExecReload=${DOCKER_PATH} restart kubelet
 ExecStartPre=-${DOCKER_PATH} stop kubelet
 ExecStartPre=-${DOCKER_PATH} rm kubelet
-ExecStartPre=${DOCKER_PATH} pull ${HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
+ExecStartPre=${DOCKER_PATH} pull ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
 ExecStartPre=${DOCKER_PATH} run --rm -v /opt/cni/bin:/cnibindir \
-    ${HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION} \
+    ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION} \
         /bin/cp -r /opt/cni/bin/. /cnibindir/
 ExecStart=${DOCKER_PATH} run \
     --name=kubelet \
@@ -37,7 +37,7 @@ ExecStart=${DOCKER_PATH} run \
     --pid=host \
     --privileged=true \
     --restart=on-failure:5 \
-    ${HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION} \
+    ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION} \
     /hyperkube kubelet \
         --allow-privileged=true \
         --register-schedulable=false \
@@ -50,8 +50,8 @@ ExecStart=${DOCKER_PATH} run \
         --cluster-domain=cluster.local \
         --kubeconfig=/etc/kubernetes/kubelet.yaml \
         --require-kubeconfig=true \
-        --cloud-provider=${CLOUD_PROVIDER:-""} \
-        --cloud-config=${CLOUD_CONFIG:-""} \
+        --cloud-provider=${KUBE_CLOUD_PROVIDER:-""} \
+        --cloud-config=${KUBE_CLOUD_CONFIG:-""} \
         --v=${KUBE_LOG_LEVEL:-"2"}
 [Install]
 WantedBy=multi-user.target

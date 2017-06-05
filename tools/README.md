@@ -32,7 +32,7 @@ composition.
     # OS useraname which is used for ssh login.
     # This user also needs to sudo with no password.
     export NODE_USERNAME="ubuntu"
-    export KUBERNETES_SERVICE_IP="192.168.1.101"
+    export KUBE_PUBLIC_SERVICE_IP="192.168.1.101"
     export MASTERS="192.168.1.111 192.168.1.112"
     export WORKERS="192.168.1.121 192.168.1.122"
     export DISCOVERY_URL=$(curl "https://discovery.etcd.io/new?size=2")

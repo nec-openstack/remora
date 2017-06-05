@@ -58,7 +58,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: kube-proxy
-        image: ${HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
+        image: ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
         command:
         - /hyperkube
         - proxy

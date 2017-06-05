@@ -3,12 +3,12 @@
 set -eu
 export LC_ALL=C
 
-CLOUD_CONFIG=""
+KUBE_CLOUD_CONFIG=""
 
-if [[ ${CLOUD_PROVIDER} == "openstack" ]]; then
-  CLOUD_CONFIG=/etc/kubernetes/openstack.conf
-  mkdir -p $(dirname $CLOUD_CONFIG)
-  cat << EOF > $CLOUD_CONFIG
+if [[ ${KUBE_CLOUD_PROVIDER} == "openstack" ]]; then
+  KUBE_CLOUD_CONFIG=/etc/kubernetes/openstack.conf
+  mkdir -p $(dirname $KUBE_CLOUD_CONFIG)
+  cat << EOF > $KUBE_CLOUD_CONFIG
 [Global]
 auth-url=$OS_AUTH_URL
 username=$OS_USERNAME
@@ -24,4 +24,4 @@ router-id=$OS_ROUTER_ID
 EOF
 fi
 
-export CLOUD_CONFIG
+export KUBE_CLOUD_CONFIG

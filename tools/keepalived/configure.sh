@@ -26,7 +26,7 @@ vrrp_instance VI {
     auth_pass himitsu
   }
   virtual_ipaddress {
-    ${KUBERNETES_SERVICE_IP}/${NODE_NETWORK_RANGE}   dev ${NODE_NET_DEVICE}
+    ${KUBE_PUBLIC_SERVICE_IP}/${NODE_NETWORK_RANGE}   dev ${NODE_NET_DEVICE}
   }
 }
 EOF

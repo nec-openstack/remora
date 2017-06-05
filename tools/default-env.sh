@@ -27,7 +27,7 @@ if [[ ${REMORA_DEFAULT_ENV_IS_LOADED:-""} != "true" ]]; then
         source "${ROOT}/env.${CLUSTER_NAME}.sh"
     fi
 
-    export KUBERNETES_SERVICE_IP=${KUBERNETES_SERVICE_IP:-"192.168.1.101"}
+    export KUBE_PUBLIC_SERVICE_IP=${KUBE_PUBLIC_SERVICE_IP:-"192.168.1.101"}
     export MASTERS=${MASTERS:-"192.168.1.111 192.168.1.112 192.168.1.113"}
     export ETCDS=${ETCDS:-${MASTERS}}
     export WORKERS=${WORKERS:-"192.168.1.121 192.168.1.122"}
@@ -61,7 +61,7 @@ if [[ ${REMORA_DEFAULT_ENV_IS_LOADED:-""} != "true" ]]; then
     export KUBE_APISERVERS=${KUBE_APISERVERS:-${MASTERS}}
     export KUBE_CONTROLLER_MANAGERS=${KUBE_CONTROLLER_MANAGERS:-${MASTERS}}
     export KUBE_SCHEDULERS=${KUBE_SCHEDULERS:-${MASTERS}}
-    export HYPERKUBE_IMAGE_REPO=${HYPERKUBE_IMAGE_REPO:-"gcr.io/google_containers/hyperkube"}
+    export KUBE_HYPERKUBE_IMAGE_REPO=${KUBE_HYPERKUBE_IMAGE_REPO:-"gcr.io/google_containers/hyperkube"}
     export KUBE_VERSION=${KUBE_VERSION:-"v1.6.1"}
     export KUBE_CLUSTER_CIDR=${KUBE_CLUSTER_CIDR:-"10.244.0.0/16"}
     export KUBE_NODE_CIDR_MASK_SIZE=${KUBE_NODE_CIDR_MASK_SIZE:-"24"}
@@ -76,13 +76,13 @@ if [[ ${REMORA_DEFAULT_ENV_IS_LOADED:-""} != "true" ]]; then
     export KUBE_INTERNAL_PORT=${KUBE_INTERNAL_PORT:-"6443"}
     export KUBE_ADMISSION_CONTROL=${KUBE_ADMISSION_CONTROL:-"NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota"}
     export KUBE_STORAGE_BACKEND=${KUBE_STORAGE_BACKEND:-"etcd3"}
-    export KUBE_TEMP="~/kube_temp"
+    export KUBE_TEMP_DIR="~/kube_temp"
     export KUBE_CERTS_DIR=${KUBE_CERTS_DIR:-"/etc/kubernetes/pki"}
     export KUBE_LOG_LEVEL=${KUBE_LOG_LEVEL:-'2'}
 
     ## For cloud provider
 
-    export CLOUD_PROVIDER=${CLOUD_PROVIDER:-""}
+    export KUBE_CLOUD_PROVIDER=${KUBE_CLOUD_PROVIDER:-""}
     export OS_AUTH_URL=${OS_AUTH_URL:-"http://192.168.11.197:5000/v3/"}
     export OS_USERNAME=${OS_USERNAME:-"demo"}
     export OS_PASSWORD=${OS_PASSWORD:-"openstack"}

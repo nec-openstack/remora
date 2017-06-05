@@ -9,7 +9,7 @@ source ${ROOT}/default-env.sh
 source ${ROOT}/utils.sh
 
 export CERTS_REMOTE_DIR=${KUBE_CERTS_DIR:-"/etc/kubernetes/pki"}
-export CERTS_TEMP_REMOTE_DIR="${KUBE_TEMP}/certs"
+export CERTS_TEMP_REMOTE_DIR="${KUBE_TEMP_DIR}/certs"
 
 K8S_CLUSTER="${MASTERS} ${WORKERS}"
 for NODE in ${K8S_CLUSTER}
