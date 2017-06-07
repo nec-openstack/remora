@@ -24,19 +24,47 @@ composition.
 -   Machine03(192.168.1.121): Kubernetes Worker
 -   Machine04(192.168.1.122): Kubernetes Worker
 
+### 0. Install dependencies
+
+```bash
+$ pip install -r requirements.txt
+```
+
 ### 1. Clone this repository and write config file
 
-    $ git clone https://github.com/nec-openstack/remora.git
-    $ cd remora
-    $ cat <<-EOF > tools/env.sh
-    # OS useraname which is used for ssh login.
-    # This user also needs to sudo with no password.
-    export NODE_USERNAME="ubuntu"
-    export KUBE_PUBLIC_SERVICE_IP="192.168.1.101"
-    export MASTERS="192.168.1.111 192.168.1.112"
-    export WORKERS="192.168.1.121 192.168.1.122"
-    export DISCOVERY_URL=$(curl "https://discovery.etcd.io/new?size=2")
-    EOF
+```bash
+$ git clone https://github.com/nec-openstack/remora.git
+$ cd remora
+$ cat <<-EOF > configs/cluster.yaml
+---
+user: core
+
+masters: &masters
+  - 192.168.1.111
+  - 192.168.1.112
+workers: &workers
+  - 192.168.1.121
+  - 192.168.1.122
+
+roledefs:
+  haproxy: *masters
+  etcd: *masters
+  apiserver: *masters
+  controller_manager: *masters
+  scheduler: *masters
+  etcd-proxy: *workers
+  worker: *workers
+
+haproxy:
+  # network range which keepalived use
+  keepalived_net_range: 16
+  # network interface which keepalived use
+  keepalived_net_device: eth0
+
+kubernetes:
+  public_service_ip: 192.168.1.101
+EOF
+```
 
 This config file specify ETCD/LB address and Kubernetes master/worker
 addresses.
@@ -46,19 +74,16 @@ addresses.
 Kubernetes uses TLS to comunicate between node to node. So you have to
 create these assets.
 
-    $ export CLUSTER_NAME=my-cluster
-    $ bash tools/generate-certs.sh
-    $ bash tools/install-certs.sh
+    $ fab cluster certs
 
-After this procedure, TLS certs are generated in `certs` directory, and
+After this procedure, TLS certs are generated in `tools/certs` directory, and
 copied to correct node.
 
 ### 3. Install LB/Keepalived
 
 If you want to build multi master node cluster, then LB is required.
 
-    $ export CLUSTER_NAME=my-cluster
-    $ bash tools/install-keepalived.sh
+    $ fab cluster deploy.haproxy
 
 Note: This script attach `VIP` to one of masters. So if your cluster is
 building under OpenStack, you have to configure `allowed-address-pairs`.
@@ -70,12 +95,10 @@ Etcd is also essential component for Kubernetes, but installing Etcd is
 out of scope. So this script only install single node etcd for testing
 purpose.
 
-    $ export CLUSTER_NAME=my-cluster
-    $ bash tools/install-etcd.sh
+    $ fab cluster deploy.etcd
 
 ### 5. Install Kubernetes
 
 Following command install Kubernetes masters and workers.
 
-    $ export CLUSTER_NAME=my-cluster
-    $ bash tools/install-k8s.sh
+    $ fab cluster deploy.kubernetes

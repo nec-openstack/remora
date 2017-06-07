@@ -43,6 +43,36 @@ def decode_env_dict(prefix, env):
     return env_list
 
 
+_ENV_PROP_PAIRS = {
+    'kubernetes': [
+        ('docker', 'docker'),
+        ('kube', 'kubernetes'),
+    ],
+    'etcd': [
+        ('docker', 'docker'),
+        ('etcd', 'etcd'),
+    ],
+    'haproxy': [
+        ('docker', 'docker'),
+        ('haproxy', 'haproxy'),
+        ('kube', 'kubernetes'),
+    ],
+}
+
+
+def generate_env_file(path, env, target, additional_env_list=[]):
+    prop_pairs = _ENV_PROP_PAIRS[target]
+    env_list = []
+    for k, v in prop_pairs:
+        env_list.extend(decode_env_dict(k, env[v]))
+    env_list.extend(additional_env_list)
+
+    with open(path, 'w') as f:
+        for e in env_list:
+            f.write(e)
+            f.write('\n')
+
+
 class Struct(dict):
     """Specialized dict where you access an item like an attribute
 

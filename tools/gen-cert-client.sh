@@ -35,8 +35,6 @@ set -eu
 export LC_ALL=C
 
 script_dir=`dirname $0`
-source ${script_dir}/default-env.sh
-source ${script_dir}/utils.sh
 CLIENT_IP=${1:-"192.168.1.111"}
 PREFIX=${2:-"client"}
 SUBJECT=${3:-"/CN=client"}

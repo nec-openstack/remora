@@ -1,0 +1,26 @@
+---
+user: core
+
+masters: &masters
+  - 192.168.1.111
+  - 192.168.1.112
+  - 192.168.1.113
+workers: &workers
+  - 192.168.1.121
+  - 192.168.1.122
+
+roledefs:
+  haproxy: *masters
+  etcd: *masters
+  apiserver: *masters
+  controller_manager: *masters
+  scheduler: *masters
+  etcd-proxy: *workers
+  worker: *workers
+
+haproxy:
+  keepalived_net_range: 16
+  keepalived_net_device: eth0
+
+kubernetes:
+  public_service_ip: 192.168.1.101

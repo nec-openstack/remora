@@ -21,16 +21,16 @@ TimeoutStartSec=0
 Restart=always
 ExecStartPre=-${DOCKER_PATH} stop etcd
 ExecStartPre=-${DOCKER_PATH} rm etcd
-ExecStartPre=${DOCKER_PATH} pull ${ETCD_IMAGE_REPO}:${ETCD_V3_VERSION_TAG}
+ExecStartPre=${DOCKER_PATH} pull ${ETCD_IMAGE_REPO}:${ETCD_VERSION}
 ExecStart=${DOCKER_PATH} run --net=host --rm --name etcd \
     --volume=/var/lib/etcd:/var/lib/etcd:rw \
     --volume=/etc/ssl/certs:/etc/ssl/certs:ro \
     --volume=/usr/share/ca-certificates:/usr/share/ca-certificates:ro \
     --volume=${ETCD_CERTS_DIR}:${ETCD_CERTS_DIR}:ro \
-    ${ETCD_IMAGE_REPO}:${ETCD_V3_VERSION_TAG} \
+    ${ETCD_IMAGE_REPO}:${ETCD_VERSION} \
     /usr/local/bin/etcd \
     --name=${_HOSTNAME} \
-    --discovery=${DISCOVERY_URL} \
+    --discovery=${ETCD_DISCOVERY_URL} \
     --advertise-client-urls=https://${NODE_IP}:2379 \
     --initial-advertise-peer-urls=https://${NODE_IP}:2380 \
     --listen-client-urls=https://${NODE_IP}:2379,http://127.0.0.1:2379 \

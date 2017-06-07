@@ -1,0 +1,42 @@
+---
+temp_dir: "/tmp/kube_temp"
+
+docker:
+  path: "/usr/bin/docker"
+
+haproxy:
+  keepalived_net_range: 24
+  keepalived_net_device: eth0
+
+kubernetes:
+  version: v1.6.4
+  hyperkube_image_repo: gcr.io/google_containers/hyperkube
+  cluster_cidr: 10.244.0.0/16
+  node_cidr_mask_size: 24
+  service_ip_range: 10.254.0.0/24
+  cluster_dns_ip: 10.254.0.10
+  additional_hostnames: []
+  private_service_ip: 10.254.0.1
+  additional_service_ips: []
+  network_plugin: "cni"
+  cni_plugin: "flannel"
+  port: 443
+  internal_port: 6443
+  admission_control: "NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds"
+  etcd_endpoint: "http://127.0.0.1:2379"
+  storage_backend: etcd3
+  certs_dir: "/etc/kubernetes/pki"
+  log_level: 2
+  cloud_provider: ""
+  cloud_config: ""
+
+etcd:
+  version: "v3.1.5"
+  image_repo: "quay.io/coreos/etcd"
+  certs_dir: "/etc/etcd/pki"
+  discovery_service_url: "https://discovery.etcd.io/new?size={0}"
+
+flannel:
+  version: v0.7.0
+  image_repo: quay.io/coreos/flannel
+  backend_type: vxlan

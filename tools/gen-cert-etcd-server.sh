@@ -4,8 +4,6 @@ set -eu
 export LC_ALL=C
 
 script_dir=`dirname $0`
-source ${script_dir}/default-env.sh
-source ${script_dir}/utils.sh
 NODE_IP=${1:-"192.168.1.111"}
 
 CA_KEY=${CA_KEY:-"${LOCAL_CERTS_DIR}/ca.key"}

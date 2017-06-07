@@ -59,14 +59,14 @@ releasenotes/build
 
 # Project
 tools/env.sh
-tools/certs/*.key
-tools/certs/*.pub
-tools/certs/*.csr
-tools/certs/*.crt
-tools/certs/*.srl
+tools/certs/**/*.key
+tools/certs/**/*.pub
+tools/certs/**/*.csr
+tools/certs/**/*.crt
+tools/certs/**/*.srl
 tools/env.*
 tools/images
-tools/certs/*.cnf
+tools/certs/**/*.cnf
 tools/userdata/*.yaml
 
 .DS_Store
