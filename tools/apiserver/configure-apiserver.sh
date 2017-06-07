@@ -35,6 +35,7 @@ spec:
     - --authorization-mode=RBAC
     - --advertise-address=${NODE_IP}
     - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+    - --kubelet-client-certificate=${KUBE_CERTS_DIR}/apiserver-kubelet-client.crt
     - --kubelet-client-key=${KUBE_CERTS_DIR}/apiserver-kubelet-client.key
     - --etcd-servers=${KUBE_ETCD_ENDPOINT}
     - --storage-backend=${KUBE_STORAGE_BACKEND}
