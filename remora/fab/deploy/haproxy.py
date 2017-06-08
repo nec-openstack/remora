@@ -30,6 +30,6 @@ def apiserver_list():
 def all():
     require('stage')
     helpers.recreate_remote_temp_dir('haproxy')
-    utils.install_default_env('haproxy', apiserver_list())
+    utils.install_default_env('haproxy', 'haproxy', apiserver_list())
     utils.install_scripts('haproxy')
     utils.configure('haproxy')
