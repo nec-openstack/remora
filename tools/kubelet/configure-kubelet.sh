@@ -19,7 +19,10 @@ ExecReload=${DOCKER_PATH} restart kubelet
 ExecStartPre=-${DOCKER_PATH} stop kubelet
 ExecStartPre=-${DOCKER_PATH} rm kubelet
 ExecStartPre=${DOCKER_PATH} pull ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
-ExecStartPre=${DOCKER_PATH} run --rm -v /opt/cni/bin:/cnibindir \
+ExecStartPre=${DOCKER_PATH} run \
+    --rm -v \
+    /opt/cni/bin:/cnibindir \
+    --privileged=true \
     ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION} \
         /bin/cp -r /opt/cni/bin/. /cnibindir/
 ExecStart=${DOCKER_PATH} run \
