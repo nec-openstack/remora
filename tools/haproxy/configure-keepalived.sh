@@ -17,13 +17,13 @@ vrrp_instance VI {
   state BACKUP
   interface ${HAPROXY_KEEPALIVED_NET_DEVICE}
   garp_master_delay 5
-  virtual_router_id 1
+  virtual_router_id ${HAPROXY_KEEPALIVED_VRID:-"1"}
   priority 101
   nopreempt
   advert_int 1
   authentication {
     auth_type PASS
-    auth_pass himitsu
+    auth_pass ${HAPROXY_KEEPALIVED_AUTH_PASSWORD:-'himitsu'}
   }
   virtual_ipaddress {
     ${KUBE_PUBLIC_SERVICE_IP}/${HAPROXY_KEEPALIVED_NET_RANGE}   dev ${HAPROXY_KEEPALIVED_NET_DEVICE}

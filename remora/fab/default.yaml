@@ -9,6 +9,8 @@ docker:
 haproxy:
   keepalived_net_range: 24
   keepalived_net_device: eth0
+  keepalived_vrid: "1"
+  keepalived_auth_password: "himitsu"
 
 kubernetes:
   version: v1.6.4
