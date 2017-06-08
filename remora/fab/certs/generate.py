@@ -44,8 +44,8 @@ def gen_certs_or_keypairs(target, script_name, host='', *options):
         default_env = os.path.join(temp_dir, 'default-env.sh')
         utils.generate_env_file(
             default_env,
-            'kubernetes',
             env,
+            'kubernetes',
             generate_local_env(target)
         )
 
