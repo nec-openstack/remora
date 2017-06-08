@@ -50,13 +50,16 @@ def gen_certs_or_keypairs(target, script_name, host='', *options):
         )
 
         with lcd(_CERTS_DIR):
-            local('source {0} && bash {1}/{2} {3} {4}'.format(
-                default_env,
-                helpers.remora_scripts_dir,
-                script_name,
-                host,
-                ' '.join(options)
-            ))
+            local(
+                'source {0} && bash {1}/{2} {3} {4}'.format(
+                    default_env,
+                    helpers.remora_scripts_dir,
+                    script_name,
+                    host,
+                    ' '.join(options)
+                ),
+                shell=env.local_shell,
+            )
 
 
 def gen_client_certs(target, *options):

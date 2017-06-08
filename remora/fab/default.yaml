@@ -1,6 +1,8 @@
 ---
 temp_dir: "/tmp/kube_temp"
 
+local_shell: "/bin/bash"
+
 docker:
   path: "/usr/bin/docker"
 
