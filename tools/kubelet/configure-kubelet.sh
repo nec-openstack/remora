@@ -57,6 +57,7 @@ ExecStart=${DOCKER_PATH} run \
         --cloud-config=${KUBE_CLOUD_CONFIG:-""} \
         --authorization-mode=Webhook \
         --client-ca-file=${KUBE_CERTS_DIR}/ca.crt \
+        --cgroup-driver=${KUBE_CGROUP_DRIVER:-""} \
         --v=${KUBE_LOG_LEVEL:-"2"}
 
 [Install]
