@@ -2,6 +2,8 @@
 temp_dir: "/tmp/kube_temp"
 
 local_shell: "/bin/bash"
+local_kubeconfig: "~/.kube/config"
+local_kubectl: "kubectl"
 
 docker:
   path: "/usr/bin/docker"

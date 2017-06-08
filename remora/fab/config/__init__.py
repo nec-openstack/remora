@@ -11,10 +11,12 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from remora.fab import certs        # noqa
-from remora.fab import clean        # noqa
-from remora.fab import config        # noqa
-from remora.fab import deploy       # noqa
-from remora.fab import helpers
+from fabric.api import execute
+from fabric.api import task
 
-helpers.create_env_tasks(globals())
+from remora.fab.config import kubernetes  # noqa
+
+
+@task(default=True)
+def all():
+    execute(kubernetes.all)
