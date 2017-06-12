@@ -1,0 +1,13 @@
+{
+  "family":{
+    "debian":{
+      "docker": "docker.io"
+    },
+    "redhat":{
+      "docker": "docker"
+    }
+  },
+  "default":{
+      "docker": "docker"
+  }
+}
