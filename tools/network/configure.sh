@@ -10,6 +10,12 @@ if [ -f "${ROOT}/default-env.sh" ]; then
     source ${ROOT}/default-env.sh
 fi
 
+until curl -sfk "https://${KUBE_PUBLIC_SERVICE_IP}:${KUBE_PORT}/healthz"
+do
+    echo "Waiting for Kubernetes API..."
+    sleep 5
+done
+
 # Network plugin
 plugin_name='kubenet'
 if [[ ${KUBE_NETWORK_PLUGIN} == 'cni' ]]; then
