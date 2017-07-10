@@ -23,10 +23,10 @@ from fabric.api import task
 from fabric.operations import require
 
 from remora.common import utils
-from remora.fab import certs
+from remora.fab.certs import constants
 from remora.fab import helpers
 
-_CERTS_DIR = certs.CERTS_DIR
+_CERTS_DIR = constants.CERTS_DIR
 _LOCAL_ENV = [
     'export LOCAL_CERTS_DIR="%s"' % _CERTS_DIR,
 ]

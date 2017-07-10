@@ -21,7 +21,7 @@ from fabric.api import roles
 from fabric.api import sudo
 from fabric.api import task
 
-from remora.fab import certs
+from remora.fab.certs import constants
 from remora.fab import helpers
 
 
@@ -36,7 +36,7 @@ def mkdirs(target):
 
 def install_file(target, prefix, suffix, modifier=''):
     local_file = "{0}{1}.{2}".format(prefix, modifier, suffix)
-    local_path = os.path.join(certs.CERTS_DIR, target, local_file)
+    local_path = os.path.join(constants.CERTS_DIR, target, local_file)
     remote_file = "{0}.{1}".format(prefix, suffix)
     remote_temp_path = os.path.join(
         helpers.remote_temp_dir("certs/{0}".format(target)),

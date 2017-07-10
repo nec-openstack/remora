@@ -11,14 +11,9 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from fabric.api import execute
-from fabric.api import task
+import os
 
-from remora.fab.certs import generate  # noqa
-from remora.fab.certs import install   # noqa
+from remora.fab import helpers
 
 
-@task(default=True)
-def all():
-    execute(generate.all)
-    execute(install.all)
+CERTS_DIR = os.path.join(helpers.remora_scripts_dir, 'certs')
