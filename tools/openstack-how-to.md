@@ -5,8 +5,8 @@ glance image-create --name ubuntu-docker \
                     --container-format=bare \
                     --file=ubuntu-xenial-docker-ec2-noclouds.qcow2
 
-nova flavor-create k2.master k2m 2048 40 1
-nova flavor-create k2.worker k2w 2048 40 1
+nova flavor-create k2.master k2m 2048 20 1
+nova flavor-create k2.worker k2w 2048 20 1
 
 openstack keypair create k8s-key \
   --public-key ~/.ssh/id_rsa.pub

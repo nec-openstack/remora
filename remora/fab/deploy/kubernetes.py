@@ -38,7 +38,11 @@ def all():
 def kubelet():
     require('stage')
     helpers.recreate_remote_temp_dir('kubelet')
-    utils.install_default_env('kubelet', 'kubernetes')
+    utils.install_default_env(
+        'kubelet',
+        'kubernetes',
+        generate_cloud_provider_env_list()
+    )
     utils.install_scripts('kubelet')
     utils.configure('kubelet')
 
@@ -96,6 +100,21 @@ def generate_network_env_list():
         )
 
     return env_list
+
+
+def generate_cloud_provider_env_list():
+    env_list = []
+    cloud_provider = env.kubernetes['cloud_provider']
+    if cloud_provider == '':
+        return env_list
+
+    if cloud_provider in env:
+        env_list.extend(
+            common_utils.decode_env_dict(cloud_provider, env[cloud_provider])
+        )
+
+    return env_list
+
 
 @task
 @roles('apiserver')

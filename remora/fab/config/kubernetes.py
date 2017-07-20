@@ -19,7 +19,7 @@ from fabric.api import lcd
 from fabric.api import local
 from fabric.api import roles
 from fabric.api import runs_once
-from fabric.api import sudo
+from fabric.api import run
 from fabric.api import task
 from fabric.operations import require
 
@@ -37,11 +37,18 @@ def remote_certs_dir():
 @runs_once
 def all():
     require('stage')
-    ca = sudo('cat {0}/ca.crt | base64'.format(remote_certs_dir()))
+    rc_dir = remote_certs_dir
+    ca = run(
+        'sudo cat {0}/ca.crt 2>/dev/null | base64'.format(rc_dir())
+    ).stdout
     # ca = base64.b64encode(ca.encode('utf-8')).decode('utf-8')
-    admin_crt = sudo('cat {0}/admin.crt | base64'.format(remote_certs_dir()))
+    admin_crt = run(
+        'sudo cat {0}/admin.crt 2>/dev/null | base64'.format(rc_dir())
+    ).stdout
     # admin_crt = base64.b64encode(admin_crt.encode('utf-8')).decode('utf-8')
-    admin_key = sudo('cat {0}/admin.key | base64'.format(remote_certs_dir()))
+    admin_key = run(
+        'sudo cat {0}/admin.key 2>/dev/null | base64'.format(rc_dir())
+    ).stdout
     # admin_key = base64.b64encode(admin_crt.encode('utf-8')).decode('utf-8')
 
     api_address = env.kubernetes['public_service_ip']

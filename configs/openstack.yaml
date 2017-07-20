@@ -1,0 +1,41 @@
+---
+user: ubuntu
+
+masters: &masters
+  - 172.16.2.121
+workers: &workers
+  - 172.16.2.131
+  - 172.16.2.132
+  # - 172.16.2.133
+
+roledefs:
+  haproxy: *masters
+  etcd: *masters
+  apiserver: *masters
+  controller_manager: *masters
+  scheduler: *masters
+  etcd-proxy: *workers
+  worker: *workers
+
+haproxy:
+  keepalived_net_range: 16
+  keepalived_net_device: eth0
+
+kubernetes:
+  public_service_ip: 172.16.2.121
+  network_plugin: "kubenet"
+  port: 6443
+  internal_port: 6443
+  cloud_provider: "openstack"
+  cloud_config: /etc/kubernetes/openstack.conf
+
+openstack:
+  auth_url: http://192.168.11.197/identity/v3/
+  username: demo
+  password: openstack
+  region_name: RegionOne
+  tenant_name: demo
+  user_domain_id: default
+  subnet_id: c5912e06-db5f-4ece-8d4a-bc3eb07019da
+  floating_network_id: d3fa92c4-b47f-4043-9578-77e30f761019
+  router_id: fe49e9c6-9b60-45d3-881e-4cd5a826cffb
