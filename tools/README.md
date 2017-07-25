@@ -24,12 +24,6 @@ composition.
 -   Machine03(192.168.1.121): Kubernetes Worker
 -   Machine04(192.168.1.122): Kubernetes Worker
 
-### 0. Install dependencies
-
-```bash
-$ pip install -r requirements.txt
-```
-
 ### 1. Clone this repository and write config file
 
 ```bash
@@ -62,14 +56,30 @@ haproxy:
   keepalived_net_device: eth0
 
 kubernetes:
+  # Public kubernetes service address
   public_service_ip: 192.168.1.101
 EOF
 ```
 
 This config file specify ETCD/LB address and Kubernetes master/worker
-addresses.
+addresses. And you can see some example config files in `configs` directory.
+`configs/openstack.yaml` tells you how to setup single master node cluster
+on the top of OpenStack.
 
-### 2. Generate and copy TLS assets
+> *Notes*: Remora uses `fabric` to setup kubernetes cluster. And these config
+> files are used for specifying target cluster.
+> If you put `configs/hoge.yaml` file under configs directory, Remora will
+> create `hoge` sub-task to specify hoge cluster.
+
+### 2. Install dependencies
+
+Remora requires some dependencies, so it's needed to install.
+
+```bash
+$ pip install -r requirements.txt
+```
+
+### 3. Generate and copy TLS assets
 
 Kubernetes uses TLS to comunicate between node to node. So you have to
 create these assets.
@@ -79,7 +89,7 @@ create these assets.
 After this procedure, TLS certs are generated in `tools/certs` directory, and
 copied to correct node.
 
-### 3. Install LB/Keepalived
+### 4. Install LB/Keepalived
 
 If you want to build multi master node cluster, then LB is required.
 
@@ -89,7 +99,7 @@ Note: This script attach `VIP` to one of masters. So if your cluster is
 building under OpenStack, you have to configure `allowed-address-pairs`.
 Check how to use `keepalived` on OpenStack environment.
 
-### 4. Install Etcd
+### 5. Install Etcd
 
 Etcd is also essential component for Kubernetes, but installing Etcd is
 out of scope. So this script only install single node etcd for testing
@@ -97,7 +107,7 @@ purpose.
 
     $ fab cluster deploy.etcd
 
-### 5. Install Kubernetes
+### 6. Install Kubernetes
 
 Following command install Kubernetes masters and workers.
 

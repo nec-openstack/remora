@@ -6,7 +6,7 @@ masters: &masters
 workers: &workers
   - 172.16.2.131
   - 172.16.2.132
-  # - 172.16.2.133
+  - 172.16.2.133
 
 roledefs:
   haproxy: *masters
@@ -17,16 +17,23 @@ roledefs:
   etcd-proxy: *workers
   worker: *workers
 
+# HAproxy and Keepalived is not required to install for one master node
+# cluster.
 haproxy:
   keepalived_net_range: 16
   keepalived_net_device: eth0
 
 kubernetes:
+  # If you have one master node, public_service_ip will be same as master node
+  # address.
   public_service_ip: 172.16.2.121
   network_plugin: "kubenet"
+  # `port` and `internal_port` must be same for single master node cluster.
   port: 6443
   internal_port: 6443
   cloud_provider: "openstack"
+  # cloud_config file path must be under /etc/kubernetes directory to share
+  # with each kubelet, apiserver and controller_manager.
   cloud_config: /etc/kubernetes/openstack.conf
 
 openstack:
