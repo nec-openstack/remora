@@ -80,6 +80,8 @@ spec:
   selector:
     matchLabels:
       k8s-app: kube-proxy
+  updateStrategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -100,6 +102,10 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/kube-proxy
           name: kube-proxy
+        # TODO: Make this a file hostpath mount
+        - mountPath: /run/xtables.lock
+          name: xtables-lock
+          readOnly: false
       hostNetwork: true
       serviceAccountName: kube-proxy
       # TODO: Why doesn't the Decoder recognize this new field and decode it properly? Right now it's ignored
@@ -110,4 +116,7 @@ spec:
       - name: kube-proxy
         configMap:
           name: kube-proxy
+      - name: xtables-lock
+        hostPath:
+          path: /run/xtables.lock
 EOF

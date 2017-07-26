@@ -15,7 +15,7 @@ haproxy:
   keepalived_auth_password: "himitsu"
 
 kubernetes:
-  version: v1.6.4
+  version: v1.7.1
   hyperkube_image_repo: gcr.io/google_containers/hyperkube
   cluster_cidr: 10.244.0.0/16
   node_cidr_mask_size: 24
@@ -43,6 +43,6 @@ etcd:
   discovery_service_url: "https://discovery.etcd.io/new?size={0}"
 
 flannel:
-  version: v0.7.0
+  version: v0.8.0
   image_repo: quay.io/coreos/flannel
   backend_type: vxlan
