@@ -64,6 +64,14 @@ def create_env_task(env_name, env_dict, namespace):
     def env_task():
         env.stage = env_name
         env.update(env_dict)
+        roledefs = env_dict.get('roledefs', None)
+        if roledefs:
+            hosts = set()
+            for v in roledefs.values():
+                hosts |= set(v)
+
+            env.hosts = list(hosts)
+
     env_task.__doc__ = u'''Set environment for {0}'''.format(env_name)
 
     wrapper = task(name=env_name)

@@ -20,7 +20,7 @@ from fabric.operations import require
 
 from remora.fab import certs        # noqa
 from remora.fab import clean        # noqa
-from remora.fab import config        # noqa
+from remora.fab import config       # noqa
 from remora.fab import deploy       # noqa
 from remora.fab import helpers
 

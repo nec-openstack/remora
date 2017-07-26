@@ -25,26 +25,11 @@ from remora.fab import helpers
 
 @task(default=True)
 def all():
-    execute(kubelet)
     execute(apiserver)
     execute(controller_manager)
     execute(scheduler)
     execute(network)
     execute(addons)
-
-
-@task
-@roles('apiserver', 'controller_manager', 'scheduler', 'worker')
-def kubelet():
-    require('stage')
-    helpers.recreate_remote_temp_dir('kubelet')
-    utils.install_default_env(
-        'kubelet',
-        'kubernetes',
-        generate_cloud_provider_env_list()
-    )
-    utils.install_scripts('kubelet')
-    utils.configure('kubelet')
 
 
 @task
@@ -97,20 +82,6 @@ def generate_network_env_list():
         cni_plugin = env.kubernetes['cni_plugin']
         env_list.extend(
             common_utils.decode_env_dict(cni_plugin, env[cni_plugin])
-        )
-
-    return env_list
-
-
-def generate_cloud_provider_env_list():
-    env_list = []
-    cloud_provider = env.kubernetes['cloud_provider']
-    if cloud_provider == '':
-        return env_list
-
-    if cloud_provider in env:
-        env_list.extend(
-            common_utils.decode_env_dict(cloud_provider, env[cloud_provider])
         )
 
     return env_list

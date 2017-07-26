@@ -89,7 +89,14 @@ create these assets.
 After this procedure, TLS certs are generated in `tools/certs` directory, and
 copied to correct node.
 
-### 4. Install LB/Keepalived
+### 4. Install Kubelet
+
+Kubelet manages all components which are installed by remora. So it's needed
+to install Kubelet first.
+
+    $ fab cluster deploy.kubelet
+
+### 5. Install LB/Keepalived
 
 If you want to build multi master node cluster, then LB is required.
 
@@ -99,16 +106,16 @@ Note: This script attach `VIP` to one of masters. So if your cluster is
 building under OpenStack, you have to configure `allowed-address-pairs`.
 Check how to use `keepalived` on OpenStack environment.
 
-### 5. Install Etcd
+### 6. Install Etcd
 
 Etcd is also essential component for Kubernetes, but installing Etcd is
-out of scope. So this script only install single node etcd for testing
+out of scope. So this script only install test grade etcd for testing
 purpose.
 
     $ fab cluster deploy.etcd
 
-### 6. Install Kubernetes
+### 7. Install Kubernetes
 
-Following command install Kubernetes masters and workers.
+Following command install Kubernetes master components.
 
     $ fab cluster deploy.kubernetes

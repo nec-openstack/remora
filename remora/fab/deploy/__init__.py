@@ -16,11 +16,13 @@ from fabric.api import task
 
 from remora.fab.deploy import etcd  # noqa
 from remora.fab.deploy import haproxy  # noqa
+from remora.fab.deploy import kubelet  # noqa
 from remora.fab.deploy import kubernetes  # noqa
 
 
 @task(default=True)
 def all():
+    execute(kubelet.all)
     execute(etcd.all)
     execute(haproxy.all)
     execute(kubernetes.all)

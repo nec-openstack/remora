@@ -28,3 +28,6 @@ haproxy:
 
 kubernetes:
   public_service_ip: 192.168.1.101
+
+flannel:
+  backend_type: host-gw

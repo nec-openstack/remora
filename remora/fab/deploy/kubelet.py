@@ -12,7 +12,7 @@
 #    under the License.
 
 from fabric.api import env
-from fabric.api import roles
+from fabric.api import execute
 from fabric.api import task
 from fabric.operations import require
 
@@ -20,16 +20,33 @@ from remora.fab.deploy import utils
 from remora.fab import helpers
 
 
-def apiserver_list():
-    servers = ' '.join(env.roledefs['apiserver'])
-    return ['export HAPROXY_BACKENDS="{0}"'.format(servers)]
-
-
 @task(default=True)
-@roles('haproxy')
 def all():
+    execute(kubelet)
+
+
+@task
+def kubelet():
     require('stage')
-    helpers.recreate_remote_temp_dir('haproxy')
-    utils.install_default_env('haproxy', 'haproxy', apiserver_list())
-    utils.install_scripts('haproxy')
-    utils.configure('haproxy')
+    helpers.recreate_remote_temp_dir('kubelet')
+    utils.install_default_env(
+        'kubelet',
+        'kubernetes',
+        generate_cloud_provider_env_list()
+    )
+    utils.install_scripts('kubelet')
+    utils.configure('kubelet')
+
+
+def generate_cloud_provider_env_list():
+    env_list = []
+    cloud_provider = env.kubernetes['cloud_provider']
+    if cloud_provider == '':
+        return env_list
+
+    if cloud_provider in env:
+        env_list.extend(
+            common_utils.decode_env_dict(cloud_provider, env[cloud_provider])
+        )
+
+    return env_list
