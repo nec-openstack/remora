@@ -31,37 +31,34 @@ vrrp_instance VI {
 }
 EOF
 
-    local TEMPLATE=/etc/systemd/system/keepalived.service
-
+    local TEMPLATE=/etc/kubernetes/manifests/keepalived.yaml
     echo "TEMPLATE: $TEMPLATE"
     mkdir -p $(dirname $TEMPLATE)
 cat << EOF > $TEMPLATE
-[Unit]
-Description=keepalived for cluster services
-
-# Requirements
-Requires=docker.service
-
-# Dependency ordering
-After=docker.service
-
-[Service]
-EnvironmentFile=/etc/environment
-
-ExecStartPre=-${DOCKER_PATH} kill keepalived
-ExecStartPre=-${DOCKER_PATH} rm keepalived
-ExecStartPre=${DOCKER_PATH} pull yuanying/keepalived:latest
-
-ExecStart=${DOCKER_PATH} run --rm \
-  --name keepalived \
-  --cap-add=NET_ADMIN \
-  --cap-add=NET_BROADCAST \
-  --net=host \
-  -v /etc/keepalived/keepalived.cfg:/etc/keepalived/keepalived.cfg:ro \
-  yuanying/keepalived
-
-[Install]
-WantedBy=multi-user.target
+apiVersion: v1
+kind: Pod
+metadata:
+  name: keepalived
+  namespace: kube-system
+  labels:
+    tier: control-plane
+    component: keepalived
+spec:
+  hostNetwork: true
+  containers:
+  - name: keepalived
+    image: yuanying/keepalived:latest
+    securityContext:
+      capabilities:
+        add: ["NET_ADMIN", "NET_BROADCAST"]
+    volumeMounts:
+    - mountPath: /etc/keepalived/keepalived.cfg
+      name: keepalived
+      readOnly: true
+  volumes:
+  - hostPath:
+      path: /etc/keepalived/keepalived.cfg
+    name: keepalived
 EOF
 }
 

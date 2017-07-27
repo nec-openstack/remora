@@ -35,35 +35,31 @@ EOF
         size=$((size+1))
     done
 
-    local TEMPLATE=/etc/systemd/system/haproxy.service
-
+    local TEMPLATE=/etc/kubernetes/manifests/haproxy.yaml
     echo "TEMPLATE: $TEMPLATE"
     mkdir -p $(dirname $TEMPLATE)
 cat << EOF > $TEMPLATE
-[Unit]
-Description=haproxy for cluster services
-
-# Requirements
-Requires=docker.service
-
-# Dependency ordering
-After=docker.service
-
-[Service]
-EnvironmentFile=/etc/environment
-
-ExecStartPre=-${DOCKER_PATH} kill haproxy
-ExecStartPre=-${DOCKER_PATH} rm haproxy
-ExecStartPre=${DOCKER_PATH} pull haproxy:alpine
-
-ExecStart=${DOCKER_PATH} run --rm \
-  --name haproxy \
-  -p ${KUBE_PORT}:${KUBE_PORT} \
-  -v /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro \
-  haproxy:alpine
-
-[Install]
-WantedBy=multi-user.target
+apiVersion: v1
+kind: Pod
+metadata:
+  name: haproxy
+  namespace: kube-system
+  labels:
+    tier: control-plane
+    component: haproxy
+spec:
+  hostNetwork: true
+  containers:
+  - name: haproxy
+    image: haproxy:alpine
+    volumeMounts:
+    - mountPath: /usr/local/etc/haproxy/haproxy.cfg
+      name: haproxy
+      readOnly: true
+  volumes:
+  - hostPath:
+      path: /etc/haproxy/haproxy.cfg
+    name: haproxy
 EOF
 }
 

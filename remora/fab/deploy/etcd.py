@@ -15,6 +15,7 @@ from fabric.api import env
 from fabric.api import execute
 from fabric.api import roles
 from fabric.api import run
+from fabric.api import runs_once
 from fabric.api import settings
 from fabric.api import sudo
 from fabric.api import task
@@ -83,6 +84,7 @@ def proxy():
 
 
 @task(default=True)
+@runs_once
 def all():
     execute(server)
     execute(proxy)

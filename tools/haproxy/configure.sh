@@ -12,9 +12,3 @@ fi
 
 bash ${ROOT}/configure-keepalived.sh
 bash ${ROOT}/configure-haproxy.sh
-
-systemctl daemon-reload
-systemctl enable keepalived
-systemctl restart keepalived
-systemctl enable haproxy
-systemctl restart haproxy

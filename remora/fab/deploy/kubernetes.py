@@ -24,6 +24,7 @@ from remora.fab import helpers
 
 
 @task(default=True)
+@runs_once
 def all():
     execute(apiserver)
     execute(controller_manager)
