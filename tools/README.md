@@ -31,6 +31,8 @@ $ git clone https://github.com/nec-openstack/remora.git
 $ cd remora
 $ cat <<-EOF > configs/cluster.yaml
 ---
+# Username of target VMs
+# If you use Ubuntu, change below line to like `user: ubuntu`.
 user: core
 
 masters: &masters
