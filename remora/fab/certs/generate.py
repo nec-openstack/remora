@@ -73,6 +73,7 @@ def gen_client_certs(target, *options):
 
 
 @task
+@runs_once
 def etcd_ca():
     require('stage')
     gen_certs_or_keypairs(
@@ -82,6 +83,7 @@ def etcd_ca():
 
 
 @task
+@runs_once
 def kubernetes_ca():
     require('stage')
     gen_certs_or_keypairs(
@@ -121,6 +123,7 @@ def etcd():
 
 
 @task(alias='sa')
+@runs_once
 def service_account():
     require('stage')
     gen_certs_or_keypairs(
@@ -130,7 +133,6 @@ def service_account():
 
 
 @task
-@roles('apiserver', 'controller_manager', 'scheduler', 'worker')
 def kubelet():
     require('stage')
     gen_client_certs(

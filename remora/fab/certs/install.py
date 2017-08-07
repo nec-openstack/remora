@@ -100,8 +100,6 @@ def install_kube_common():
 @task
 @roles('apiserver')
 def apiserver():
-    install_kube_common()
-
     install_public_key('kubernetes', 'sa')
     install_certs('kubernetes', 'admin')
     install_certs('kubernetes', 'apiserver')
@@ -111,8 +109,6 @@ def apiserver():
 @task
 @roles('controller_manager')
 def controller_manager():
-    install_kube_common()
-
     install_private_key('kubernetes', 'ca')
     install_private_key('kubernetes', 'sa')
     install_certs('kubernetes', 'controller-manager')
@@ -121,24 +117,21 @@ def controller_manager():
 @task
 @roles('scheduler')
 def scheduler():
-    install_kube_common()
-
     install_certs('kubernetes', 'scheduler')
 
 
 @task
-@roles('worker')
-def worker():
+def kubelet():
     install_kube_common()
 
 
 @task(alias='k8s')
 @runs_once
 def kubernetes():
+    execute(kubelet)
     execute(apiserver)
     execute(controller_manager)
     execute(scheduler)
-    execute(worker)
 
 
 @task(default=True)
