@@ -19,6 +19,7 @@ from fabric.api import execute
 from fabric.api import lcd
 from fabric.api import local
 from fabric.api import roles
+from fabric.api import runs_once
 from fabric.api import task
 from fabric.operations import require
 
@@ -112,6 +113,7 @@ def etcd_client():
 
 
 @task
+@runs_once
 def etcd():
     execute(etcd_ca)
     execute(etcd_server)
@@ -182,6 +184,7 @@ def scheduler():
 
 
 @task(alias='k8s')
+@runs_once
 def kubernetes():
     execute(kubernetes_ca)
     execute(service_account)
@@ -192,6 +195,7 @@ def kubernetes():
 
 
 @task(default=True)
+@runs_once
 def all():
     execute(etcd)
     execute(kubernetes)

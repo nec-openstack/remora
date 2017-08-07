@@ -18,6 +18,7 @@ from fabric.api import execute
 from fabric.api import put
 from fabric.api import require
 from fabric.api import roles
+from fabric.api import runs_once
 from fabric.api import sudo
 from fabric.api import task
 
@@ -65,6 +66,7 @@ def install_public_key(target, prefix):
 
 
 @task
+@runs_once
 def etcd():
     execute(etcd_server)
     execute(etcd_proxy)
@@ -131,6 +133,7 @@ def worker():
 
 
 @task(alias='k8s')
+@runs_once
 def kubernetes():
     execute(apiserver)
     execute(controller_manager)
@@ -139,6 +142,7 @@ def kubernetes():
 
 
 @task(default=True)
+@runs_once
 def all():
     execute(etcd)
     execute(kubernetes)
