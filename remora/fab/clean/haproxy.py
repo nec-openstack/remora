@@ -23,4 +23,4 @@ from remora.fab.clean import utils
 def all():
     require('stage')
     for key in ['keepalived', 'haproxy']:
-        utils.disable_service(key)
+        pass

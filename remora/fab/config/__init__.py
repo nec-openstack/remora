@@ -12,11 +12,13 @@
 #    under the License.
 
 from fabric.api import execute
+from fabric.api import runs_once
 from fabric.api import task
 
 from remora.fab.config import kubernetes  # noqa
 
 
 @task(default=True)
+@runs_once
 def all():
     execute(kubernetes.all)

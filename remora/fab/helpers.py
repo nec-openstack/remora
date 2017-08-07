@@ -51,11 +51,25 @@ def merge_dicts(dict1, dict2):
     return dict1
 
 
+def construct_env(env_data, default_env_data=None):
+    if not default_env_data:
+        default_env_data = yaml.safe_load(open(default_configs).read())
+
+    env_data = merge_dicts(env_data, default_env_data)
+    env.update(env_data)
+    roledefs = env_data.get('roledefs', None)
+    if roledefs:
+        hosts = set()
+        for v in roledefs.values():
+            hosts |= set(v)
+
+        env.hosts = list(hosts)
+
+
 def create_env_tasks(namespace):
     default_env_data = yaml.safe_load(open(default_configs).read())
     for config in glob.glob(configs):
         env_data = yaml.safe_load(open(config).read())
-        env_data = merge_dicts(env_data, default_env_data)
         stage = os.path.splitext(os.path.basename(config))[0]
         create_env_task(stage, env_data, namespace)
 
@@ -63,14 +77,7 @@ def create_env_tasks(namespace):
 def create_env_task(env_name, env_dict, namespace):
     def env_task():
         env.stage = env_name
-        env.update(env_dict)
-        roledefs = env_dict.get('roledefs', None)
-        if roledefs:
-            hosts = set()
-            for v in roledefs.values():
-                hosts |= set(v)
-
-            env.hosts = list(hosts)
+        construct_env(env_dict)
 
     env_task.__doc__ = u'''Set environment for {0}'''.format(env_name)
 

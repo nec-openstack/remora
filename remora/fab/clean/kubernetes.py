@@ -19,7 +19,6 @@ from remora.fab.clean import utils
 
 
 @task(default=True)
-@roles('apiserver', 'controller_manager', 'scheduler', 'worker')
 def all():
     require('stage')
     utils.disable_service('kubelet', 'kubernetes')

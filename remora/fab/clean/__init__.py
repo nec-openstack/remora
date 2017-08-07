@@ -15,6 +15,7 @@ from fabric.api import env
 from fabric.api import execute
 from fabric.api import require
 from fabric.api import roles
+from fabric.api import runs_once
 from fabric.api import sudo
 from fabric.api import task
 
@@ -23,11 +24,7 @@ from remora.fab.clean import haproxy
 from remora.fab.clean import kubernetes
 
 
-@roles(
-    'haproxy',
-    'etcd', 'etcd-proxy',
-    'apiserver', 'controller_manager', 'scheduler', 'worker',
-)
+@task
 def dependency():
     require('stage')
     sudo('rm -rf {0}'.format(env.temp_dir))
@@ -38,6 +35,7 @@ def dependency():
 
 
 @task(default=True)
+@runs_once
 def all():
     execute(etcd.all)
     execute(haproxy.all)

@@ -23,5 +23,4 @@ from remora.fab.clean import utils
 @roles('etcd', 'etcd-proxy')
 def all():
     require('stage')
-    utils.disable_service('etcd')
     sudo('rm -rf /var/lib/etcd')
