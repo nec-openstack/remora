@@ -35,6 +35,7 @@ kubernetes:
   log_level: 2
   cloud_provider: ""
   cloud_config: ""
+  upstream_nameservers: '["8.8.8.8", "8.8.4.4"]'
 
 etcd:
   version: "v3.1.5"

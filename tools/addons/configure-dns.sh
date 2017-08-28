@@ -9,6 +9,10 @@ KUBE_ADDONS_DIR=/etc/kubernetes/addons
 mkdir -p ${KUBE_ADDONS_DIR}
 
 echo "---" > ${KUBE_ADDONS_DIR}/kube-dns.yaml
+sed "
+  s|__PILLAR__DNS__UPSTREAM_NAMESERVERS__|${KUBE_UPSTREAM_NAMESERVERS}|g
+" ${ROOT}/kubedns-configmap.yaml.base >> ${KUBE_ADDONS_DIR}/kube-dns.yaml
+echo "---" >> ${KUBE_ADDONS_DIR}/kube-dns.yaml
 cat ${ROOT}/kubedns-sa.yaml >> ${KUBE_ADDONS_DIR}/kube-dns.yaml
 echo "---" >> ${KUBE_ADDONS_DIR}/kube-dns.yaml
 sed "
