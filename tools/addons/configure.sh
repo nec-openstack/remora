@@ -13,8 +13,6 @@ fi
 source ${ROOT}/configure-proxy.sh
 source ${ROOT}/configure-dns.sh
 
-ADDONS="kube-proxy kube-dns"
-
 until curl -skf "https://${KUBE_PUBLIC_SERVICE_IP}:${KUBE_PORT}/healthz"
 do
     echo "Waiting for Kubernetes API..."
@@ -22,7 +20,7 @@ do
 done
 
 echo "Install addons..."
-for ADDON in ${ADDONS}; do
+for ADDON in ${KUBE_ADDONS}; do
     echo "Addon: ${ADDON}"
     cat /etc/kubernetes/addons/${ADDON}.yaml \
         | ${DOCKER_PATH} run \
