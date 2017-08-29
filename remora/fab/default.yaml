@@ -15,7 +15,7 @@ haproxy:
   keepalived_auth_password: "himitsu"
 
 kubernetes:
-  version: v1.7.1
+  version: v1.7.4
   hyperkube_image_repo: gcr.io/google_containers/hyperkube
   cluster_cidr: 10.244.0.0/16
   node_cidr_mask_size: 24
