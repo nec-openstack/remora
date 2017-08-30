@@ -38,6 +38,9 @@ spec:
     - --kubelet-client-certificate=${KUBE_CERTS_DIR}/apiserver-kubelet-client.crt
     - --kubelet-client-key=${KUBE_CERTS_DIR}/apiserver-kubelet-client.key
     - --etcd-servers=${KUBE_ETCD_ENDPOINT}
+    - --etcd-cafile=${ETCD_CERTS_DIR}/ca.crt
+    - --etcd-certfile=${ETCD_CERTS_DIR}/etcd-client.crt
+    - --etcd-keyfile=${ETCD_CERTS_DIR}/etcd-client.key
     - --storage-backend=${KUBE_STORAGE_BACKEND}
     - --cloud-provider=${KUBE_CLOUD_PROVIDER:-""}
     - --cloud-config=${KUBE_CLOUD_CONFIG:-""}
@@ -60,6 +63,9 @@ spec:
     - mountPath: /etc/ssl/certs
       name: ssl-certs-host
       readOnly: true
+    - mountPath: ${ETCD_CERTS_DIR}
+      name: etcd-certs-host
+      readOnly: true
   volumes:
   - hostPath:
       path: /etc/kubernetes
@@ -67,4 +73,7 @@ spec:
   - hostPath:
       path: /etc/ssl/certs
     name: ssl-certs-host
+  - hostPath:
+      path: ${ETCD_CERTS_DIR}
+    name: etcd-certs-host
 EOF

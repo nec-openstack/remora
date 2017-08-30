@@ -69,7 +69,7 @@ def install_public_key(target, prefix):
 @runs_once
 def etcd():
     execute(etcd_server)
-    execute(etcd_proxy)
+    execute(etcd_client)
 
 
 @task
@@ -82,8 +82,8 @@ def etcd_server():
 
 
 @task
-@roles('etcd-proxy')
-def etcd_proxy():
+@roles('etcd-proxy', 'apiserver')
+def etcd_client():
     require('stage')
     mkdirs('etcd')
     install_cert('etcd', 'ca')

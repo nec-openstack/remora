@@ -33,12 +33,21 @@ def all():
     execute(addons)
 
 
+def etcd_servers_list():
+    if not env['kubernetes'].get('etcd_endpoint'):
+        servers = ["https://{}:2379".format(s) for s in env.roledefs['etcd']]
+        servers = ','.join(servers)
+        return ['export KUBE_ETCD_ENDPOINT="{0}"'.format(servers)]
+
+    return []
+
+
 @task
 @roles('apiserver')
 def apiserver():
     require('stage')
     helpers.recreate_remote_temp_dir('apiserver')
-    utils.install_default_env('apiserver', 'kubernetes')
+    utils.install_default_env('apiserver', 'kubernetes', etcd_servers_list())
     utils.install_scripts('apiserver')
     utils.configure('apiserver')
 

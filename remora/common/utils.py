@@ -46,6 +46,7 @@ def decode_env_dict(prefix, env):
 _ENV_PROP_PAIRS = {
     'kubernetes': [
         ('docker', 'docker'),
+        ('etcd', 'etcd'),
         ('kube', 'kubernetes'),
     ],
     'etcd': [
