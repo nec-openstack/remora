@@ -24,3 +24,4 @@ from remora.fab.clean import utils
 def all():
     require('stage')
     sudo('rm -rf /var/lib/etcd')
+    sudo('rm -rf /etc/etcd')
