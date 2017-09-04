@@ -30,6 +30,7 @@ vrrp_instance VI {
   }
 }
 EOF
+    chmod 664 $TEMPLATE
 
     local TEMPLATE=/etc/kubernetes/manifests/keepalived.yaml
     echo "TEMPLATE: $TEMPLATE"

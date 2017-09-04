@@ -34,6 +34,7 @@ EOF
         echo "        server api${size} ${address}:${KUBE_INTERNAL_PORT} check" >> ${TEMPLATE}
         size=$((size+1))
     done
+    chmod 664 ${TEMPLATE}
 
     local TEMPLATE=/etc/kubernetes/manifests/haproxy.yaml
     echo "TEMPLATE: $TEMPLATE"
