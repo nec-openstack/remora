@@ -30,6 +30,8 @@ helpers.create_env_tasks(globals())
 @task
 @runs_once
 def host(host=None):
+    env['hosts'] = [host]
+
     for k, v in env.roledefs.items():
         if host in v:
             env.roledefs[k] = [host]
