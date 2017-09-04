@@ -26,14 +26,12 @@ class CreateCluster(command.Command):
 
     def get_parser(self, prog_name):
         parser = super(CreateCluster, self).get_parser(prog_name)
-        parser.add_argument("template_path",
-                            metavar="<CLUSTER_TEMPLATE_PATH>",
-                            help="Path of the cluster template")
+
         return parser
 
-    def take_action(self, parsed_args):
-
-        with open(parsed_args.template_path) as f:
+    @utils.global_options
+    def take_action(self, parsed_args, global_options):
+        with open(global_options.cluster_config) as f:
             params = yaml.load(f)
         print(params)
 

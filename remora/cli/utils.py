@@ -12,12 +12,11 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import functools
 
-def get_client(obj):
-    if hasattr(obj.app, 'client_manager'):
-        # NOTE(sileht): cliff objects loaded by OSC
-        return obj.app.client_manager.coe
-    else:
-        # TODO(sileht): Remove this when OSC is able
-        # to install the gnocchi client binary itself
-        return obj.app.client
+
+def global_options(func):
+    @functools.wraps(func)
+    def wrapper(self, parsed_args):
+        return func(self, parsed_args, self.app.options)
+    return wrapper

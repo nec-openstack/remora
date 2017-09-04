@@ -61,6 +61,12 @@ class RemoraShell(app.App):
             version,
             argparse_kwargs={'allow_abbrev': False})
 
+        parser.add_argument("--cluster-config",
+                            metavar="<CLUSTER_CONFIG_PATH>",
+                            default=os.environ.get('REMORA_CLUSTER', None),
+                            help="Path of the cluster config. "
+                                 "Default=env[REMORA_CLUSTER].")
+
         return parser
 
 
