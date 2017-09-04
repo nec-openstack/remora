@@ -17,6 +17,7 @@ from fabric.api import runs_once
 from fabric.api import task
 from fabric.operations import require
 
+from remora.common import utils as common_utils
 from remora.fab.deploy import utils
 from remora.fab import helpers
 

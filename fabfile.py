@@ -12,11 +12,8 @@
 #    under the License.
 
 from fabric.api import env
-from fabric.api import execute
-from fabric.api import roles
 from fabric.api import runs_once
 from fabric.api import task
-from fabric.operations import require
 
 from remora.fab import certs        # noqa
 from remora.fab import clean        # noqa
@@ -26,6 +23,7 @@ from remora.fab import helpers
 
 
 helpers.create_env_tasks(globals())
+
 
 @task
 @runs_once

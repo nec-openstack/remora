@@ -11,12 +11,10 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from fabric.api import sudo
 from fabric.api import require
 from fabric.api import roles
+from fabric.api import sudo
 from fabric.api import task
-
-from remora.fab.clean import utils
 
 
 @task(default=True)

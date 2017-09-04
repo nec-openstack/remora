@@ -19,6 +19,7 @@ from fabric.api import task
 
 from remora.tests.functional import base
 
+
 @task
 @roles('apiserver')
 def health():

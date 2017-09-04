@@ -24,6 +24,7 @@ from remora.fab import helpers
 config = os.getenv("REMORA_FUNCTIONAL_TEST_CONFIG")
 helpers.construct_env(yaml.safe_load(open(config).read()))
 
+
 class TestCase(testtools.TestCase):
 
     def setUp(self):

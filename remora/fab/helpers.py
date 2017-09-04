@@ -40,7 +40,7 @@ def recreate_remote_temp_dir(target):
 
 
 def merge_dicts(dict1, dict2):
-    """ Recursively merges dict2 into dict1 """
+    """Recursively merges dict2 into dict1"""
     if not isinstance(dict1, dict) or not isinstance(dict2, dict):
         return dict1
     for k in dict2:
@@ -67,7 +67,6 @@ def construct_env(env_data, default_env_data=None):
 
 
 def create_env_tasks(namespace):
-    default_env_data = yaml.safe_load(open(default_configs).read())
     for config in glob.glob(configs):
         env_data = yaml.safe_load(open(config).read())
         stage = os.path.splitext(os.path.basename(config))[0]

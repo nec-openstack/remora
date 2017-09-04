@@ -12,7 +12,6 @@
 #    under the License.
 
 from fabric.api import require
-from fabric.api import roles
 from fabric.api import task
 
 from remora.fab.clean import utils
