@@ -58,15 +58,13 @@ ChangeLog
 releasenotes/build
 
 # Project
-tools/env.sh
-tools/certs/**/*.key
-tools/certs/**/*.pub
-tools/certs/**/*.csr
-tools/certs/**/*.crt
-tools/certs/**/*.srl
-tools/env.*
-tools/images
-tools/certs/**/*.cnf
-tools/userdata/*.yaml
+remora/scripts/certs/**/*.key
+remora/scripts/certs/**/*.pub
+remora/scripts/certs/**/*.csr
+remora/scripts/certs/**/*.crt
+remora/scripts/certs/**/*.srl
+remora/scripts/images
+remora/scripts/certs/**/*.cnf
+remora/scripts/userdata/*.yaml
 
 .DS_Store
