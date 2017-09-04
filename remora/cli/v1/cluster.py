@@ -11,12 +11,12 @@
 #   License for the specific language governing permissions and limitations
 #   under the License.
 
-from osc_lib.command import command
+from cliff import command
 from oslo_log import log as logging
 import yaml
 
 from remora.cli import utils
-from remora.cluster import cluster
+# from remora.cluster import cluster
 
 
 class CreateCluster(command.Command):
@@ -36,6 +36,5 @@ class CreateCluster(command.Command):
         with open(parsed_args.template_path) as f:
             params = yaml.load(f)
         print(params)
-        c = cluster.Cluster(utils.get_client(self).env, params)
-        print(c._lb_provider().build())
-        return utils.get_client(self).region_name
+
+        return ""

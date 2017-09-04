@@ -18,12 +18,11 @@ import sys
 
 from cliff import app
 from cliff import commandmanager
-from keystoneauth1 import loading
 
 import remora
 from remora.cli.v1 import cluster
 from remora.common import config
-from remora.v1 import client
+# from remora.v1 import client
 
 
 class RemoraCommandManager(commandmanager.CommandManager):
@@ -45,7 +44,6 @@ class RemoraShell(app.App):
             command_manager=RemoraCommandManager(None),
             deferred_help=True,
         )
-        self._client = None
 
     def build_option_parser(self, description, version):
         """Return an argparse option parser for this application.
@@ -63,48 +61,7 @@ class RemoraShell(app.App):
             version,
             argparse_kwargs={'allow_abbrev': False})
 
-        loading.register_session_argparse_arguments(parser=parser)
-        loading.register_auth_argparse_arguments(
-            parser=parser, argv=sys.argv, default="v3password")
-
-        parser.add_argument(
-            '--os-interface',
-            metavar='<name>',
-            default=os.environ.get('OS_INTERFACE', 'public'),
-            help='API Interface to use [public, internal, admin]')
-
-        parser.add_argument(
-            '--os-region-name',
-            metavar='<name>',
-            default=os.environ.get('OS_REGION_NAME', None),
-            help='Region of the cloud to use')
-        # adapter.register_adapter_argparse_arguments(
-        #     parser=parser, service_type="coe")
-        # adapter.register_service_adapter_argparse_arguments(
-        #     parser=parser, service_type="coe")
-
         return parser
-
-    @property
-    def client(self):
-        # NOTE(sileht): we lazy load the client to not
-        # load/connect auth stuffs
-        if self._client is None:
-            auth_plugin = loading.load_auth_from_argparse_arguments(
-                self.options)
-            session = loading.load_session_from_argparse_arguments(
-                self.options, auth=auth_plugin)
-
-            # Openstck style endpoint
-            kwargs = dict(
-                session=session,
-                interface=self.options.os_interface,
-                region_name=self.options.os_region_name,
-                verify=not self.options.insecure,
-                cacert=self.options.os_cacert,
-            )
-            self._client = client.Client(**kwargs)
-        return self._client
 
 
 def main(args=None):
