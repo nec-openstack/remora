@@ -13,7 +13,14 @@
 
 import os
 
+from fabric.api import env
+
 from remora.fab import helpers
 
 
 CERTS_DIR = os.path.join(helpers.remora_scripts_dir, 'certs')
+
+
+def certs_dir():
+    certs_dir = env.get('local', {}).get('certs_dir', CERTS_DIR)
+    return os.path.expanduser(certs_dir)

@@ -20,6 +20,7 @@ from cliff import app
 from cliff import commandmanager
 
 import remora
+from remora.cli.v1 import certs
 from remora.cli.v1 import cluster
 from remora.common import config
 # from remora.v1 import client
@@ -28,6 +29,7 @@ from remora.common import config
 class RemoraCommandManager(commandmanager.CommandManager):
     SHELL_COMMANDS = {
         "cluster create": cluster.CreateCluster,
+        "certs generate": certs.GenerateCerts,
     }
 
     def load_commands(self, namespace):

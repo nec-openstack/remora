@@ -27,14 +27,9 @@ from remora.common import utils
 from remora.fab.certs import constants
 from remora.fab import helpers
 
-_CERTS_DIR = constants.CERTS_DIR
-_LOCAL_ENV = [
-    'export LOCAL_CERTS_DIR="%s"' % _CERTS_DIR,
-]
-
 
 def generate_local_env(target):
-    certs_dir = os.path.join(_CERTS_DIR, target)
+    certs_dir = os.path.join(constants.certs_dir(), target)
     return [
         'export LOCAL_CERTS_DIR="%s"' % certs_dir,
     ]
@@ -50,17 +45,16 @@ def gen_certs_or_keypairs(target, script_name, host='', *options):
             generate_local_env(target)
         )
 
-        with lcd(_CERTS_DIR):
-            local(
-                'source {0} && bash {1}/{2} {3} {4}'.format(
-                    default_env,
-                    helpers.remora_scripts_dir,
-                    script_name,
-                    host,
-                    ' '.join(options)
-                ),
-                shell=env.local_shell,
-            )
+        local(
+            'source {0} && bash {1}/{2} {3} {4}'.format(
+                default_env,
+                helpers.remora_scripts_dir,
+                script_name,
+                host,
+                ' '.join(options)
+            ),
+            shell=env.local_shell,
+        )
 
 
 def gen_client_certs(target, *options):

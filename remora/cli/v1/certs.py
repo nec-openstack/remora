@@ -14,21 +14,19 @@
 from cliff import command
 from oslo_log import log as logging
 
+from fabric.api import execute
+
 from remora.cli import utils
-# from remora.cluster import cluster
+from remora.fab.certs import generate
 
 
-class CreateCluster(command.Command):
-    """Create a coe cluster"""
+class GenerateCerts(command.Command):
+    """Generate a cluster certs"""
 
-    log = logging.getLogger(__name__ + ".CreateCluster")
-
-    def get_parser(self, prog_name):
-        parser = super(CreateCluster, self).get_parser(prog_name)
-
-        return parser
+    log = logging.getLogger(__name__ + ".GenerateCerts")
 
     @utils.fabric_env
     def take_action(self, parsed_args):
 
-        return ""
+        execute(generate.all)
+        return "ok"

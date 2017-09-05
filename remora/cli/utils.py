@@ -12,11 +12,29 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import os
 import functools
+import yaml
+
+from fabric.api import env
+
+from remora.fab import helpers
 
 
-def global_options(func):
+def fabric_env(func):
     @functools.wraps(func)
     def wrapper(self, parsed_args):
-        return func(self, parsed_args, self.app.options)
+        cluster_config = self.app.options.cluster_config
+        if not cluster_config:
+            self.log.error("Cluster Config is not specified")
+        if not os.path.exists(cluster_config):
+            self.log.error("Cluster Config is not exist: {}".format(
+                cluster_config))
+
+        with open(self.app.options.cluster_config) as f:
+            params = yaml.load(f)
+            env.stage = 'remora'
+            helpers.construct_env(params)
+        return func(self, parsed_args)
+
     return wrapper

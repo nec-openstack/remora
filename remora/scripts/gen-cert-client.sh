@@ -39,6 +39,8 @@ NODE_IP=${1:-"192.168.1.111"}
 PREFIX=${2:-"client"}
 SUBJECT=${3:-"/CN=client"}
 
+mkdir -p ${LOCAL_CERTS_DIR}
+
 CA_KEY=${CA_KEY:-"${LOCAL_CERTS_DIR}/ca.key"}
 CA_CERT=${CA_CERT:-"${LOCAL_CERTS_DIR}/ca.crt"}
 CLIENT_KEY=${CLIENT_KEY:-"${LOCAL_CERTS_DIR}/${PREFIX}-${NODE_IP}.key"}

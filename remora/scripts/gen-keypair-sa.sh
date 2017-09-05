@@ -5,6 +5,8 @@ export LC_ALL=C
 
 script_dir=`dirname $0`
 
+mkdir -p ${LOCAL_CERTS_DIR}
+
 SA_KEY=${SA_KEY:-"${LOCAL_CERTS_DIR}/sa.key"}
 SA_PUB=${SA_PUB:-"${LOCAL_CERTS_DIR}/sa.pub"}
 

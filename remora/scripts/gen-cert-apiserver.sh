@@ -6,6 +6,8 @@ export LC_ALL=C
 script_dir=`dirname $0`
 NODE_IP=${1:-"192.168.1.111"}
 
+mkdir -p ${LOCAL_CERTS_DIR}
+
 CA_KEY=${CA_KEY:-"${LOCAL_CERTS_DIR}/ca.key"}
 CA_CERT=${CA_CERT:-"${LOCAL_CERTS_DIR}/ca.crt"}
 KUBE_KEY=${KUBE_KEY:-"${LOCAL_CERTS_DIR}/apiserver-${NODE_IP}.key"}
