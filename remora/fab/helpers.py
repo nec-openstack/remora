@@ -51,6 +51,21 @@ def merge_dicts(dict1, dict2):
     return dict1
 
 
+def setup_hosts(roledefs):
+    hosts = set()
+    for v in roledefs.values():
+        hosts |= set(v)
+
+    env.hosts = list(hosts)
+    return env.hosts
+
+
+def setup_etcd_proxy_roles(hosts, roledefs):
+    if not roledefs.get('etcd-proxy', None):
+        etcd_proxy = set(hosts) - set(roledefs.get('etcd', []))
+        roledefs['etcd-proxy'] = list(etcd_proxy)
+
+
 def construct_env(env_data, default_env_data=None):
     if not default_env_data:
         default_env_data = yaml.safe_load(open(default_configs).read())
@@ -59,12 +74,8 @@ def construct_env(env_data, default_env_data=None):
     env.update(env_data)
     roledefs = env_data.get('roledefs', None)
     if roledefs:
-        hosts = set()
-        for v in roledefs.values():
-            hosts |= set(v)
-
-        env.hosts = list(hosts)
-
+        hosts = setup_hosts(roledefs)
+        setup_etcd_proxy_roles(hosts, roledefs)
 
 def create_env_tasks(namespace):
     for config in glob.glob(configs):

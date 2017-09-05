@@ -82,7 +82,6 @@ def etcd_server():
 
 
 @task
-@roles('etcd-proxy', 'apiserver')
 def etcd_client():
     require('stage')
     mkdirs('etcd')

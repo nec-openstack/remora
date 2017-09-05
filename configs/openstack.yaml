@@ -14,7 +14,6 @@ roledefs:
   apiserver: *masters
   controller_manager: *masters
   scheduler: *masters
-  etcd-proxy: *workers
   worker: *workers
 
 # HAproxy and Keepalived is not required to install for one master node

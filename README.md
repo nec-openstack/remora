@@ -57,7 +57,6 @@ roledefs:
   apiserver: *masters
   controller_manager: *masters
   scheduler: *masters
-  etcd-proxy: *workers
   worker: *workers
 
 haproxy:
