@@ -131,7 +131,7 @@ def kubelet():
     gen_client_certs(
         'kubernetes',
         'kubelet',
-        '"/O=system:nodes/CN=system:node:kubelet"'
+        '"/O=system:nodes/CN=system:node:{}"'.format(env.host)
     )
 
 
