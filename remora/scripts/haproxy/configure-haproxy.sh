@@ -19,9 +19,9 @@ global
 defaults
         mode    tcp
         balance leastconn
-        timeout client      30000ms
-        timeout server      30000ms
-        timeout connect      3000ms
+        timeout client      30m
+        timeout server      30m
+        timeout connect     3000ms
         retries 3
 frontend kube_api
         bind 0.0.0.0:${KUBE_PORT}
