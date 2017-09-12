@@ -35,10 +35,20 @@ def kubelet():
     utils.install_default_env(
         'kubelet',
         'kubernetes',
-        generate_cloud_provider_env_list()
+        env_list()
     )
     utils.install_scripts('kubelet')
     utils.configure('kubelet')
+
+
+def env_list():
+    return generate_cloud_provider_env_list() + master_env_list()
+
+
+def master_env_list():
+    if env.host in env.roledefs.get('master', []):
+        return ['export KUBE_IS_MASTER="1"']
+    return ['export KUBE_IS_MASTER="0"']
 
 
 def generate_cloud_provider_env_list():

@@ -3,7 +3,15 @@
 set -eu
 export LC_ALL=C
 
+KUBE_IS_MASTER=${KUBE_IS_MASTER:-'0'}
 # export NODE_IP=$1
+
+KUBELET_NODE_LABELS=''
+KUBELET_REGISTER_WITH_TAINTS=''
+if [[ ${KUBE_IS_MASTER} == '1' ]]; then
+  KUBELET_NODE_LABELS='--node-labels=node-role.kubernetes.io/master'
+  KUBELET_REGISTER_WITH_TAINTS='--register-with-taints=node-role.kubernetes.io/master=:NoSchedule'
+fi
 
 KUBELET_SERVICE=/etc/systemd/system/kubelet.service
 cat << EOF > ${KUBELET_SERVICE}
@@ -16,6 +24,11 @@ Requires=docker.service
 TimeoutStartSec=0
 Restart=always
 ExecReload=${DOCKER_PATH} restart kubelet
+ExecStartPre=/bin/mkdir -p /etc/kubernetes/manifests
+ExecStartPre=/bin/mkdir -p /opt/cni/bin
+ExecStartPre=/bin/mkdir -p /etc/kubernetes/cni/net.d
+ExecStartPre=/bin/mkdir -p /etc/kubernetes/checkpoint-secrets
+ExecStartPre=/bin/mkdir -p /etc/kubernetes/inactive-manifests
 ExecStartPre=-${DOCKER_PATH} stop kubelet
 ExecStartPre=-${DOCKER_PATH} rm kubelet
 ExecStartPre=${DOCKER_PATH} pull ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
@@ -58,6 +71,9 @@ ExecStart=${DOCKER_PATH} run \
         --authorization-mode=Webhook \
         --client-ca-file=${KUBE_CERTS_DIR}/ca.crt \
         --cgroup-driver=${KUBE_CGROUP_DRIVER:-""} \
+        --pod-manifest-path=/etc/kubernetes/manifests \
+        ${KUBELET_NODE_LABELS} \
+        ${KUBELET_REGISTER_WITH_TAINTS} \
         --v=${KUBE_LOG_LEVEL:-"2"}
 
 [Install]
