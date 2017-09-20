@@ -21,8 +21,8 @@ from remora.fab.deploy import kubelet  # noqa
 from remora.fab.deploy import kubernetes  # noqa
 
 
-@runs_once
 @task(default=True)
+@runs_once
 def all():
     execute(kubelet.all)
     execute(etcd.all)
