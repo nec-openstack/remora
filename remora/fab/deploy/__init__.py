@@ -12,6 +12,7 @@
 #    under the License.
 
 from fabric.api import execute
+from fabric.api import runs_once
 from fabric.api import task
 
 from remora.fab.deploy import etcd  # noqa
@@ -20,6 +21,7 @@ from remora.fab.deploy import kubelet  # noqa
 from remora.fab.deploy import kubernetes  # noqa
 
 
+@runs_once
 @task(default=True)
 def all():
     execute(kubelet.all)
