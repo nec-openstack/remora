@@ -16,6 +16,7 @@ ETCD_CERT=${ETCD_CERT:-"${LOCAL_CERTS_DIR}/etcd-${NODE_IP}.crt"}
 OPENSSL_CONFIG="${LOCAL_CERTS_DIR}/etcd-server-${NODE_IP}.cnf"
 
 sans="DNS:etcd,DNS:etcd.default,DNS:etcd.default.svc,DNS:etcd.default.svc.cluster.local"
+sans="${sans},DNS:localhost,IP:127.0.0.1"
 sans="${sans},IP:${NODE_IP}"
 
 # Create config for server's csr
