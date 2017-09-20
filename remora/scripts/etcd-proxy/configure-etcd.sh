@@ -27,16 +27,11 @@ spec:
     image: ${ETCD_IMAGE_REPO}:${ETCD_VERSION}
     command:
     - /usr/local/bin/etcd
-    - --name=${_HOSTNAME}
-    - --proxy=on
-    - --discovery=${ETCD_DISCOVERY_URL}
-    - --listen-client-urls=http://127.0.0.1:2379
-    - --cert-file=${ETCD_CERTS_DIR}/etcd-client.crt
-    - --key-file=${ETCD_CERTS_DIR}/etcd-client.key
-    - --trusted-ca-file=${ETCD_CERTS_DIR}/ca.crt
-    - --peer-cert-file=${ETCD_CERTS_DIR}/etcd-client.crt
-    - --peer-key-file=${ETCD_CERTS_DIR}/etcd-client.key
-    - --peer-trusted-ca-file=${ETCD_CERTS_DIR}/ca.crt
+    - gateway
+    - start
+    - --endpoints=${ETCD_ENDPOINTS}
+    - --listen-addr=127.0.0.1:2379
+    - --trusted-ca-file=/etc/etcd/pki/ca.crt
     volumeMounts:
     - mountPath: /var/lib/etcd
       name: etcd

@@ -71,6 +71,10 @@ def server():
     utils.install_scripts('etcd')
     utils.configure('etcd')
 
+def etcd_servers_list():
+    servers = ["{}:2379".format(s) for s in env.roledefs['etcd']]
+    servers = ','.join(servers)
+    return ['export ETCD_ENDPOINTS="{0}"'.format(servers)]
 
 @task
 @roles('etcd-proxy')
@@ -78,7 +82,7 @@ def proxy():
     require('stage')
     resolve_discovery_url()
     helpers.recreate_remote_temp_dir('etcd-proxy')
-    utils.install_default_env('etcd-proxy', 'etcd')
+    utils.install_default_env('etcd-proxy', 'etcd', etcd_servers_list())
     utils.install_scripts('etcd-proxy')
     utils.configure('etcd-proxy')
 
