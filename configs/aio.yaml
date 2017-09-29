@@ -1,0 +1,40 @@
+---
+user: core
+
+local:
+  certs_dir: "~/Downloads/certs"
+
+roledefs:
+  haproxy:
+  - 192.168.201.121
+  etcd:
+  - 192.168.201.121
+  apiserver:
+  - 192.168.201.121
+  controller_manager:
+  - 192.168.201.121
+  scheduler:
+  - 192.168.201.121
+
+haproxy:
+  keepalived_net_range: 16
+  keepalived_net_device: eth0
+  keepalived_vrid: "21"
+  keepalived_auth_password: "himtsudesune"
+
+kubernetes:
+  public_service_ip: 192.168.201.101
+
+openstack:
+  auth_url: http://192.168.11.197/identity/v3/
+  username: demo
+  password: openstack
+  region_name: RegionOne
+  tenant_name: demo
+  user_domain_id: default
+  subnet_id: c5912e06-db5f-4ece-8d4a-bc3eb07019da
+  floating_network_id: d3fa92c4-b47f-4043-9578-77e30f761019
+  router_id: fe49e9c6-9b60-45d3-881e-4cd5a826cffb
+
+flannel:
+  backend_type: host-gw
