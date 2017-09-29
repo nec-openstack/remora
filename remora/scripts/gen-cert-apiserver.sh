@@ -4,20 +4,18 @@ set -eu
 export LC_ALL=C
 
 script_dir=`dirname $0`
-NODE_IP=${1:-"192.168.1.111"}
 
 mkdir -p ${LOCAL_CERTS_DIR}
 
 CA_KEY=${CA_KEY:-"${LOCAL_CERTS_DIR}/ca.key"}
 CA_CERT=${CA_CERT:-"${LOCAL_CERTS_DIR}/ca.crt"}
-KUBE_KEY=${KUBE_KEY:-"${LOCAL_CERTS_DIR}/apiserver-${NODE_IP}.key"}
-KUBE_CERT_REQ=${KUBE_CERT_REQ:-"${LOCAL_CERTS_DIR}/apiserver-${NODE_IP}.csr"}
-KUBE_CERT=${KUBE_CERT:-"${LOCAL_CERTS_DIR}/apiserver-${NODE_IP}.crt"}
-OPENSSL_CONFIG="${LOCAL_CERTS_DIR}/apiserver-${NODE_IP}.cnf"
+KUBE_KEY=${KUBE_KEY:-"${LOCAL_CERTS_DIR}/apiserver.key"}
+KUBE_CERT_REQ=${KUBE_CERT_REQ:-"${LOCAL_CERTS_DIR}/apiserver.csr"}
+KUBE_CERT=${KUBE_CERT:-"${LOCAL_CERTS_DIR}/apiserver.crt"}
+OPENSSL_CONFIG="${LOCAL_CERTS_DIR}/apiserver.cnf"
 
 sans="DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster.local"
 sans="${sans},IP:${KUBE_PUBLIC_SERVICE_IP},IP:${KUBE_PRIVATE_SERVICE_IP}"
-sans="${sans},IP:${NODE_IP}"
 for HOSTNAME in ${KUBE_ADDITIONAL_HOSTNAMES}
 do
     sans="${sans},DNS:${HOSTNAME}"

@@ -61,6 +61,15 @@ def gen_client_certs(target, *options):
     gen_certs_or_keypairs(
         target,
         'gen-cert-client.sh',
+        '',
+        *options
+    )
+
+
+def gen_kubelet_certs(target, *options):
+    gen_certs_or_keypairs(
+        target,
+        'gen-cert-kubelet.sh',
         env.host,
         *options
     )
@@ -87,17 +96,17 @@ def kubernetes_ca():
 
 
 @task
-@roles('etcd')
+@runs_once
 def etcd_server():
     require('stage')
     gen_certs_or_keypairs(
         'etcd',
         'gen-cert-etcd-server.sh',
-        env.host
     )
 
 
 @task
+@runs_once
 def etcd_client():
     require('stage')
     gen_client_certs(
@@ -128,7 +137,7 @@ def service_account():
 @task
 def kubelet():
     require('stage')
-    gen_client_certs(
+    gen_kubelet_certs(
         'kubernetes',
         'kubelet',
         '"/O=system:nodes/CN=system:node:{}"'.format(env.host)
@@ -136,7 +145,7 @@ def kubelet():
 
 
 @task
-@roles('apiserver')
+@runs_once
 def apiserver():
     require('stage')
     gen_client_certs(
@@ -147,7 +156,6 @@ def apiserver():
     gen_certs_or_keypairs(
         'kubernetes',
         'gen-cert-apiserver.sh',
-        env.host
     )
     gen_client_certs(
         'kubernetes',
@@ -157,7 +165,7 @@ def apiserver():
 
 
 @task
-@roles('controller_manager')
+@runs_once
 def controller_manager():
     require('stage')
     gen_client_certs(
@@ -168,7 +176,7 @@ def controller_manager():
 
 
 @task
-@roles('scheduler')
+@runs_once
 def scheduler():
     require('stage')
     gen_client_certs(

@@ -49,9 +49,13 @@ def install_file(target, prefix, suffix, modifier=''):
 
 
 def install_certs(target, prefix):
+    install_file(target, prefix, 'key')
+    install_file(target, prefix, 'crt')
+
+
+def install_indivisual_certs(target, prefix):
     install_file(target, prefix, 'key', "-{0}".format(env.host))
     install_file(target, prefix, 'crt', "-{0}".format(env.host))
-
 
 def install_cert(target, prefix):
     install_file(target, prefix, 'crt')
@@ -93,7 +97,7 @@ def install_kube_common():
     require('stage')
     mkdirs('kubernetes')
     install_cert('kubernetes', 'ca')
-    install_certs('kubernetes', 'kubelet')
+    install_indivisual_certs('kubernetes', 'kubelet')
 
 
 @task

@@ -41,6 +41,8 @@ etcd:
   version: "v3.1.5"
   image_repo: "quay.io/coreos/etcd"
   certs_dir: "/etc/etcd/pki"
+  cluster_ip: 10.254.0.20
+  bootstrap_cluster_ip: 10.254.0.30
   discovery_service_url: "https://discovery.etcd.io/new?size={0}"
 
 flannel:
