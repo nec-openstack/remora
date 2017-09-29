@@ -32,7 +32,7 @@ spec:
     - --tls-cert-file=${KUBE_CERTS_DIR}/apiserver.crt
     - --tls-private-key-file=${KUBE_CERTS_DIR}/apiserver.key
     - --allow-privileged
-    - --authorization-mode=RBAC
+    - --authorization-mode=Node,RBAC
     - --advertise-address=${NODE_IP}
     - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
     - --kubelet-client-certificate=${KUBE_CERTS_DIR}/apiserver-kubelet-client.crt

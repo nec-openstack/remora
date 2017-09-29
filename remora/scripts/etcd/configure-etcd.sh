@@ -31,7 +31,7 @@ spec:
     - --discovery=${ETCD_DISCOVERY_URL}
     - --advertise-client-urls=https://${NODE_IP}:2379
     - --initial-advertise-peer-urls=https://${NODE_IP}:2380
-    - --listen-client-urls=https://${NODE_IP}:2379
+    - --listen-client-urls=https://${NODE_IP}:2379,https://127.0.0.1:2379
     - --listen-peer-urls=https://${NODE_IP}:2380
     - --client-cert-auth=true
     - --cert-file=${ETCD_CERTS_DIR}/etcd.crt

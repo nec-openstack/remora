@@ -79,6 +79,9 @@ def etcd_servers_list():
 @task
 @roles('etcd-proxy')
 def proxy():
+    if env.host not in env.roledefs.get('etcd-proxy', []):
+        return
+
     require('stage')
     resolve_discovery_url()
     helpers.recreate_remote_temp_dir('etcd-proxy')

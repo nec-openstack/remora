@@ -28,7 +28,7 @@ kubernetes:
   cni_plugin: "flannel"
   port: 6443
   internal_port: 6444
-  admission_control: "NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds"
+  admission_control: "Initializers,NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota"
   storage_backend: etcd3
   certs_dir: "/etc/kubernetes/pki"
   log_level: 2

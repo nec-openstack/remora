@@ -6,6 +6,3 @@ distinguished_name = req_distinguished_name
 basicConstraints = CA:FALSE
 keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 extendedKeyUsage = clientAuth
-subjectAltName = @alt_names
-[alt_names]
-IP.1 = $ENV::NODE_IP
