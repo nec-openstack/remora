@@ -12,17 +12,14 @@
 #    under the License.
 
 import os
-import tempfile
 
 from fabric.api import env
 from fabric.api import execute
-from fabric.api import local
 from fabric.api import runs_once
 from fabric.api import task
 from fabric.operations import require
 
-from remora.common import utils
-from remora.fab.certs import constants
+from remora.fab import constants
 from remora.fab import helpers
 
 
@@ -33,33 +30,19 @@ def generate_local_env(target):
     ]
 
 
-def gen_certs_or_keypairs(target, script_name, host='', *options):
-    with tempfile.TemporaryDirectory() as temp_dir:
-        default_env = os.path.join(temp_dir, 'default-env.sh')
-        utils.generate_env_file(
-            default_env,
-            env,
-            generate_local_env(target)
-        )
-
-        local(
-            'source {0} && bash {1}/{2} {3} {4}'.format(
-                default_env,
-                helpers.remora_scripts_dir,
-                script_name,
-                host,
-                ' '.join(options)
-            ),
-            shell=env.configs['local']['shell'],
-        )
+def gen_certs_or_keypairs(target, script_name, *options):
+    helpers.run_script(
+        script_name,
+        *options,
+        local_env=generate_local_env(target)
+    )
 
 
 def gen_client_certs(target, *options):
     gen_certs_or_keypairs(
         target,
         'gen-cert-client.sh',
-        '',
-        *options
+        *options,
     )
 
 
@@ -68,7 +51,7 @@ def gen_kubelet_certs(target, *options):
         target,
         'gen-cert-kubelet.sh',
         env.host,
-        *options
+        *options,
     )
 
 

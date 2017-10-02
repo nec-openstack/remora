@@ -3,7 +3,10 @@
 set -eu
 export LC_ALL=C
 
-KUBECONFIG_TEMPLATE=/etc/kubernetes/kubelet.yaml
+KUBECONFIG_TEMPLATE=${LOCAL_KUBELET_ASSETS_DIR}/kubelet.yaml
+CA_DATA=$(cat ${LOCAL_CERTS_DIR}/ca.crt | base64)
+CLIENT_CERTS_DATA=$(cat ${LOCAL_CERTS_DIR}/kubelet-${NODE_IP}.crt | base64)
+CLIENT_KEY_DATA=$(cat ${LOCAL_CERTS_DIR}/kubelet-${NODE_IP}.key | base64)
 
 echo "TEMPLATE: $KUBECONFIG_TEMPLATE"
 mkdir -p $(dirname $KUBECONFIG_TEMPLATE)
@@ -13,13 +16,13 @@ kind: Config
 clusters:
 - name: kubernetes
   cluster:
-    certificate-authority: ${KUBE_CERTS_DIR}/ca.crt
+    certificate-authority-data: ${CA_DATA}
     server: https://${KUBE_PUBLIC_SERVICE_IP}:${KUBE_PORT}
 users:
 - name: kubelet
   user:
-    client-certificate: ${KUBE_CERTS_DIR}/kubelet.crt
-    client-key: ${KUBE_CERTS_DIR}/kubelet.key
+    client-certificate-data: ${CLIENT_CERTS_DATA}
+    client-key-data: ${CLIENT_KEY_DATA}
 contexts:
 - context:
     cluster: kubernetes

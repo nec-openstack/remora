@@ -11,27 +11,14 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from fabric.api import env
-from fabric.api import runs_once
+from fabric.api import execute
 from fabric.api import task
 
-from remora.fab import clean        # noqa
-from remora.fab import config       # noqa
-from remora.fab import deploy       # noqa
-from remora.fab import helpers
-from remora.fab import render       # noqa
+from remora.fab.render import certs     # noqa
+from remora.fab.render import kubelet   # noqa
 
 
-helpers.create_env_tasks(globals())
-
-
-@task
-@runs_once
-def host(host=None):
-    env['hosts'] = [host]
-
-    for k, v in env.roledefs.items():
-        if host in v:
-            env.roledefs[k] = [host]
-        else:
-            env.roledefs[k] = []
+@task(default=True)
+def all():
+    execute(certs.all)
+    execute(kubelet.all)

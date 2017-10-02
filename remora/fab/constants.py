@@ -11,27 +11,22 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import os
+
 from fabric.api import env
-from fabric.api import runs_once
-from fabric.api import task
 
-from remora.fab import clean        # noqa
-from remora.fab import config       # noqa
-from remora.fab import deploy       # noqa
 from remora.fab import helpers
-from remora.fab import render       # noqa
 
 
-helpers.create_env_tasks(globals())
+ASSETS_DIR = os.path.join(helpers.remora_scripts_dir, 'assets')
 
 
-@task
-@runs_once
-def host(host=None):
-    env['hosts'] = [host]
+def assets_dir():
+    assets_dir = env.configs.get('local', {}).get('assets_dir', ASSETS_DIR)
+    assets_dir = os.path.expanduser(assets_dir)
+    return assets_dir
 
-    for k, v in env.roledefs.items():
-        if host in v:
-            env.roledefs[k] = [host]
-        else:
-            env.roledefs[k] = []
+
+def certs_dir():
+    certs_dir = os.path.join(assets_dir(), 'certs')
+    return certs_dir

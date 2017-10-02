@@ -57,6 +57,7 @@ def install_indivisual_certs(target, prefix):
     install_file(target, prefix, 'key', "-{0}".format(env.host))
     install_file(target, prefix, 'crt', "-{0}".format(env.host))
 
+
 def install_cert(target, prefix):
     install_file(target, prefix, 'crt')
 

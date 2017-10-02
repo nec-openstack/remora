@@ -1,6 +1,10 @@
 ---
 temp_dir: "/tmp/kube_temp"
 
+local:
+  shell: "/bin/bash"
+  kubeconfig: "~/.kube/config"
+  kubectl: "kubectl"
 local_shell: "/bin/bash"
 local_kubeconfig: "~/.kube/config"
 local_kubectl: "kubectl"

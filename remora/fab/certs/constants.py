@@ -18,9 +18,10 @@ from fabric.api import env
 from remora.fab import helpers
 
 
-CERTS_DIR = os.path.join(helpers.remora_scripts_dir, 'certs')
+ASSETS_DIR = os.path.join(helpers.remora_scripts_dir, 'assets')
 
 
 def certs_dir():
-    certs_dir = env.get('local', {}).get('certs_dir', CERTS_DIR)
+    assets_dir = env.configs.get('local', {}).get('assets_dir', ASSETS_DIR)
+    certs_dir = os.path.join(assets_dir, 'certs')
     return os.path.expanduser(certs_dir)

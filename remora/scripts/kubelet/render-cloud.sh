@@ -4,8 +4,7 @@ set -eu
 export LC_ALL=C
 
 if [[ ${KUBE_CLOUD_PROVIDER} == "openstack" ]]; then
-  mkdir -p $(dirname $KUBE_CLOUD_CONFIG)
-  cat << EOF > $KUBE_CLOUD_CONFIG
+  cat << EOF > ${LOCAL_KUBELET_ASSETS_DIR}/cloud.ini
 [Global]
 auth-url=$OPENSTACK_AUTH_URL
 username=$OPENSTACK_USERNAME
@@ -20,5 +19,3 @@ floating-network-id=${OPENSTACK_FLOATING_NETWORK_ID:-""}
 router-id=${OPENSTACK_ROUTER_ID:-""}
 EOF
 fi
-
-export KUBE_CLOUD_CONFIG

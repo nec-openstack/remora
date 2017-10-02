@@ -13,12 +13,16 @@
 
 import glob
 import os
+import tempfile
 import time
 import yaml
 
 from fabric.api import env
+from fabric.api import local
 from fabric.api import run
 from fabric.api import task
+
+from remora.common import utils
 
 
 __fabric_lib_dir = os.path.abspath(os.path.dirname(__file__))
@@ -71,11 +75,14 @@ def construct_env(env_data, default_env_data=None):
         default_env_data = yaml.safe_load(open(default_configs).read())
 
     env_data = merge_dicts(env_data, default_env_data)
-    env.update(env_data)
+    env['configs'] = env_data
     roledefs = env_data.get('roledefs', None)
+    del env_data['roledefs']
     if roledefs:
+        env['roledefs'] = roledefs
         hosts = setup_hosts(roledefs)
         setup_etcd_proxy_roles(hosts, roledefs)
+
 
 def create_env_tasks(namespace):
     for config in glob.glob(configs):
@@ -94,3 +101,23 @@ def create_env_task(env_name, env_dict, namespace):
     wrapper = task(name=env_name)
     rand = '%d' % (time.time() * 100000)
     namespace['task_%s_%s' % (env_name, rand)] = wrapper(env_task)
+
+
+def run_script(script_name, *options, local_env=[]):
+    with tempfile.TemporaryDirectory() as temp_dir:
+        default_env = os.path.join(temp_dir, 'default-env.sh')
+        utils.generate_env_file(
+            default_env,
+            env,
+            local_env
+        )
+
+        local(
+            'source {0} && bash {1}/{2} {3}'.format(
+                default_env,
+                remora_scripts_dir,
+                script_name,
+                ' '.join(options)
+            ),
+            shell=env.configs['local']['shell'],
+        )

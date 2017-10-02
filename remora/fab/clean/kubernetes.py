@@ -22,6 +22,7 @@ from remora.fab.clean import utils
 def all():
     require('stage')
     utils.disable_service('kubelet', 'kubernetes')
-    sudo('ip link show dev {0} > /dev/null 2>&1 && ip link delete dev {0}'.format('cni0'))
-    sudo('ip link show dev {0} > /dev/null 2>&1 && ip link delete dev {0}'.format('flannel.1'))
+    script = 'ip link show dev {0} > /dev/null 2>&1 && ip link delete dev {0}'
+    sudo(script.format('cni0'))
+    sudo(script.format('flannel.1'))
     sudo('file {0} > /dev/null 2>&1 && sudo rm -rf {0}'.format('/run/flannel'))

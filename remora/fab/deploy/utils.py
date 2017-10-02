@@ -35,7 +35,6 @@ def install_default_env(target, package, additional_env_list=[]):
         utils.generate_env_file(
             temp.name,
             env,
-            package,
             additional_env_list
         )
         put(

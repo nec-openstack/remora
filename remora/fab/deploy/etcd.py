@@ -71,10 +71,12 @@ def server():
     utils.install_scripts('etcd')
     utils.configure('etcd')
 
+
 def etcd_servers_list():
     servers = ["{}:2379".format(s) for s in env.roledefs['etcd']]
     servers = ','.join(servers)
     return ['export ETCD_ENDPOINTS="{0}"'.format(servers)]
+
 
 @task
 @roles('etcd-proxy')

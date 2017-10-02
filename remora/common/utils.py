@@ -33,6 +33,8 @@ def tar_gz_base64(dir_path):
 
 def decode_env_dict(prefix, env):
     env_list = []
+    if not isinstance(env, dict):
+        return env_list
     for k, v in env.items():
         key = "%s_%s" % (prefix.upper(), k.upper())
         if (isinstance(v, list)):
@@ -43,30 +45,20 @@ def decode_env_dict(prefix, env):
     return env_list
 
 
-_ENV_PROP_PAIRS = {
-    'kubernetes': [
-        ('docker', 'docker'),
-        ('etcd', 'etcd'),
-        ('kube', 'kubernetes'),
-    ],
-    'etcd': [
-        ('docker', 'docker'),
-        ('etcd', 'etcd'),
-    ],
-    'haproxy': [
-        ('docker', 'docker'),
-        ('haproxy', 'haproxy'),
-        ('kube', 'kubernetes'),
-    ],
-}
-
-
-def generate_env_file(path, env, target, additional_env_list=[]):
-    prop_pairs = _ENV_PROP_PAIRS[target]
+def generate_default_env_list(env, additional_env_list=[]):
     env_list = []
-    for k, v in prop_pairs:
-        env_list.extend(decode_env_dict(k, env[v]))
+    for k, v in env['configs'].items():
+        if k == 'kubernetes':
+            prefix = 'kube'
+        else:
+            prefix = k
+        env_list.extend(decode_env_dict(prefix, env['configs'][k]))
     env_list.extend(additional_env_list)
+    return env_list
+
+
+def generate_env_file(path, env, additional_env_list=[]):
+    env_list = generate_default_env_list(env, additional_env_list)
 
     with open(path, 'w') as f:
         for e in env_list:
