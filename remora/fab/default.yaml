@@ -42,7 +42,7 @@ kubernetes:
   addons: "kube-proxy kube-dns"
 
 etcd:
-  version: "v3.1.5"
+  version: "v3.1.8"
   image_repo: "quay.io/coreos/etcd"
   certs_dir: "/etc/etcd/pki"
   cluster_ip: 10.254.0.20

@@ -17,15 +17,11 @@ from fabric.api import runs_once
 from fabric.api import task
 from fabric.operations import require
 
-from remora.fab import constants
 from remora.fab import helpers
-from remora.fab.render import certs
 
 
 def generate_local_env():
-    local_env = ['export LOCAL_ASSETS_DIR="%s"' % constants.assets_dir()]
-    certs_env = certs.generate_local_env('kubernetes')
-    return local_env + master_env_list() + certs_env
+    return helpers.generate_local_env() + master_env_list()
 
 
 def render(script_name, *options):

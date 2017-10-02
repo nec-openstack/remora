@@ -23,14 +23,7 @@ from fabric.api import run
 from fabric.api import task
 
 from remora.common import utils
-
-
-__fabric_lib_dir = os.path.abspath(os.path.dirname(__file__))
-__fabric_dir = os.path.join(__fabric_lib_dir, '..', '..')
-__fabric_dir = os.path.abspath(__fabric_dir)
-remora_scripts_dir = os.path.join(__fabric_dir, 'remora', 'scripts')
-default_configs = os.path.join(__fabric_lib_dir, 'default.yaml')
-configs = os.path.join(__fabric_dir, 'configs', '*.yaml')
+from remora.fab import constants
 
 
 def remote_temp_dir(target):
@@ -72,7 +65,9 @@ def setup_etcd_proxy_roles(hosts, roledefs):
 
 def construct_env(env_data, default_env_data=None):
     if not default_env_data:
-        default_env_data = yaml.safe_load(open(default_configs).read())
+        default_env_data = yaml.safe_load(
+            open(constants.default_configs).read()
+        )
 
     env_data = merge_dicts(env_data, default_env_data)
     env['configs'] = env_data
@@ -85,7 +80,7 @@ def construct_env(env_data, default_env_data=None):
 
 
 def create_env_tasks(namespace):
-    for config in glob.glob(configs):
+    for config in glob.glob(constants.configs):
         env_data = yaml.safe_load(open(config).read())
         stage = os.path.splitext(os.path.basename(config))[0]
         create_env_task(stage, env_data, namespace)
@@ -103,6 +98,19 @@ def create_env_task(env_name, env_dict, namespace):
     namespace['task_%s_%s' % (env_name, rand)] = wrapper(env_task)
 
 
+def generate_certs_local_env(target):
+    certs_dir = os.path.join(constants.certs_dir(), target)
+    return [
+        'export LOCAL_CERTS_DIR="%s"' % certs_dir,
+    ]
+
+
+def generate_local_env():
+    local_env = ['export LOCAL_ASSETS_DIR="%s"' % constants.assets_dir()]
+    certs_env = generate_certs_local_env('kubernetes')
+    return local_env + certs_env
+
+
 def run_script(script_name, *options, local_env=[]):
     with tempfile.TemporaryDirectory() as temp_dir:
         default_env = os.path.join(temp_dir, 'default-env.sh')
@@ -115,7 +123,7 @@ def run_script(script_name, *options, local_env=[]):
         local(
             'source {0} && bash {1}/{2} {3}'.format(
                 default_env,
-                remora_scripts_dir,
+                constants.remora_scripts_dir,
                 script_name,
                 ' '.join(options)
             ),

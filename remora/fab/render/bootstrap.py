@@ -11,17 +11,35 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import os
-
 from fabric.api import env
+from fabric.api import execute
+from fabric.api import roles
+from fabric.api import runs_once
+from fabric.api import task
+from fabric.operations import require
 
 from remora.fab import helpers
 
 
-ASSETS_DIR = os.path.join(helpers.remora_scripts_dir, 'assets')
+def render(script_name, *options):
+    helpers.run_script(
+        script_name,
+        *options,
+        local_env=helpers.generate_local_env()
+    )
 
 
-def certs_dir():
-    assets_dir = env.configs.get('local', {}).get('assets_dir', ASSETS_DIR)
-    certs_dir = os.path.join(assets_dir, 'certs')
-    return os.path.expanduser(certs_dir)
+@task(default=True)
+@runs_once
+def all():
+    execute(bootstrap)
+
+
+@task
+@runs_once
+@roles('bootstrap')
+def bootstrap():
+    render(
+        'bootstrap/render.sh',
+        env.host
+    )

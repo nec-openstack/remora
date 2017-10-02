@@ -15,10 +15,14 @@ import os
 
 from fabric.api import env
 
-from remora.fab import helpers
 
-
-ASSETS_DIR = os.path.join(helpers.remora_scripts_dir, 'assets')
+__fabric_lib_dir = os.path.abspath(os.path.dirname(__file__))
+__fabric_dir = os.path.join(__fabric_lib_dir, '..', '..')
+__fabric_dir = os.path.abspath(__fabric_dir)
+remora_scripts_dir = os.path.join(__fabric_dir, 'remora', 'scripts')
+default_configs = os.path.join(__fabric_lib_dir, 'default.yaml')
+configs = os.path.join(__fabric_dir, 'configs', '*.yaml')
+ASSETS_DIR = os.path.join(remora_scripts_dir, 'assets')
 
 
 def assets_dir():

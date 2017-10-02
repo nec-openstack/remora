@@ -16,6 +16,7 @@ OPENSSL_CONFIG="${LOCAL_CERTS_DIR}/apiserver.cnf"
 
 sans="DNS:kubernetes,DNS:kubernetes.default,DNS:kubernetes.default.svc,DNS:kubernetes.default.svc.cluster.local"
 sans="${sans},IP:${KUBE_PUBLIC_SERVICE_IP},IP:${KUBE_PRIVATE_SERVICE_IP}"
+sans="${sans},IP:${KUBE_BOOTSTRAP_IP}"
 for HOSTNAME in ${KUBE_ADDITIONAL_HOSTNAMES}
 do
     sans="${sans},DNS:${HOSTNAME}"

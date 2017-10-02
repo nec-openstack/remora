@@ -22,7 +22,7 @@ from fabric.api import runs_once
 from fabric.api import sudo
 from fabric.api import task
 
-from remora.fab.certs import constants
+from remora.fab import constants
 from remora.fab import helpers
 
 

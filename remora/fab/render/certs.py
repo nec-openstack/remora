@@ -19,22 +19,14 @@ from fabric.api import runs_once
 from fabric.api import task
 from fabric.operations import require
 
-from remora.fab import constants
 from remora.fab import helpers
-
-
-def generate_local_env(target):
-    certs_dir = os.path.join(constants.certs_dir(), target)
-    return [
-        'export LOCAL_CERTS_DIR="%s"' % certs_dir,
-    ]
 
 
 def gen_certs_or_keypairs(target, script_name, *options):
     helpers.run_script(
         script_name,
         *options,
-        local_env=generate_local_env(target)
+        local_env=helpers.generate_certs_local_env(target)
     )
 
 

@@ -14,6 +14,7 @@
 from fabric.api import execute
 from fabric.api import task
 
+from remora.fab.render import bootstrap # noqa
 from remora.fab.render import certs     # noqa
 from remora.fab.render import kubelet   # noqa
 
@@ -22,3 +23,4 @@ from remora.fab.render import kubelet   # noqa
 def all():
     execute(certs.all)
     execute(kubelet.all)
+    execute(bootstrap.all)

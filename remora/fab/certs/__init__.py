@@ -20,5 +20,4 @@ from remora.fab.certs import install   # noqa
 
 @task(default=True)
 def all():
-    execute(generate.all)
     execute(install.all)
