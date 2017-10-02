@@ -39,6 +39,7 @@ def all():
 @runs_once
 @roles('bootstrap')
 def bootstrap():
+    require('stage')
     render(
         'bootstrap/render.sh',
         env.host

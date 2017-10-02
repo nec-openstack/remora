@@ -11,8 +11,6 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import os
-
 from fabric.api import env
 from fabric.api import execute
 from fabric.api import runs_once
