@@ -15,7 +15,9 @@ import os
 
 from fabric.api import env
 from fabric.api import execute
+from fabric.api import local
 from fabric.api import put
+from fabric.api import roles
 from fabric.api import sudo
 from fabric.api import task
 from fabric.operations import require
@@ -29,16 +31,34 @@ def all():
     execute(kubelet)
 
 
-@task
-def kubelet():
+def install(target, local_files):
     require('stage')
-    helpers.recreate_remote_temp_dir("kubelet")
+    helpers.recreate_remote_temp_dir(target)
     local_files = os.path.join(
         constants.assets_dir(),
-        'kubelet',
-        'node-{}'.format(env.host),
-        '*'
+        local_files,
     )
-    remote_temp_dir = helpers.remote_temp_dir("kubelet")
+    remote_temp_dir = helpers.remote_temp_dir(target)
     put(local_files, remote_temp_dir)
     sudo("bash {0}/{1}".format(remote_temp_dir, 'install.sh'))
+
+
+@task
+def kubelet():
+    install(
+        'kubelet',
+        os.path.join('kubelet', 'node-{}'.format(env.host), '*')
+    )
+
+
+@task
+@roles('bootstrap')
+def bootstrap():
+    local('cp -r {0} {1}'.format(
+        constants.certs_dir(),
+        os.path.join(constants.assets_dir(), 'bootstrap')
+    ))
+    install(
+        'bootstrap',
+        os.path.join('bootstrap', '*')
+    )

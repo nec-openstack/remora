@@ -19,7 +19,7 @@ spec:
     command:
     - ./hyperkube
     - scheduler
-    - --kubeconfig=/etc/kubernetes/kubeconfig-bootstrap.yaml
+    - --kubeconfig=/etc/kubernetes/kubeconfig-bootstrap
     - --leader-elect=true
     - --v=${KUBE_LOG_LEVEL:-"2"}
     volumeMounts:

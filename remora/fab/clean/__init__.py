@@ -18,15 +18,13 @@ from fabric.api import runs_once
 from fabric.api import sudo
 from fabric.api import task
 
-from remora.fab.clean import etcd
-from remora.fab.clean import haproxy
 from remora.fab.clean import kubernetes
 
 
 @task
 def dependency():
     require('stage')
-    sudo('rm -rf {0}'.format(env.temp_dir))
+    sudo('rm -rf {0}'.format(env['configs']['temp_dir']))
     sudo('systemctl stop docker && systemctl disable docker')
     sudo('rm -rf /var/lib/docker')
     sudo('systemctl daemon-reload')
@@ -36,7 +34,5 @@ def dependency():
 @task(default=True)
 @runs_once
 def all():
-    execute(etcd.all)
-    execute(haproxy.all)
     execute(kubernetes.all)
     execute(dependency)

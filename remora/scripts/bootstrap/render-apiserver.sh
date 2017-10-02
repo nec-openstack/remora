@@ -26,24 +26,24 @@ spec:
     - --allow-privileged
     - --authorization-mode=Node,RBAC
     - --bind-address=0.0.0.0
-    - --client-ca-file=/etc/kubernetes/secrets/ca.crt
-    - --etcd-cafile=/etc/kubernetes/secrets/ca.crt
-    - --etcd-certfile=/etc/kubernetes/secrets/etcd-client.crt
-    - --etcd-keyfile=/etc/kubernetes/secrets/etcd-client.key
+    - --client-ca-file=/etc/kubernetes/secrets/kubernetes/ca.crt
+    - --etcd-cafile=/etc/kubernetes/secrets/etcd/ca.crt
+    - --etcd-certfile=/etc/kubernetes/secrets/etcd/etcd-client.crt
+    - --etcd-keyfile=/etc/kubernetes/secrets/etcd/etcd-client.key
     - --etcd-quorum-read=true
     - --etcd-servers=https://${ETCD_CLUSTER_IP}:2379,https://127.0.0.1:12379
     - --insecure-port=0
-    - --kubelet-client-certificate=/etc/kubernetes/secrets/apiserver-kubelet-client.crt
-    - --kubelet-client-key=/etc/kubernetes/secrets/apiserver-kubelet-client.key
+    - --kubelet-client-certificate=/etc/kubernetes/secrets/kubernetes/apiserver-kubelet-client.crt
+    - --kubelet-client-key=/etc/kubernetes/secrets/kubernetes/apiserver-kubelet-client.key
     - --secure-port=${KUBE_INTERNAL_PORT}
-    - --service-account-key-file=/etc/kubernetes/secrets/sa.pub
+    - --service-account-key-file=/etc/kubernetes/secrets/kubernetes/sa.pub
     - --service-cluster-ip-range=${KUBE_SERVICE_IP_RANGE}
     - --cloud-provider=${KUBE_CLOUD_PROVIDER:-""}
     - --cloud-config=${KUBE_CLOUD_CONFIG:-""}
     - --storage-backend=${KUBE_STORAGE_BACKEND}
-    - --tls-ca-file=/etc/kubernetes/secrets/secrets/ca.crt
-    - --tls-cert-file=/etc/kubernetes/secrets/apiserver.crt
-    - --tls-private-key-file=/etc/kubernetes/secrets/apiserver.key
+    - --tls-ca-file=/etc/kubernetes/secrets/kubernetes/ca.crt
+    - --tls-cert-file=/etc/kubernetes/secrets/kubernetes/apiserver.crt
+    - --tls-private-key-file=/etc/kubernetes/secrets/kubernetes/apiserver.key
     - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
     - --v=${KUBE_LOG_LEVEL:-"2"}
     env:
@@ -64,7 +64,7 @@ spec:
   volumes:
   - name: secrets
     hostPath:
-      path: /etc/kubernetes/bootstrap-secrets
+      path: /etc/kubernetes/bootstrap/secrets
   - name: ssl-certs-host
     hostPath:
       path: /usr/share/ca-certificates

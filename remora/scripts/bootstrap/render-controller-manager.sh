@@ -23,10 +23,10 @@ spec:
     - --cloud-provider=${KUBE_CLOUD_PROVIDER:-""}
     - --cloud-config=${KUBE_CLOUD_CONFIG:-""}
     - --configure-cloud-routes=false
-    - --kubeconfig=/etc/kubernetes/kubeconfig-bootstrap.yaml
+    - --kubeconfig=/etc/kubernetes/kubeconfig-bootstrap
     - --leader-elect=true
-    - --root-ca-file=/etc/kubernetes/bootstrap-secrets/ca.crt
-    - --service-account-private-key-file=/etc/kubernetes/bootstrap-secrets/service-account.key
+    - --root-ca-file=/etc/kubernetes/bootstrap/secrets/kubernetes/ca.crt
+    - --service-account-private-key-file=/etc/kubernetes/bootstrap/secrets/kubernetes/service-account.key
     - --v=${KUBE_LOG_LEVEL:-"2"}
     volumeMounts:
     - name: kubernetes

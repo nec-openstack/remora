@@ -44,7 +44,7 @@ spec:
   volumes:
   - name: secrets
     hostPath:
-      path: /etc/kubernetes/bootstrap-secrets
+      path: /etc/kubernetes/bootstrap/secrets
   hostNetwork: true
   restartPolicy: Never
   dnsPolicy: ClusterFirstWithHostNet

@@ -26,3 +26,4 @@ def disable_service(service, config_dir_basename=None):
     sudo('rm -rf /etc/systemd/system/{0}*'.format(service))
     sudo('rm -rf /etc/{0}'.format(config_dir_basename))
     sudo('rm -rf {0}'.format(helpers.remote_temp_dir(service)))
+    sudo('systemctl daemon-reload')

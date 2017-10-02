@@ -69,7 +69,7 @@ ExecStart=${DOCKER_PATH} run \\
         --cloud-provider=${KUBE_CLOUD_PROVIDER:-""} \\
         --cloud-config=${KUBE_CLOUD_CONFIG:-""} \\
         --authorization-mode=Webhook \\
-        --client-ca-file=${KUBE_CERTS_DIR}/ca.crt \\
+        --client-ca-file=/etc/kubernetes/ca.crt \\
         --cgroup-driver=${KUBE_CGROUP_DRIVER:-""} \\
         --pod-manifest-path=/etc/kubernetes/manifests \\
         ${KUBELET_NODE_LABELS} \\
