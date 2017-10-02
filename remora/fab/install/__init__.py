@@ -11,25 +11,34 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import os
+
 from fabric.api import env
-from fabric.api import runs_once
+from fabric.api import execute
+from fabric.api import put
+from fabric.api import sudo
 from fabric.api import task
+from fabric.operations import require
 
+from remora.fab import constants
 from remora.fab import helpers
-from remora.fab import install      # noqa
-from remora.fab import render       # noqa
 
 
-helpers.create_env_tasks(globals())
+@task(default=True)
+def all():
+    execute(kubelet)
 
 
 @task
-@runs_once
-def host(host=None):
-    env['hosts'] = [host]
-
-    for k, v in env.roledefs.items():
-        if host in v:
-            env.roledefs[k] = [host]
-        else:
-            env.roledefs[k] = []
+def kubelet():
+    require('stage')
+    helpers.recreate_remote_temp_dir("kubelet")
+    local_files = os.path.join(
+        constants.assets_dir(),
+        'kubelet',
+        'node-{}'.format(env.host),
+        '*'
+    )
+    remote_temp_dir = helpers.remote_temp_dir("kubelet")
+    put(local_files, remote_temp_dir)
+    sudo("bash {0}/{1}".format(remote_temp_dir, 'install.sh'))

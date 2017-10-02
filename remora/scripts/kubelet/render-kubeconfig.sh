@@ -8,7 +8,6 @@ CA_DATA=$(cat ${LOCAL_CERTS_DIR}/ca.crt | base64)
 CLIENT_CERTS_DATA=$(cat ${LOCAL_CERTS_DIR}/kubelet-${NODE_IP}.crt | base64)
 CLIENT_KEY_DATA=$(cat ${LOCAL_CERTS_DIR}/kubelet-${NODE_IP}.key | base64)
 
-echo "TEMPLATE: $KUBECONFIG_TEMPLATE"
 mkdir -p $(dirname $KUBECONFIG_TEMPLATE)
 cat << EOF > $KUBECONFIG_TEMPLATE
 apiVersion: v1

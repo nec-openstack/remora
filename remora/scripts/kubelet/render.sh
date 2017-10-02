@@ -18,3 +18,4 @@ echo ${LOCAL_KUBELET_ASSETS_DIR}
 source ${ROOT}/render-cloud.sh
 source ${ROOT}/render-kubeconfig.sh
 source ${ROOT}/render-kubelet.sh
+source ${ROOT}/render-installer.sh
