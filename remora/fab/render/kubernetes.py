@@ -44,6 +44,7 @@ def all():
     execute(apiserver)
     execute(controller_manager)
     execute(scheduler)
+    execute(checkpointer)
 
 
 @task
@@ -72,6 +73,16 @@ def scheduler():
     require('stage')
     render(
         'scheduler/render.sh',
+        env.host
+    )
+
+
+@task
+@runs_once
+def checkpointer():
+    require('stage')
+    render(
+        'checkpointer/render.sh',
         env.host
     )
 
