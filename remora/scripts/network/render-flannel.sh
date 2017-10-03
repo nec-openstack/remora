@@ -3,10 +3,7 @@
 set -eu
 export LC_ALL=C
 
-# export NODE_IP=$1
-KUBE_ADDONS_DIR=/etc/kubernetes/addons
-
-KUBE_FLANNEL_TEMPLATE=${KUBE_ADDONS_DIR}/kube-cni-flannel.yaml
+KUBE_FLANNEL_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-cni-flannel.yaml
 mkdir -p $(dirname $KUBE_FLANNEL_TEMPLATE)
 cat << EOF > $KUBE_FLANNEL_TEMPLATE
 ---
@@ -137,11 +134,3 @@ spec:
           configMap:
             name: kube-flannel-cfg
 EOF
-
-cat ${KUBE_FLANNEL_TEMPLATE} \
-    | ${DOCKER_PATH} run \
-        --net=host \
-        --rm -i \
-        --volume=/etc/kubernetes:/etc/kubernetes:ro \
-        ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION} \
-        /hyperkube kubectl --kubeconfig=/etc/kubernetes/admin.yaml apply -f -

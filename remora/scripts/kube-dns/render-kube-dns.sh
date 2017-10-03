@@ -1,22 +1,51 @@
-# Copyright 2016 The Kubernetes Authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#!/usr/bin/env bash
 
-# Should keep target in cluster/addons/dns-horizontal-autoscaler/dns-horizontal-autoscaler.yaml
-# in sync with this file.
+set -eu
+export LC_ALL=C
 
-# __MACHINE_GENERATED_WARNING__
-
+KUBE_DNS_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-dns.yaml
+cat << EOF > $KUBE_DNS_TEMPLATE
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kube-dns
+  namespace: kube-system
+  labels:
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-dns
+  namespace: kube-system
+  labels:
+    k8s-app: kube-dns
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+    kubernetes.io/name: "KubeDNS"
+spec:
+  selector:
+    k8s-app: kube-dns
+  clusterIP: ${KUBE_CLUSTER_DNS_IP}
+  ports:
+  - name: dns
+    port: 53
+    protocol: UDP
+  - name: dns-tcp
+    port: 53
+    protocol: TCP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-dns
+  namespace: kube-system
+data:
+  upstreamNameservers: |
+    ${KUBE_UPSTREAM_NAMESERVERS}
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -85,7 +114,7 @@ spec:
           initialDelaySeconds: 3
           timeoutSeconds: 5
         args:
-        - --domain=__PILLAR__DNS__DOMAIN__.
+        - --domain=cluster.local.
         - --dns-port=10053
         - --config-dir=/kube-dns-config
         - --v=2
@@ -125,7 +154,7 @@ spec:
         - -k
         - --cache-size=1000
         - --log-facility=-
-        - --server=/__PILLAR__DNS__DOMAIN__/127.0.0.1#10053
+        - --server=/cluster.local/127.0.0.1#10053
         - --server=/in-addr.arpa/127.0.0.1#10053
         - --server=/ip6.arpa/127.0.0.1#10053
         ports:
@@ -157,8 +186,8 @@ spec:
         args:
         - --v=2
         - --logtostderr
-        - --probe=kubedns,127.0.0.1:10053,kubernetes.default.svc.__PILLAR__DNS__DOMAIN__,5,A
-        - --probe=dnsmasq,127.0.0.1:53,kubernetes.default.svc.__PILLAR__DNS__DOMAIN__,5,A
+        - --probe=kubedns,127.0.0.1:10053,kubernetes.default.svc.cluster.local,5,A
+        - --probe=dnsmasq,127.0.0.1:53,kubernetes.default.svc.cluster.local,5,A
         ports:
         - containerPort: 10054
           name: metrics
@@ -169,3 +198,4 @@ spec:
             cpu: 10m
       dnsPolicy: Default  # Don't use cluster DNS.
       serviceAccountName: kube-dns
+EOF

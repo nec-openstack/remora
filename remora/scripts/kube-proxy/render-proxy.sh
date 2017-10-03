@@ -1,25 +1,9 @@
 #!/usr/bin/env bash
-# Copyright 2016 The Kubernetes Authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
 set -eu
 export LC_ALL=C
 
-# export NODE_IP=$1
-
-KUBE_PROXY_TEMPLATE=/etc/kubernetes/addons/kube-proxy.yaml
-mkdir -p $(dirname $KUBE_PROXY_TEMPLATE)
+KUBE_PROXY_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-proxy.yaml
 cat << EOF > $KUBE_PROXY_TEMPLATE
 ---
 kind: ClusterRoleBinding
@@ -96,7 +80,12 @@ spec:
         - proxy
         - --kubeconfig=/var/lib/kube-proxy/kubeconfig.conf
         - --cluster-cidr=${KUBE_CLUSTER_CIDR}
-        - --hostname-override=${NODE_IP}
+        - --hostname-override=\$(NODE_NAME)
+        env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
         securityContext:
           privileged: true
         volumeMounts:

@@ -3,9 +3,7 @@
 set -eu
 export LC_ALL=C
 
-KUBE_ADDONS_DIR=/etc/kubernetes/addons
-
-KUBE_WEAVE_TEMPLATE=${KUBE_ADDONS_DIR}/kube-cni-weave.yaml
+KUBE_WEAVE_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-cni-weave.yaml
 mkdir -p $(dirname $KUBE_WEAVE_TEMPLATE)
 cat << EOF > $KUBE_WEAVE_TEMPLATE
 apiVersion: extensions/v1beta1
@@ -88,11 +86,3 @@ spec:
             path: /lib/modules
 
 EOF
-
-cat ${KUBE_FLANNEL_TEMPLATE} \
-    | ${DOCKER_PATH} run \
-        --net=host \
-        --rm -i \
-        --volume=/etc/kubernetes:/etc/kubernetes:ro \
-        ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION} \
-        /hyperkube kubectl --kubeconfig=/etc/kubernetes/admin.yaml apply -f -
