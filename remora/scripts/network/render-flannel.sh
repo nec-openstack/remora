@@ -107,7 +107,7 @@ spec:
       containers:
       - name: kube-flannel
         image: ${FLANNEL_IMAGE_REPO}:${FLANNEL_VERSION}
-        command: [ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr" ]
+        command: [ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr", "--iface=\$(POD_IP)"]
         securityContext:
           privileged: true
         env:
@@ -119,6 +119,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
         volumeMounts:
         - name: run
           mountPath: /run
