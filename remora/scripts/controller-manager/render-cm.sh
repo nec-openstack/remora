@@ -10,6 +10,18 @@ SA_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/sa.pub | base64)
 
 cat << EOF > $KUBE_TEMPLATE
 ---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: kube-controller-manager
+  namespace: kube-system
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      tier: control-plane
+      k8s-app: kube-controller-manager
+---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
