@@ -120,6 +120,7 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
+      serviceAccountName: kube-controller-manager
       tolerations:
       - key: CriticalAddonsOnly
         operator: Exists

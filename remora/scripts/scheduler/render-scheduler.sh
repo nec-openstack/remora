@@ -91,6 +91,7 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
+      serviceAccountName: kube-scheduler
       tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
