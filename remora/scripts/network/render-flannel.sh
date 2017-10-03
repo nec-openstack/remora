@@ -11,6 +11,9 @@ kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: flannel
+  labels:
+    tier: node
+    k8s-app: flannel
 rules:
   - apiGroups:
       - ""
@@ -36,6 +39,9 @@ kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: flannel
+  labels:
+    tier: node
+    k8s-app: flannel
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -50,6 +56,9 @@ kind: ServiceAccount
 metadata:
   name: flannel
   namespace: kube-system
+  labels:
+    tier: node
+    k8s-app: flannel
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -58,7 +67,7 @@ metadata:
   namespace: kube-system
   labels:
     tier: node
-    app: flannel
+    k8s-app: flannel
 data:
   cni-conf.json: |
     {
@@ -83,13 +92,13 @@ metadata:
   namespace: kube-system
   labels:
     tier: node
-    app: flannel
+    k8s-app: flannel
 spec:
   template:
     metadata:
       labels:
         tier: node
-        app: flannel
+        k8s-app: flannel
     spec:
       hostNetwork: true
       nodeSelector:
@@ -123,6 +132,10 @@ spec:
           mountPath: /etc/cni/net.d
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
       volumes:
         - name: run
           hostPath:
@@ -133,4 +146,8 @@ spec:
         - name: flannel-cfg
           configMap:
             name: kube-flannel-cfg
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
 EOF

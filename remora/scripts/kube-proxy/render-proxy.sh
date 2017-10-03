@@ -57,6 +57,7 @@ apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
   labels:
+    tier: node
     k8s-app: kube-proxy
   name: kube-proxy
   namespace: kube-system
@@ -64,12 +65,13 @@ spec:
   selector:
     matchLabels:
       k8s-app: kube-proxy
-  updateStrategy:
-    type: RollingUpdate
   template:
     metadata:
       labels:
+        tier: node
         k8s-app: kube-proxy
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
     spec:
       containers:
       - name: kube-proxy
@@ -97,10 +99,12 @@ spec:
           readOnly: false
       hostNetwork: true
       serviceAccountName: kube-proxy
-      # TODO: Why doesn't the Decoder recognize this new field and decode it properly? Right now it's ignored
-      # tolerations:
-      # - key: {{ .MasterTaintKey }}
-      #   effect: NoSchedule
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
       volumes:
       - name: kube-proxy
         configMap:
@@ -108,4 +112,8 @@ spec:
       - name: xtables-lock
         hostPath:
           path: /run/xtables.lock
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
 EOF
