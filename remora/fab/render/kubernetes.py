@@ -41,6 +41,17 @@ def all():
     execute(proxy)
     execute(network)
     execute(dns)
+    execute(apiserver)
+
+
+@task
+@runs_once
+def apiserver():
+    require('stage')
+    render(
+        'apiserver/render.sh',
+        env.host
+    )
 
 
 @task

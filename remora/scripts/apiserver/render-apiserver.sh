@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+
+set -eu
+export LC_ALL=C
+
+KUBE_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-apiserver.yaml
+SERVER_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/apiserver.crt | base64)
+SERVER_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/apiserver.key | base64)
+CA=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/ca.crt | base64)
+ETCD_CLIENT_CA=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/ca.crt | base64)
+ETCD_CLIENT_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd-client.crt | base64)
+ETCD_CLIENT_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd-client.key | base64)
+SA_PUB_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/sa.pub | base64)
+KUBELET_CLIENT_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/apiserver-kubelet-client.crt | base64)
+KUBELET_CLIENT_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/apiserver-kubelet-client.key | base64)
+
+cat << EOF > $KUBE_TEMPLATE
+---
+apiVersion: v1
+data:
+  apiserver.crt: ${SERVER_CERT}
+  apiserver.key: ${SERVER_KEY}
+  ca.crt: ${CA}
+  etcd-client-ca.crt: ${ETCD_CLIENT_CA}
+  etcd-client.crt: ${ETCD_CLIENT_CERT}
+  etcd-client.key: ${ETCD_CLIENT_KEY}
+  service-account.pub: ${SA_PUB_KEY}
+  apiserver-kubelet-client.crt: ${KUBELET_CLIENT_CERT}
+  apiserver-kubelet-client.key: ${KUBELET_CLIENT_KEY}
+kind: Secret
+metadata:
+  name: kube-apiserver
+  namespace: kube-system
+type: Opaque
+---
+apiVersion: "extensions/v1beta1"
+kind: DaemonSet
+metadata:
+  name: kube-apiserver
+  namespace: kube-system
+  labels:
+    tier: control-plane
+    k8s-app: kube-apiserver
+spec:
+  template:
+    metadata:
+      labels:
+        tier: control-plane
+        k8s-app: kube-apiserver
+      annotations:
+        checkpointer.alpha.coreos.com/checkpoint: "true"
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      containers:
+      - name: kube-apiserver
+        image: ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
+        command:
+        - /usr/bin/flock
+        - /var/lock/api-server.lock
+        - /hyperkube
+        - apiserver
+        - --admission-control=${KUBE_ADMISSION_CONTROL}
+        - --advertise-address=\$(POD_IP)
+        - --allow-privileged=true
+        - --anonymous-auth=false
+        - --authorization-mode=Node,RBAC
+        - --bind-address=0.0.0.0
+        - --client-ca-file=/etc/kubernetes/secrets/ca.crt
+        - --cloud-provider=${KUBE_CLOUD_PROVIDER:-""}
+        - --cloud-config=${KUBE_CLOUD_CONFIG:-""}
+        - --etcd-cafile=/etc/kubernetes/secrets/etcd-client-ca.crt
+        - --etcd-certfile=/etc/kubernetes/secrets/etcd-client.crt
+        - --etcd-keyfile=/etc/kubernetes/secrets/etcd-client.key
+        - --etcd-quorum-read=true
+        - --etcd-servers=https://${ETCD_CLUSTER_IP}:2379
+        - --insecure-port=0
+        - --kubelet-client-certificate=/etc/kubernetes/secrets/apiserver-kubelet-client.crt
+        - --kubelet-client-key=/etc/kubernetes/secrets/apiserver-kubelet-client.key
+        - --secure-port=${KUBE_INTERNAL_PORT}
+        - --service-account-key-file=/etc/kubernetes/secrets/service-account.pub
+        - --service-cluster-ip-range=${KUBE_SERVICE_IP_RANGE}
+        - --storage-backend=${KUBE_STORAGE_BACKEND}
+        - --tls-ca-file=/etc/kubernetes/secrets/ca.crt
+        - --tls-cert-file=/etc/kubernetes/secrets/apiserver.crt
+        - --tls-private-key-file=/etc/kubernetes/secrets/apiserver.key
+        - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+        - --v=${KUBE_LOG_LEVEL:-"2"}
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        volumeMounts:
+        - mountPath: /etc/ssl/certs
+          name: ssl-certs-host
+          readOnly: true
+        - mountPath: /etc/kubernetes/secrets
+          name: secrets
+          readOnly: true
+        - mountPath: /var/lock
+          name: var-lock
+          readOnly: false
+      hostNetwork: true
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: ssl-certs-host
+        hostPath:
+          path: /usr/share/ca-certificates
+      - name: secrets
+        secret:
+          secretName: kube-apiserver
+      - name: var-lock
+        hostPath:
+          path: /var/lock
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+
+EOF
