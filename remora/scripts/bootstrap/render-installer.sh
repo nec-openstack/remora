@@ -15,6 +15,7 @@ ROOT=$(dirname "${BASH_SOURCE}")
 mkdir -p /etc/kubernetes/bootstrap
 mkdir -p /etc/kubernetes/bootstrap/secrets
 mkdir -p /etc/kubernetes/bootstrap/manifests
+cp ${ROOT}/kubeconfig-bootstrap /etc/kubernetes/
 cp ${ROOT}/haproxy.cfg /etc/kubernetes/bootstrap/
 cp ${ROOT}/keepalived.cfg /etc/kubernetes/bootstrap/
 cp -r ${ROOT}/certs/* /etc/kubernetes/bootstrap/secrets/

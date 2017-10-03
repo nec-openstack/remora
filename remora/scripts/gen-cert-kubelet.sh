@@ -20,6 +20,9 @@ CA_CERT=${CA_CERT:-"${LOCAL_CERTS_DIR}/ca.crt"}
 CLIENT_KEY=${CLIENT_KEY:-"${LOCAL_CERTS_DIR}/${PREFIX}-${NODE_IP}.key"}
 CLIENT_CERT_REQ=${CLIENT_CERT_REQ:-"${LOCAL_CERTS_DIR}/${PREFIX}-${NODE_IP}.csr"}
 CLIENT_CERT=${CLIENT_CERT:-"${LOCAL_CERTS_DIR}/${PREFIX}-${NODE_IP}.crt"}
+mkdir -p $(dirname $CLIENT_KEY)
+mkdir -p $(dirname $CLIENT_CERT_REQ)
+mkdir -p $(dirname $CLIENT_CERT)
 
 if [[ ! -f ${CLIENT_KEY} ]]; then
     openssl genrsa -out "${CLIENT_KEY}" 4096

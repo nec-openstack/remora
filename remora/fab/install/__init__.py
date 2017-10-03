@@ -15,7 +15,6 @@ import os
 
 from fabric.api import env
 from fabric.api import execute
-from fabric.api import local
 from fabric.api import put
 from fabric.api import roles
 from fabric.api import sudo
@@ -54,10 +53,6 @@ def kubelet():
 @task
 @roles('bootstrap')
 def bootstrap():
-    local('cp -r {0} {1}'.format(
-        constants.certs_dir(),
-        os.path.join(constants.assets_dir(), 'bootstrap')
-    ))
     install(
         'bootstrap',
         os.path.join('bootstrap', '*')

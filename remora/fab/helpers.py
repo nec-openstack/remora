@@ -100,9 +100,23 @@ def create_env_task(env_name, env_dict, namespace):
 
 
 def generate_certs_local_env(target):
+    assets_dir = constants.assets_dir()
+    if target == 'etcd':
+        ca_key = os.path.join(assets_dir, constants.ETCD_CA_KEY)
+        ca_crt = os.path.join(assets_dir, constants.ETCD_CA_CERT)
+        ca_srl = os.path.join(assets_dir, constants.ETCD_CA_SERIAL)
+    else:
+        ca_key = os.path.join(assets_dir, constants.KUBE_CA_KEY)
+        ca_crt = os.path.join(assets_dir, constants.KUBE_CA_CERT)
+        ca_srl = os.path.join(assets_dir, constants.KUBE_CA_SERIAL)
+
     certs_dir = os.path.join(constants.certs_dir(), target)
+
     return [
         'export LOCAL_CERTS_DIR="%s"' % certs_dir,
+        'export CA_KEY="{}"'.format(ca_key),
+        'export CA_CERT="{}"'.format(ca_crt),
+        'export CA_SERIAL="{}"'.format(ca_srl),
     ]
 
 

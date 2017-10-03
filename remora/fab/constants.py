@@ -24,6 +24,14 @@ default_configs = os.path.join(__fabric_lib_dir, 'default.yaml')
 configs = os.path.join(__fabric_dir, 'configs', '*.yaml')
 ASSETS_DIR = os.path.join(remora_scripts_dir, 'assets')
 
+ETCD_CA_KEY = 'certs/etcd/ca.key'
+ETCD_CA_CERT = 'certs/etcd/ca.crt'
+ETCD_CA_SERIAL = 'certs/etcd/ca.srl'
+
+KUBE_CA_KEY = 'certs/kubernetes/ca.key'
+KUBE_CA_CERT = 'certs/kubernetes/ca.crt'
+KUBE_CA_SERIAL = 'certs/kubernetes/ca.srl'
+
 
 def assets_dir():
     assets_dir = env.configs.get('local', {}).get('assets_dir', ASSETS_DIR)
@@ -34,3 +42,7 @@ def assets_dir():
 def certs_dir():
     certs_dir = os.path.join(assets_dir(), 'certs')
     return certs_dir
+
+
+def kubelet_asset_dir(node):
+    return os.path.join(assets_dir(), 'kubelet', 'node-{}'.format(node))

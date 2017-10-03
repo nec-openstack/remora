@@ -11,7 +11,6 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from fabric.api import env
 from fabric.api import execute
 from fabric.api import runs_once
 from fabric.api import task
@@ -32,15 +31,6 @@ def gen_client_certs(target, *options):
     gen_certs_or_keypairs(
         target,
         'gen-cert-client.sh',
-        *options,
-    )
-
-
-def gen_kubelet_certs(target, *options):
-    gen_certs_or_keypairs(
-        target,
-        'gen-cert-kubelet.sh',
-        env.host,
         *options,
     )
 
@@ -105,16 +95,6 @@ def service_account():
 
 
 @task
-def kubelet():
-    require('stage')
-    gen_kubelet_certs(
-        'kubernetes',
-        'kubelet',
-        '"/O=system:nodes/CN=system:node:{}"'.format(env.host)
-    )
-
-
-@task
 @runs_once
 def apiserver():
     require('stage')
@@ -161,10 +141,7 @@ def scheduler():
 def kubernetes():
     execute(kubernetes_ca)
     execute(service_account)
-    execute(kubelet)
     execute(apiserver)
-    execute(controller_manager)
-    execute(scheduler)
 
 
 @task(default=True)

@@ -10,7 +10,7 @@ if [ -f "${ROOT}/default-env.sh" ]; then
     source ${ROOT}/default-env.sh
 fi
 
-export LOCAL_KUBELET_ASSETS_DIR=${LOCAL_ASSETS_DIR}/kubelet/node-${NODE_IP}
+export LOCAL_KUBELET_ASSETS_DIR=${LOCAL_KUBELET_ASSETS_DIR:-${LOCAL_ASSETS_DIR}/kubelet/node-${NODE_IP}}
 mkdir -p ${LOCAL_KUBELET_ASSETS_DIR}
 echo ${LOCAL_KUBELET_ASSETS_DIR}
 

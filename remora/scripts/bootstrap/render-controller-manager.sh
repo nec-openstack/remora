@@ -22,11 +22,15 @@ spec:
     - --allocate-node-cidrs=true
     - --cloud-provider=${KUBE_CLOUD_PROVIDER:-""}
     - --cloud-config=${KUBE_CLOUD_CONFIG:-""}
+    - --cluster-cidr=${KUBE_CLUSTER_CIDR}
+    - --node-cidr-mask-size=${KUBE_NODE_CIDR_MASK_SIZE}
     - --configure-cloud-routes=false
     - --kubeconfig=/etc/kubernetes/kubeconfig-bootstrap
     - --leader-elect=true
     - --root-ca-file=/etc/kubernetes/bootstrap/secrets/kubernetes/ca.crt
-    - --service-account-private-key-file=/etc/kubernetes/bootstrap/secrets/kubernetes/service-account.key
+    - --cluster-signing-cert-file=/etc/kubernetes/bootstrap/secrets/kubernetes/ca.crt
+    - --cluster-signing-key-file=/etc/kubernetes/bootstrap/secrets/kubernetes/ca.key
+    - --service-account-private-key-file=/etc/kubernetes/bootstrap/secrets/kubernetes/sa.key
     - --v=${KUBE_LOG_LEVEL:-"2"}
     volumeMounts:
     - name: kubernetes
