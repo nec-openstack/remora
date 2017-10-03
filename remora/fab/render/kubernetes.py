@@ -43,6 +43,7 @@ def all():
     execute(dns)
     execute(apiserver)
     execute(controller_manager)
+    execute(scheduler)
 
 
 @task
@@ -61,6 +62,16 @@ def controller_manager():
     require('stage')
     render(
         'controller-manager/render.sh',
+        env.host
+    )
+
+
+@task
+@runs_once
+def scheduler():
+    require('stage')
+    render(
+        'scheduler/render.sh',
         env.host
     )
 
