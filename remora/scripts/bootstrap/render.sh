@@ -14,7 +14,6 @@ echo ${LOCAL_BOOTSTRAP_ASSETS_DIR}
 source ${ROOT}/render-etcd.sh ${NODE_IP}
 source ${ROOT}/render-kubeconfig.sh ${NODE_IP}
 source ${ROOT}/render-apiserver.sh ${NODE_IP}
-source ${ROOT}/render-haproxy.sh ${NODE_IP}
 source ${ROOT}/render-keepalived.sh ${NODE_IP}
 source ${ROOT}/render-controller-manager.sh ${NODE_IP}
 source ${ROOT}/render-scheduler.sh ${NODE_IP}

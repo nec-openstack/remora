@@ -24,7 +24,12 @@ from remora.fab import helpers
 
 
 def generate_local_env():
-    return helpers.generate_local_env()
+    return helpers.generate_local_env() + apiserver_list()
+
+
+def apiserver_list():
+    servers = ' '.join(env.roledefs['master'])
+    return ['export HAPROXY_BACKENDS="{0}"'.format(servers)]
 
 
 def render(script_name, *options):
@@ -45,6 +50,7 @@ def all():
     execute(controller_manager)
     execute(scheduler)
     execute(checkpointer)
+    execute(keepalived)
 
 
 @task
@@ -83,6 +89,16 @@ def checkpointer():
     require('stage')
     render(
         'checkpointer/render.sh',
+        env.host
+    )
+
+
+@task
+@runs_once
+def keepalived():
+    require('stage')
+    render(
+        'keepalived/render.sh',
         env.host
     )
 

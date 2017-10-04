@@ -13,8 +13,10 @@
 
 from fabric.api import env
 from fabric.api import execute
+from fabric.api import reboot
 from fabric.api import require
 from fabric.api import runs_once
+from fabric.api import settings
 from fabric.api import sudo
 from fabric.api import task
 
@@ -24,11 +26,12 @@ from remora.fab.clean import kubernetes
 @task
 def dependency():
     require('stage')
-    sudo('rm -rf {0}'.format(env['configs']['temp_dir']))
-    sudo('systemctl stop docker && systemctl disable docker')
-    sudo('rm -rf /var/lib/docker')
-    sudo('systemctl daemon-reload')
-    sudo('systemctl enable docker && systemctl start docker')
+    with settings(warn_only=True):
+        sudo('rm -rf {0}'.format(env['configs']['temp_dir']))
+        sudo('systemctl stop docker && systemctl disable docker')
+        sudo('rm -rf /var/lib/docker')
+        sudo('systemctl daemon-reload && systemctl enable docker')
+        reboot()
 
 
 @task(default=True)
