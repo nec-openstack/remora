@@ -6,7 +6,7 @@ export LC_ALL=C
 KUBE_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-controller-manager.yaml
 
 CA=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/ca.crt | base64)
-SA_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/sa.pub | base64)
+SA_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/sa.key | base64)
 
 cat << EOF > $KUBE_TEMPLATE
 ---
