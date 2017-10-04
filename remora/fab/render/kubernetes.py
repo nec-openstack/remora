@@ -51,7 +51,7 @@ def all():
     execute(scheduler)
     execute(checkpointer)
     execute(keepalived)
-    execute(etcd)
+    execute(etcd_selfhosted)
 
 
 @task
@@ -106,10 +106,10 @@ def keepalived():
 
 @task
 @runs_once
-def etcd():
+def etcd_selfhosted():
     require('stage')
     render(
-        'etcd/render.sh',
+        'etcd-selfhosted/render.sh',
         env.host
     )
 

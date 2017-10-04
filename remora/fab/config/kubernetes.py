@@ -18,44 +18,44 @@ from fabric.api import env
 from fabric.api import local
 from fabric.api import roles
 from fabric.api import runs_once
-from fabric.api import sudo
 from fabric.api import task
 from fabric.operations import require
 
-
-def remote_certs_dir():
-    return env['kubernetes']['certs_dir']
+from remora.fab import constants
 
 
 @task
-@roles('apiserver')
 @runs_once
 def all():
     require('stage')
-    rc_dir = remote_certs_dir
-    ca = sudo(
-        'cat {0}/ca.crt 2>/dev/null'.format(rc_dir())
-    ).stdout
+    certs_dir = constants.certs_dir()
+    ca = local(
+        'cat {0}/kubernetes/ca.crt 2>/dev/null'.format(certs_dir),
+        capture=True,
+    )
     ca = base64.b64encode(ca.encode('utf-8')).decode('utf-8')
-    admin_crt = sudo(
-        'cat {0}/admin.crt 2>/dev/null'.format(rc_dir())
-    ).stdout
+    admin_crt = local(
+        'cat {0}/kubernetes/admin.crt 2>/dev/null'.format(certs_dir),
+        capture=True,
+    )
     admin_crt = base64.b64encode(admin_crt.encode('utf-8')).decode('utf-8')
-    admin_key = sudo(
-        'cat {0}/admin.key 2>/dev/null'.format(rc_dir())
-    ).stdout
+    admin_key = local(
+        'cat {0}/kubernetes/admin.key 2>/dev/null'.format(certs_dir),
+        capture=True,
+    )
     admin_key = base64.b64encode(admin_key.encode('utf-8')).decode('utf-8')
 
-    api_address = env.kubernetes['public_service_ip']
-    api_port = env.kubernetes['port']
+    api_address = env['configs']['kubernetes']['public_service_ip']
+    api_port = env['configs']['kubernetes']['port']
     api_endpoint = 'https://{0}:{1}'.format(api_address, api_port)
-    kubeconfig = os.path.expanduser(env.local_kubeconfig)
+    kubeconfig = os.path.expanduser(env['configs']['local']['kubeconfig'])
+    local_kubectl = env['configs']['local']['kubectl']
 
     local(
         "{kubectl} config set-cluster {cluster} \
         --server={api_endpoint} \
         --kubeconfig={kube_config}".format(
-            kubectl=env.local_kubectl,
+            kubectl=local_kubectl,
             kube_config=kubeconfig,
             cluster=env.stage,
             api_endpoint=api_endpoint,
@@ -66,7 +66,7 @@ def all():
         clusters.{cluster}.certificate-authority-data \
         "{ca}" \
         --kubeconfig={kube_config}'.format(
-            kubectl=env.local_kubectl,
+            kubectl=local_kubectl,
             kube_config=kubeconfig,
             cluster=env.stage,
             ca=ca,
@@ -76,7 +76,7 @@ def all():
     local(
         "{kubectl} config set-credentials {cluster}-admin \
         --kubeconfig={kube_config}".format(
-            kubectl=env.local_kubectl,
+            kubectl=local_kubectl,
             kube_config=kubeconfig,
             cluster=env.stage,
         )
@@ -86,7 +86,7 @@ def all():
         users.{cluster}-admin.client-certificate-data \
         "{admin_crt}" \
         --kubeconfig={kube_config}'.format(
-            kubectl=env.local_kubectl,
+            kubectl=local_kubectl,
             kube_config=kubeconfig,
             cluster=env.stage,
             admin_crt=admin_crt,
@@ -97,7 +97,7 @@ def all():
         users.{cluster}-admin.client-key-data \
         "{admin_key}" \
         --kubeconfig={kube_config}'.format(
-            kubectl=env.local_kubectl,
+            kubectl=local_kubectl,
             kube_config=kubeconfig,
             cluster=env.stage,
             admin_key=admin_key,
@@ -107,7 +107,7 @@ def all():
         "{kubectl} config set-context {cluster} \
         --cluster={cluster} --user={cluster}-admin \
         --kubeconfig={kube_config}".format(
-            kubectl=env.local_kubectl,
+            kubectl=local_kubectl,
             kube_config=kubeconfig,
             cluster=env.stage,
         )
@@ -116,7 +116,7 @@ def all():
     local(
         "{kubectl} config use-context {cluster} \
         --kubeconfig={kube_config}".format(
-            kubectl=env.local_kubectl,
+            kubectl=local_kubectl,
             kube_config=kubeconfig,
             cluster=env.stage,
         )

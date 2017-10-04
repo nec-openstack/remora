@@ -28,6 +28,7 @@ from remora.fab import helpers
 @task(default=True)
 def all():
     execute(kubelet)
+    execute(bootstrap)
 
 
 def install(target, local_files):

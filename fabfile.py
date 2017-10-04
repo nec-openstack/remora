@@ -16,6 +16,7 @@ from fabric.api import runs_once
 from fabric.api import task
 
 from remora.fab import clean        # noqa
+from remora.fab import config       # noqa
 from remora.fab import helpers
 from remora.fab import install      # noqa
 from remora.fab import render       # noqa
