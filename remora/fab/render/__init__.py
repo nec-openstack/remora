@@ -16,6 +16,7 @@ from fabric.api import task
 
 from remora.fab.render import bootstrap     # noqa
 from remora.fab.render import certs         # noqa
+from remora.fab.render import etcd          # noqa
 from remora.fab.render import kubelet       # noqa
 from remora.fab.render import kubernetes    # noqa
 
@@ -24,5 +25,6 @@ from remora.fab.render import kubernetes    # noqa
 def all():
     execute(certs.all)
     execute(kubelet.all)
+    execute(etcd.all)
     execute(bootstrap.all)
     execute(kubernetes.all)

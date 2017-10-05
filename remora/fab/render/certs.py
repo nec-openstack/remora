@@ -19,6 +19,22 @@ from fabric.operations import require
 from remora.fab import helpers
 
 
+def cert_env_list():
+    etcd_assets_dir = constants.etcd_assets_dir(env.host)
+    return [
+        'export ETCD_SERVER_KEY="{}"'.format(
+            os.path.join(etcd_assets_dir, 'etcd-server.key')
+        ),
+        'export ETCD_SERVER_CERT_REQ="{}"'.format(
+            os.path.join(etcd_assets_dir, 'etcd-server.csr')
+        ),
+        'export ETCD_SERVER_CERT="{}"'.format(
+            os.path.join(etcd_assets_dir, 'etcd-server.crt')
+        ),
+        'export ETCD_ASSETS_DIR="{}"'.format(etcd_assets_dir),
+    ]
+
+
 @task
 @runs_once
 def etcd():

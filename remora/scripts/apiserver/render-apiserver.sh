@@ -8,15 +8,15 @@ if [[ ${ETCD_SELFHOSTED} == 'true' ]]; then
 fi
 
 KUBE_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-apiserver.yaml
-SERVER_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/apiserver.crt | base64)
-SERVER_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/apiserver.key | base64)
-CA=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/ca.crt | base64)
-ETCD_CLIENT_CA=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/ca.crt | base64)
-ETCD_CLIENT_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd-client.crt | base64)
-ETCD_CLIENT_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd-client.key | base64)
-SA_PUB_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/sa.pub | base64)
-KUBELET_CLIENT_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/kubelet-client.crt | base64)
-KUBELET_CLIENT_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/kubelet-client.key | base64)
+SERVER_CERT=$(cat ${KUBE_APISERVER_CERT} | base64)
+SERVER_KEY=$(cat ${KUBE_APISERVER_KEY} | base64)
+CA=$(cat ${KUBE_CA_CERT} | base64)
+ETCD_CLIENT_CA=$(cat ${ETCD_CA_CERT} | base64)
+ETCD_CLIENT_CERT=$(cat ${ETCD_CLIENT_CERT} | base64)
+ETCD_CLIENT_KEY=$(cat ${ETCD_CLIENT_CERT_REQ} | base64)
+SA_PUB_KEY=$(cat ${KUBE_SA_PUB_KEY} | base64)
+KUBELET_CLIENT_CERT=$(cat ${KUBE_KUBELET_CLIENT_CERT} | base64)
+KUBELET_CLIENT_KEY=$(cat ${KUBE_KUBELET_CLIENT_KEY} | base64)
 
 cat << EOF > $KUBE_TEMPLATE
 ---

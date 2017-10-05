@@ -99,11 +99,11 @@ def create_env_task(env_name, env_dict, namespace):
     namespace['task_%s_%s' % (env_name, rand)] = wrapper(env_task)
 
 
-def generate_local_assets_env():
+def generate_local_assets_env(host):
     certs_path = []
     for k, v in constants.LOCAL_ASSETS_PATH.items():
         certs_path.append(
-            'export {}="{}"'.format(k, getattr(constants, k.lower())())
+            'export {}="{}"'.format(k, getattr(constants, k.lower())(host))
         )
     return [
         'export LOCAL_CERTS_DIR="%s"' % constants.certs_dir(),
@@ -124,7 +124,7 @@ def generate_etcd_env():
 
 def generate_local_env():
     local_env = ['export LOCAL_ASSETS_DIR="%s"' % constants.assets_dir()]
-    local_assets_env = generate_local_assets_env()
+    local_assets_env = generate_local_assets_env(env.host)
     return local_env + local_assets_env + generate_etcd_env()
 
 

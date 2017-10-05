@@ -52,6 +52,17 @@ LOCAL_ASSETS_PATH = {
     'KUBE_BOOTSTRAP_TEMP_DIR': 'bootstrap/kubernetes/bootstrap',
     'KUBE_BOOTSTRAP_CERTS_DIR': 'bootstrap/kubernetes/bootstrap/secrets',
     'KUBE_BOOTSTRAP_MANIFESTS_DIR': 'bootstrap/kubernetes/manifests',
+
+    'ETCD_ASSETS_ROOT_DIR': 'etcd',
+    'ETCD_ASSETS_DIR': 'etcd/node-{}',
+    'ETCD_SERVER_KEY': 'etcd/node-{}/etcd.key',
+    'ETCD_SERVER_CERT': 'etcd/node-{}/etcd.crt',
+    'ETCD_SERVER_CERT_REQ': 'etcd/node-{}/etcd.csr',
+
+    'KUBELET_ASSETS_DIR': 'kubelet/node-{}',
+    'KUBELET_CLIENT_KEY': 'kubelet/node-{}/kubelet.key',
+    'KUBELET_CLIENT_CERT': 'kubelet/node-{}/kubelet.crt',
+    'KUBELET_CLIENT_CERT_REQ': 'kubelet/node-{}/kubelet.csr',
 }
 
 
@@ -69,15 +80,11 @@ def certs_dir():
 _mod = sys.modules[__name__]
 for k, v in LOCAL_ASSETS_PATH.items():
     def wrapper(v):
-        def _():
-            return os.path.join(assets_dir(), v)
+        def _(host=''):
+            return os.path.join(assets_dir(), v.format(host))
         return _
     setattr(_mod, k.lower(), wrapper(v))
 
 
-def kubelet_asset_dir(node):
+def kubelet_assets_dir(node):
     return os.path.join(assets_dir(), 'kubelet', 'node-{}'.format(node))
-
-
-def etcd_asset_dir(node):
-    return os.path.join(assets_dir(), 'etcd', 'node-{}'.format(node))

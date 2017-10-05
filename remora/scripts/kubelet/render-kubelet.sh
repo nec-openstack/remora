@@ -13,7 +13,7 @@ if [[ ${KUBE_IS_MASTER} == '1' ]]; then
   KUBELET_REGISTER_WITH_TAINTS='--register-with-taints=node-role.kubernetes.io/master=:NoSchedule'
 fi
 
-KUBELET_SERVICE=${LOCAL_KUBELET_ASSETS_DIR}/kubelet.service
+KUBELET_SERVICE=${KUBELET_ASSETS_DIR}/kubelet.service
 cat << EOF > ${KUBELET_SERVICE}
 [Unit]
 Description=Kubelet Container

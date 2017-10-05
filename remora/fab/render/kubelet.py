@@ -24,7 +24,7 @@ from remora.fab import helpers
 
 
 def generate_local_env():
-    return helpers.generate_local_env() + master_env_list() + cert_env_list()
+    return helpers.generate_local_env() + master_env_list()
 
 
 def render(script_name, *options):
@@ -33,22 +33,6 @@ def render(script_name, *options):
         *options,
         local_env=generate_local_env()
     )
-
-
-def cert_env_list():
-    kubelet_asset_dir = constants.kubelet_asset_dir(env.host)
-    return [
-        'export CLIENT_KEY="{}"'.format(
-            os.path.join(kubelet_asset_dir, 'kubelet.key')
-        ),
-        'export CLIENT_CERT_REQ="{}"'.format(
-            os.path.join(kubelet_asset_dir, 'kubelet.csr')
-        ),
-        'export CLIENT_CERT="{}"'.format(
-            os.path.join(kubelet_asset_dir, 'kubelet.crt')
-        ),
-        'export LOCAL_KUBELET_ASSETS_DIR="{}"'.format(kubelet_asset_dir),
-    ]
 
 
 def master_env_list():
@@ -66,12 +50,6 @@ def all():
 @task
 def kubelet():
     require('stage')
-    render(
-        'kubelet/gen-cert-kubelet.sh',
-        env.host,
-        'kubelet',
-        '"/O=system:nodes/CN=system:node:{}"'.format(env.host)
-    )
     render(
         'kubelet/render.sh',
         env.host

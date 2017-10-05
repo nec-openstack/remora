@@ -4,7 +4,7 @@ set -eu
 export LC_ALL=C
 
 if [[ ${KUBE_CLOUD_PROVIDER} == "openstack" ]]; then
-  cat << EOF > ${LOCAL_KUBELET_ASSETS_DIR}/cloud.ini
+  cat << EOF > ${KUBELET_ASSETS_DIR}/cloud.ini
 [Global]
 auth-url=$OPENSTACK_AUTH_URL
 username=$OPENSTACK_USERNAME

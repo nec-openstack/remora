@@ -22,3 +22,4 @@ def all():
     require('stage')
     with settings(warn_only=True):
         sudo('rm -rf /var/etcd')
+        sudo('rm -rf /var/lib/etcd')

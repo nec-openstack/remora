@@ -14,18 +14,31 @@
 from fabric.api import env
 from fabric.api import execute
 from fabric.api import roles
+from fabric.api import run
 from fabric.api import runs_once
 from fabric.api import task
 from fabric.operations import require
 
+from remora.fab import constants
 from remora.fab import helpers
+
+
+def etcd_env_list():
+    etcd_initial_cluster = [
+        "{}=https://{}:2380".format(v, k) for k, v in env.etcd_hosts.items()
+    ]
+    etcd_initial_cluster = ','.join(etcd_initial_cluster)
+    return [
+        'export ETCD_NODE_NAME={}'.format(env.etcd_hosts[env.host]),
+        'export ETCD_INITIAL_CLUSTER={}'.format(etcd_initial_cluster),
+    ] + helpers.generate_local_env()
 
 
 def render(script_name, *options):
     helpers.run_script(
         script_name,
         *options,
-        local_env=helpers.generate_local_env()
+        local_env=etcd_env_list()
     )
 
 
@@ -36,7 +49,17 @@ def all():
     if helpers.is_selfhosted_etcd():
         execute(etcd_selfhosted)
     else:
+        execute(correct_hostname)
         execute(etcd)
+
+
+@task
+@roles('etcd')
+def correct_hostname():
+    hostname = run('hostname').stdout
+    hostnames = env.get('etcd_hosts', {})
+    hostnames[env.host] = hostname
+    env['etcd_hosts'] = hostnames
 
 
 @task

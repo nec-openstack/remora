@@ -5,9 +5,6 @@ export LC_ALL=C
 
 KUBE_TEMPLATE=${LOCAL_MANIFESTS_DIR}/network-checkpointer.yaml
 
-CA=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/ca.crt | base64)
-SA_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/sa.pub | base64)
-
 cat << EOF > $KUBE_TEMPLATE
 ---
 # FIXME(yuanying): Fix to apply correct ClusterRole
