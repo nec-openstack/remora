@@ -55,9 +55,6 @@ kind: Pod
 metadata:
   name: bootstrap-keepalived
   namespace: kube-system
-  labels:
-    tier: control-plane
-    component: keepalived
 spec:
   hostNetwork: true
   containers:

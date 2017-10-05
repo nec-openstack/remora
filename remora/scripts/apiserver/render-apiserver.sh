@@ -66,7 +66,6 @@ spec:
         - --admission-control=${KUBE_ADMISSION_CONTROL}
         - --advertise-address=\$(POD_IP)
         - --allow-privileged=true
-        - --anonymous-auth=false
         - --authorization-mode=Node,RBAC
         - --bind-address=0.0.0.0
         - --client-ca-file=/etc/kubernetes/secrets/ca.crt

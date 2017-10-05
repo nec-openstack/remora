@@ -48,6 +48,7 @@ def all():
     execute(scheduler)
     execute(checkpointer)
     execute(keepalived)
+    execute(kubernetes)
 
 
 @task
@@ -126,5 +127,15 @@ def network():
     require('stage')
     render(
         'network/render.sh',
+        env.host
+    )
+
+
+@task
+@runs_once
+def kubernetes():
+    require('stage')
+    render(
+        'kubernetes/render.sh',
         env.host
     )

@@ -44,6 +44,9 @@ $ cat <<-EOF > configs/cluster.yaml
 # If you use Ubuntu, change below line to like `user: ubuntu`.
 user: core
 
+local:
+  assets_dir: "~/.kube/assets"
+
 masters: &masters
   - 192.168.1.111
   - 192.168.1.112
@@ -52,11 +55,10 @@ workers: &workers
   - 192.168.1.122
 
 roledefs:
-  haproxy: *masters
+  bootstrap:
+  - 192.168.1.111
   etcd: *masters
-  apiserver: *masters
-  controller_manager: *masters
-  scheduler: *masters
+  master: *masters
   worker: *workers
 
 haproxy:
@@ -71,8 +73,9 @@ kubernetes:
 EOF
 ```
 
-This config file specify ETCD/LB address and Kubernetes master/worker
-addresses. And you can see some example config files in `configs` directory.
+This config file specify bootstrap host which boot Kubernetes cluster and
+Kubernetes master/worker addresses.
+And you can see some example config files in `configs` directory.
 `configs/openstack.yaml` tells you how to setup single master node cluster
 on the top of OpenStack.
 
@@ -89,43 +92,59 @@ Remora requires some dependencies, so it's needed to install.
 $ pip install -r requirements.txt
 ```
 
-### 3. Generate and copy TLS assets
+And also Remora will use `kubectl` command. So please install `kubectl`.
 
-Kubernetes uses TLS to comunicate between node to node. So you have to
-create these assets.
+### 3. Generate assets
 
-    $ fab cluster certs
+Following command will create the assets which are needed to build Kubernetes
+cluster such as TLS certs, systemd unit files, Kubernetes manifests and
+install scripts.
 
-After this procedure, TLS certs are generated in `tools/certs` directory, and
-copied to correct node.
+    $ fab cluster render
+
+After this procedure, the assets are generated in `local.assets` directory.
+You can modify these assets if you want.
 
 ### 4. Install Kubelet
 
 Kubelet manages all components which are installed by remora. So it's needed
 to install Kubelet first.
 
-    $ fab cluster deploy.kubelet
+    $ fab cluster install.kubelet
 
-### 5. Install LB/Keepalived
-
-If you want to build multi master node cluster, then LB is required.
-
-    $ fab cluster deploy.haproxy
-
-Note: This script attach `VIP` to one of masters. So if your cluster is
-building under OpenStack, you have to configure `allowed-address-pairs`.
-Check how to use `keepalived` on OpenStack environment.
-
-### 6. Install Etcd
+### 5. Install Etcd
 
 Etcd is also essential component for Kubernetes, but installing Etcd is
 out of scope. So this script only install test grade etcd for testing
 purpose.
 
-    $ fab cluster deploy.etcd
+    $ fab cluster install.etcd
+
+### 6. Install Bootstrap Kubernetes
+
+Remora will install Kubernetes cluster using Kubernetes itself, in other words,
+Remora needs Bootstrap Kubernetes cluster before installing.
+Following command create Bootstrap Kubernetes cluster.
+
+    $ fab cluster install.bootstrap
 
 ### 7. Install Kubernetes
 
-Following command install Kubernetes master components.
+It's the time to install Real Kubernetes cluster.
+Following command build Kubernetes cluster and cleanup Bootstrap Kubernetes
+cluster.
 
-    $ fab cluster deploy.kubernetes
+    $ fab cluster install.kubernetes
+
+## Check you cluster
+
+You can access Kubernetes cluster easily.
+Following command will setup you kubeconfig.
+
+    $ fab cluster config
+
+Then you can use `kubectl` command.
+
+    $ kubectl version
+
+That's all.

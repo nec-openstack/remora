@@ -1,19 +1,20 @@
 ---
 user: ubuntu
 
+local:
+  assets_dir: "~/.kube/assets"
+
 masters: &masters
   - 172.16.2.121
 workers: &workers
-  - 172.16.2.131
-  - 172.16.2.132
-  - 172.16.2.133
+  - 172.16.2.123
+  - 172.16.2.124
 
 roledefs:
-  haproxy: *masters
+  bootstrap:
+  - 172.16.2.121
   etcd: *masters
-  apiserver: *masters
-  controller_manager: *masters
-  scheduler: *masters
+  master: *masters
   worker: *workers
 
 # HAproxy and Keepalived is not required to install for one master node

@@ -98,6 +98,7 @@ spec:
         - --configure-cloud-routes=false # FIXME:(yuanying) Change true if kubenet is used.
         - --leader-elect=true
         - --root-ca-file=/etc/kubernetes/secrets/ca.crt
+        - --use-service-account-credentials=true
         - --service-account-private-key-file=/etc/kubernetes/secrets/service-account.key
         - --cloud-provider=${KUBE_CLOUD_PROVIDER:-""}
         - --cloud-config=${KUBE_CLOUD_CONFIG:-""}

@@ -47,6 +47,9 @@ LOCAL_ASSETS_PATH = {
     'KUBE_APISERVER_CERT': 'certs/kubernetes/apiserver.crt',
     'KUBE_APISERVER_CERT_REQ': 'certs/kubernetes/apiserver.csr',
 
+    'KUBE_ASSETS_DIR': 'kubernetes',
+    'KUBE_MANIFESTS_DIR': 'kubernetes/manifests',
+
     'KUBE_BOOTSTRAP_DIR': 'bootstrap',
     'KUBE_BOOTSTRAP_ASSETS_DIR': 'bootstrap/kubernetes',
     'KUBE_BOOTSTRAP_TEMP_DIR': 'bootstrap/kubernetes/bootstrap',
@@ -84,7 +87,3 @@ for k, v in LOCAL_ASSETS_PATH.items():
             return os.path.join(assets_dir(), v.format(host))
         return _
     setattr(_mod, k.lower(), wrapper(v))
-
-
-def kubelet_assets_dir(node):
-    return os.path.join(assets_dir(), 'kubelet', 'node-{}'.format(node))
