@@ -13,7 +13,6 @@
 
 import glob
 import os
-import sys
 import tempfile
 import time
 import yaml
@@ -100,21 +99,11 @@ def create_env_task(env_name, env_dict, namespace):
     namespace['task_%s_%s' % (env_name, rand)] = wrapper(env_task)
 
 
-_mod = sys.modules[__name__]
-for k, v in constants.CERTS_PATH.items():
-    def wrapper(v):
-        def _():
-            assets_dir = constants.assets_dir()
-            return os.path.join(assets_dir, v)
-        return _
-    setattr(_mod, k.lower(), wrapper(v))
-
-
-def generate_certs_local_env():
+def generate_local_assets_env():
     certs_path = []
-    for k, v in constants.CERTS_PATH.items():
+    for k, v in constants.LOCAL_ASSETS_PATH.items():
         certs_path.append(
-            'export {}="{}"'.format(k, getattr(_mod, k.lower())())
+            'export {}="{}"'.format(k, getattr(constants, k.lower())())
         )
     return [
         'export LOCAL_CERTS_DIR="%s"' % constants.certs_dir(),
@@ -135,8 +124,8 @@ def generate_etcd_env():
 
 def generate_local_env():
     local_env = ['export LOCAL_ASSETS_DIR="%s"' % constants.assets_dir()]
-    certs_env = generate_certs_local_env()
-    return local_env + certs_env + generate_etcd_env()
+    local_assets_env = generate_local_assets_env()
+    return local_env + local_assets_env + generate_etcd_env()
 
 
 def is_selfhosted_etcd():

@@ -3,7 +3,7 @@
 set -eu
 export LC_ALL=C
 
-export KUBE_CM_TEMPLATE=${LOCAL_BOOTSTRAP_ASSETS_DIR}/kube-controller-manager.yaml
+export KUBE_CM_TEMPLATE=${KUBE_BOOTSTRAP_MANIFESTS_DIR}/kube-controller-manager.bootstrap.yaml
 mkdir -p $(dirname $KUBE_CM_TEMPLATE)
 cat << EOF > $KUBE_CM_TEMPLATE
 ---
@@ -25,7 +25,7 @@ spec:
     - --cluster-cidr=${KUBE_CLUSTER_CIDR}
     - --node-cidr-mask-size=${KUBE_NODE_CIDR_MASK_SIZE}
     - --configure-cloud-routes=false
-    - --kubeconfig=/etc/kubernetes/kubeconfig-bootstrap
+    - --kubeconfig=/etc/kubernetes/bootstrap/kubeconfig-bootstrap
     - --leader-elect=true
     - --root-ca-file=/etc/kubernetes/bootstrap/secrets/kubernetes/ca.crt
     - --cluster-signing-cert-file=/etc/kubernetes/bootstrap/secrets/kubernetes/ca.crt

@@ -19,29 +19,13 @@ from fabric.operations import require
 from remora.fab import helpers
 
 
-def gen_certs_or_keypairs(target, script_name, *options):
-    helpers.run_script(
-        script_name,
-        *options,
-        local_env=helpers.generate_certs_local_env()
-    )
-
-
-def gen_client_certs(target, *options):
-    gen_certs_or_keypairs(
-        target,
-        'gen-cert-client.sh',
-        *options,
-    )
-
-
 @task
 @runs_once
 def etcd():
     require('stage')
     helpers.run_script(
         'certs/etcd/render.sh',
-        local_env=helpers.generate_certs_local_env()
+        local_env=helpers.generate_local_env()
     )
 
 
@@ -91,7 +75,7 @@ def kubernetes():
     require('stage')
     helpers.run_script(
         'certs/kubernetes/render.sh',
-        local_env=helpers.generate_certs_local_env()
+        local_env=helpers.generate_local_env()
     )
 
 

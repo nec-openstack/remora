@@ -5,7 +5,7 @@ export LC_ALL=C
 
 export NODE_IP=${1:-${NODE_IP}}
 
-TEMPLATE=${LOCAL_BOOTSTRAP_ASSETS_DIR}/haproxy.cfg
+TEMPLATE=${KUBE_BOOTSTRAP_TEMP_DIR}/haproxy.cfg
 cat << EOF > $TEMPLATE
 global
         quiet
@@ -26,7 +26,7 @@ backend kube_api_backend
 EOF
 chmod 664 ${TEMPLATE}
 
-TEMPLATE=${LOCAL_BOOTSTRAP_ASSETS_DIR}/keepalived.cfg
+TEMPLATE=${KUBE_BOOTSTRAP_TEMP_DIR}/keepalived.cfg
 mkdir -p $(dirname $TEMPLATE)
 cat << EOF > $TEMPLATE
 vrrp_instance VI {
@@ -48,7 +48,7 @@ ${KUBE_PUBLIC_SERVICE_IP}/${HAPROXY_KEEPALIVED_NET_RANGE}   dev ${HAPROXY_KEEPAL
 EOF
 chmod 664 $TEMPLATE
 
-TEMPLATE=${LOCAL_BOOTSTRAP_ASSETS_DIR}/keepalived.yaml
+TEMPLATE=${KUBE_BOOTSTRAP_MANIFESTS_DIR}/keepalived.bootstrap.yaml
 cat << EOF > $TEMPLATE
 apiVersion: v1
 kind: Pod

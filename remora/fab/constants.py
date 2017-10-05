@@ -12,6 +12,7 @@
 #    under the License.
 
 import os
+import sys
 
 from fabric.api import env
 
@@ -24,7 +25,7 @@ default_configs = os.path.join(__fabric_lib_dir, 'default.yaml')
 configs = os.path.join(__fabric_dir, 'configs', '*.yaml')
 ASSETS_DIR = os.path.join(remora_scripts_dir, 'assets')
 
-CERTS_PATH = {
+LOCAL_ASSETS_PATH = {
     'ETCD_CA_KEY': 'certs/etcd/ca.key',
     'ETCD_CA_CERT': 'certs/etcd/ca.crt',
     'ETCD_CA_SERIAL': 'certs/etcd/ca.srl',
@@ -45,6 +46,12 @@ CERTS_PATH = {
     'KUBE_APISERVER_KEY': 'certs/kubernetes/apiserver.key',
     'KUBE_APISERVER_CERT': 'certs/kubernetes/apiserver.crt',
     'KUBE_APISERVER_CERT_REQ': 'certs/kubernetes/apiserver.csr',
+
+    'KUBE_BOOTSTRAP_DIR': 'bootstrap',
+    'KUBE_BOOTSTRAP_ASSETS_DIR': 'bootstrap/kubernetes',
+    'KUBE_BOOTSTRAP_TEMP_DIR': 'bootstrap/kubernetes/bootstrap',
+    'KUBE_BOOTSTRAP_CERTS_DIR': 'bootstrap/kubernetes/bootstrap/secrets',
+    'KUBE_BOOTSTRAP_MANIFESTS_DIR': 'bootstrap/kubernetes/manifests',
 }
 
 
@@ -57,6 +64,15 @@ def assets_dir():
 def certs_dir():
     certs_dir = os.path.join(assets_dir(), 'certs')
     return certs_dir
+
+
+_mod = sys.modules[__name__]
+for k, v in LOCAL_ASSETS_PATH.items():
+    def wrapper(v):
+        def _():
+            return os.path.join(assets_dir(), v)
+        return _
+    setattr(_mod, k.lower(), wrapper(v))
 
 
 def kubelet_asset_dir(node):

@@ -48,7 +48,7 @@ def bootstrap():
         'bootstrap/render.sh',
         env.host
     )
-    local('cp -r {0} {1}'.format(
+    local('cp -r {0}/* {1}'.format(
         constants.certs_dir(),
-        os.path.join(constants.assets_dir(), 'bootstrap')
+        constants.kube_bootstrap_certs_dir()
     ))

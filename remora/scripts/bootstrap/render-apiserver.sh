@@ -7,7 +7,7 @@ if [[ ${ETCD_SELFHOSTED} == 'true' ]]; then
   ETCD_SERVERS="https://${ETCD_CLUSTER_IP}:2379,https://127.0.0.1:12379"
 fi
 
-export KUBE_API_TEMPLATE=${LOCAL_BOOTSTRAP_ASSETS_DIR}/kube-apiserver.yaml
+export KUBE_API_TEMPLATE=${KUBE_BOOTSTRAP_MANIFESTS_DIR}/kube-apiserver.bootstrap.yaml
 mkdir -p $(dirname $KUBE_API_TEMPLATE)
 cat << EOF > $KUBE_API_TEMPLATE
 apiVersion: v1

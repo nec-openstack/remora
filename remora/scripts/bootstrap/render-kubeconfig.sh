@@ -4,10 +4,10 @@ set -eu
 export LC_ALL=C
 
 NODE_IP=$1
-KUBECONFIG_TEMPLATE=${LOCAL_BOOTSTRAP_ASSETS_DIR}/kubeconfig-bootstrap
-CA_DATA=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/ca.crt | base64)
-CLIENT_CERTS_DATA=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/admin.crt | base64)
-CLIENT_KEY_DATA=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/admin.key | base64)
+KUBECONFIG_TEMPLATE=${KUBE_BOOTSTRAP_TEMP_DIR}/kubeconfig-bootstrap
+CA_DATA=$(cat ${KUBE_CA_CERT} | base64)
+CLIENT_CERTS_DATA=$(cat ${KUBE_ADMIN_CERT} | base64)
+CLIENT_KEY_DATA=$(cat ${KUBE_ADMIN_KEY} | base64)
 
 echo "TEMPLATE: $KUBECONFIG_TEMPLATE"
 mkdir -p $(dirname $KUBECONFIG_TEMPLATE)

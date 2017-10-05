@@ -3,7 +3,7 @@
 set -eu
 export LC_ALL=C
 
-export KUBE_SCHEDULER_TEMPLATE=${LOCAL_BOOTSTRAP_ASSETS_DIR}/kube-scheduler.yaml
+export KUBE_SCHEDULER_TEMPLATE=${KUBE_BOOTSTRAP_MANIFESTS_DIR}/kube-scheduler.bootstrap.yaml
 mkdir -p $(dirname $KUBE_SCHEDULER_TEMPLATE)
 cat << EOF > $KUBE_SCHEDULER_TEMPLATE
 ---
@@ -19,7 +19,7 @@ spec:
     command:
     - ./hyperkube
     - scheduler
-    - --kubeconfig=/etc/kubernetes/kubeconfig-bootstrap
+    - --kubeconfig=/etc/kubernetes/bootstrap/kubeconfig-bootstrap
     - --leader-elect=true
     - --v=${KUBE_LOG_LEVEL:-"2"}
     volumeMounts:

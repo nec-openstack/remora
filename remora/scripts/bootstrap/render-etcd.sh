@@ -3,7 +3,7 @@
 set -eu
 export LC_ALL=C
 
-export KUBE_ETCD_TEMPLATE=${LOCAL_BOOTSTRAP_ASSETS_DIR}/etcd.yaml
+export KUBE_ETCD_TEMPLATE=${KUBE_BOOTSTRAP_MANIFESTS_DIR}/etcd.bootstrap.yaml
 mkdir -p $(dirname $KUBE_ETCD_TEMPLATE)
 cat << EOF > $KUBE_ETCD_TEMPLATE
 ---
