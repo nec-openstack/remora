@@ -10,4 +10,6 @@ mkdir -p ${LOCAL_MANIFESTS_DIR}
 echo ${LOCAL_MANIFESTS_DIR}
 
 source ${ROOT}/render-pod-checkpointer.sh
-source ${ROOT}/render-network-checkpointer.sh
+if [[ ${ETCD_SELFHOSTED} == 'true' ]]; then
+  source ${ROOT}/render-network-checkpointer.sh
+fi

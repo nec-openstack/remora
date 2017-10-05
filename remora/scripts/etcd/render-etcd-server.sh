@@ -26,7 +26,7 @@ spec:
     - --name=${ETCD_NODE_NAME}
     - --advertise-client-urls=https://${NODE_IP}:2379
     - --initial-advertise-peer-urls=https://${NODE_IP}:2380
-    - --initial-advertise-peer-urls=${ETCD_INITIAL_CLUSTER}
+    - --initial-cluster=${ETCD_INITIAL_CLUSTER}
     - --listen-client-urls=https://${NODE_IP}:2379,https://127.0.0.1:2379
     - --listen-peer-urls=https://${NODE_IP}:2380
     - --client-cert-auth=true

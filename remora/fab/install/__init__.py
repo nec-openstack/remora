@@ -28,6 +28,7 @@ from remora.fab import helpers
 @task(default=True)
 def all():
     execute(kubelet)
+    execute(etcd)
     execute(bootstrap)
 
 
@@ -48,6 +49,15 @@ def kubelet():
     install(
         'kubelet',
         os.path.join('kubelet', 'node-{}'.format(env.host), '*')
+    )
+
+
+@task
+@roles('etcd')
+def etcd():
+    install(
+        'etcd',
+        os.path.join('etcd', 'node-{}'.format(env.host), '*')
     )
 
 
