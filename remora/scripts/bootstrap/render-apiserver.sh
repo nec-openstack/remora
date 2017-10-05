@@ -3,6 +3,10 @@
 set -eu
 export LC_ALL=C
 
+if [[ ${ETCD_SELFHOSTED} == 'true' ]]; then
+  ETCD_SERVERS="https://${ETCD_CLUSTER_IP}:2379,https://127.0.0.1:12379"
+fi
+
 export KUBE_API_TEMPLATE=${LOCAL_BOOTSTRAP_ASSETS_DIR}/kube-apiserver.yaml
 mkdir -p $(dirname $KUBE_API_TEMPLATE)
 cat << EOF > $KUBE_API_TEMPLATE
@@ -31,10 +35,10 @@ spec:
     - --etcd-certfile=/etc/kubernetes/secrets/etcd/etcd-client.crt
     - --etcd-keyfile=/etc/kubernetes/secrets/etcd/etcd-client.key
     - --etcd-quorum-read=true
-    - --etcd-servers=https://${ETCD_CLUSTER_IP}:2379,https://127.0.0.1:12379
+    - --etcd-servers=${ETCD_SERVERS}
     - --insecure-port=0
-    - --kubelet-client-certificate=/etc/kubernetes/secrets/kubernetes/apiserver-kubelet-client.crt
-    - --kubelet-client-key=/etc/kubernetes/secrets/kubernetes/apiserver-kubelet-client.key
+    - --kubelet-client-certificate=/etc/kubernetes/secrets/kubernetes/kubelet-client.crt
+    - --kubelet-client-key=/etc/kubernetes/secrets/kubernetes/kubelet-client.key
     - --secure-port=${KUBE_INTERNAL_PORT}
     - --service-account-key-file=/etc/kubernetes/secrets/kubernetes/sa.pub
     - --service-cluster-ip-range=${KUBE_SERVICE_IP_RANGE}

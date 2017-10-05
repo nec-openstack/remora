@@ -24,13 +24,28 @@ default_configs = os.path.join(__fabric_lib_dir, 'default.yaml')
 configs = os.path.join(__fabric_dir, 'configs', '*.yaml')
 ASSETS_DIR = os.path.join(remora_scripts_dir, 'assets')
 
-ETCD_CA_KEY = 'certs/etcd/ca.key'
-ETCD_CA_CERT = 'certs/etcd/ca.crt'
-ETCD_CA_SERIAL = 'certs/etcd/ca.srl'
-
-KUBE_CA_KEY = 'certs/kubernetes/ca.key'
-KUBE_CA_CERT = 'certs/kubernetes/ca.crt'
-KUBE_CA_SERIAL = 'certs/kubernetes/ca.srl'
+CERTS_PATH = {
+    'ETCD_CA_KEY': 'certs/etcd/ca.key',
+    'ETCD_CA_CERT': 'certs/etcd/ca.crt',
+    'ETCD_CA_SERIAL': 'certs/etcd/ca.srl',
+    'ETCD_CLIENT_KEY': 'certs/etcd/etcd-client.key',
+    'ETCD_CLIENT_CERT': 'certs/etcd/etcd-client.crt',
+    'ETCD_CLIENT_CERT_REQ': 'certs/etcd/etcd-client.csr',
+    'KUBE_CA_KEY': 'certs/kubernetes/ca.key',
+    'KUBE_CA_CERT': 'certs/kubernetes/ca.crt',
+    'KUBE_CA_SERIAL': 'certs/kubernetes/ca.srl',
+    'KUBE_SA_KEY': 'certs/kubernetes/sa.key',
+    'KUBE_SA_PUB_KEY': 'certs/kubernetes/sa.pub',
+    'KUBE_ADMIN_KEY': 'certs/kubernetes/admin.key',
+    'KUBE_ADMIN_CERT': 'certs/kubernetes/admin.crt',
+    'KUBE_ADMIN_CERT_REQ': 'certs/kubernetes/admin.csr',
+    'KUBE_KUBELET_CLIENT_KEY': 'certs/kubernetes/kubelet-client.key',
+    'KUBE_KUBELET_CLIENT_CERT': 'certs/kubernetes/kubelet-client.crt',
+    'KUBE_KUBELET_CLIENT_CERT_REQ': 'certs/kubernetes/kubelet-client.csr',
+    'KUBE_APISERVER_KEY': 'certs/kubernetes/apiserver.key',
+    'KUBE_APISERVER_CERT': 'certs/kubernetes/apiserver.crt',
+    'KUBE_APISERVER_CERT_REQ': 'certs/kubernetes/apiserver.csr',
+}
 
 
 def assets_dir():
@@ -46,3 +61,7 @@ def certs_dir():
 
 def kubelet_asset_dir(node):
     return os.path.join(assets_dir(), 'kubelet', 'node-{}'.format(node))
+
+
+def etcd_asset_dir(node):
+    return os.path.join(assets_dir(), 'etcd', 'node-{}'.format(node))

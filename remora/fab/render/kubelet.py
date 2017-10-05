@@ -67,7 +67,7 @@ def all():
 def kubelet():
     require('stage')
     render(
-        'gen-cert-kubelet.sh',
+        'kubelet/gen-cert-kubelet.sh',
         env.host,
         'kubelet',
         '"/O=system:nodes/CN=system:node:{}"'.format(env.host)

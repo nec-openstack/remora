@@ -16,7 +16,6 @@ import os
 
 from fabric.api import env
 from fabric.api import local
-from fabric.api import roles
 from fabric.api import runs_once
 from fabric.api import task
 from fabric.operations import require

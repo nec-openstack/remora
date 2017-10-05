@@ -32,7 +32,7 @@ NODE_IP=${NODE_IP} \
 openssl req -new -key "${CLIENT_KEY}" \
             -out "${CLIENT_CERT_REQ}" \
             -subj "${SUBJECT}" \
-            -config ${script_dir}/openssl-client.cnf
+            -config ${script_dir}/../openssl-client.cnf
 
 NODE_IP=${NODE_IP} \
 openssl x509 -req -in "${CLIENT_CERT_REQ}" \
@@ -42,4 +42,4 @@ openssl x509 -req -in "${CLIENT_CERT_REQ}" \
              -out "${CLIENT_CERT}" \
              -days 365 \
              -extensions v3_req \
-             -extfile ${script_dir}/openssl-client.cnf
+             -extfile ${script_dir}/../openssl-client.cnf

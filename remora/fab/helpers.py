@@ -13,6 +13,7 @@
 
 import glob
 import os
+import sys
 import tempfile
 import time
 import yaml
@@ -99,31 +100,47 @@ def create_env_task(env_name, env_dict, namespace):
     namespace['task_%s_%s' % (env_name, rand)] = wrapper(env_task)
 
 
-def generate_certs_local_env(target):
-    assets_dir = constants.assets_dir()
-    if target == 'etcd':
-        ca_key = os.path.join(assets_dir, constants.ETCD_CA_KEY)
-        ca_crt = os.path.join(assets_dir, constants.ETCD_CA_CERT)
-        ca_srl = os.path.join(assets_dir, constants.ETCD_CA_SERIAL)
-    else:
-        ca_key = os.path.join(assets_dir, constants.KUBE_CA_KEY)
-        ca_crt = os.path.join(assets_dir, constants.KUBE_CA_CERT)
-        ca_srl = os.path.join(assets_dir, constants.KUBE_CA_SERIAL)
+_mod = sys.modules[__name__]
+for k, v in constants.CERTS_PATH.items():
+    def wrapper(v):
+        def _():
+            assets_dir = constants.assets_dir()
+            return os.path.join(assets_dir, v)
+        return _
+    setattr(_mod, k.lower(), wrapper(v))
 
-    certs_dir = os.path.join(constants.certs_dir(), target)
 
+def generate_certs_local_env():
+    certs_path = []
+    for k, v in constants.CERTS_PATH.items():
+        certs_path.append(
+            'export {}="{}"'.format(k, getattr(_mod, k.lower())())
+        )
     return [
-        'export LOCAL_CERTS_DIR="%s"' % certs_dir,
-        'export CA_KEY="{}"'.format(ca_key),
-        'export CA_CERT="{}"'.format(ca_crt),
-        'export CA_SERIAL="{}"'.format(ca_srl),
-    ]
+        'export LOCAL_CERTS_DIR="%s"' % constants.certs_dir(),
+    ] + certs_path
+
+
+def generate_etcd_env():
+    etcd_servers = ''
+    if not is_selfhosted_etcd():
+        etcd_servers = env.roledefs.get('etcd', None)
+        if not etcd_servers:
+            raise "etcd roles should be set!"
+        etcd_servers = ["https://{}:2379".format(x) for x in etcd_servers]
+        etcd_servers = ','.join(etcd_servers)
+
+    return ['export ETCD_SERVERS="{}"'.format(etcd_servers)]
 
 
 def generate_local_env():
     local_env = ['export LOCAL_ASSETS_DIR="%s"' % constants.assets_dir()]
-    certs_env = generate_certs_local_env('kubernetes')
-    return local_env + certs_env
+    certs_env = generate_certs_local_env()
+    return local_env + certs_env + generate_etcd_env()
+
+
+def is_selfhosted_etcd():
+    return env['configs']['etcd']['selfhosted'] == 'true'
 
 
 def run_script(script_name, *options, local_env=[]):

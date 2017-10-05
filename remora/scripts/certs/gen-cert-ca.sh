@@ -7,8 +7,8 @@ script_dir=`dirname $0`
 
 mkdir -p ${LOCAL_CERTS_DIR}
 
-CA_KEY=${CA_KEY:-"${LOCAL_CERTS_DIR}/ca.key"}
-CA_CERT=${CA_CERT:-"${LOCAL_CERTS_DIR}/ca.crt"}
+CA_KEY=${CA_KEY}
+CA_CERT=${CA_CERT}
 
 if [[ ! -f ${CA_KEY} ]]; then
     openssl genrsa -out "${CA_KEY}" 4096

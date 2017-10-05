@@ -16,8 +16,6 @@ from fabric.api import settings
 from fabric.api import sudo
 from fabric.api import task
 
-from remora.fab.clean import utils
-
 
 @task(default=True)
 def all():

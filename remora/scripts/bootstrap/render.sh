@@ -11,7 +11,9 @@ mkdir -p ${LOCAL_BOOTSTRAP_ASSETS_DIR}
 echo ${LOCAL_BOOTSTRAP_ASSETS_DIR}
 
 
-source ${ROOT}/render-etcd.sh ${NODE_IP}
+if [[ ${ETCD_SELFHOSTED} == 'true' ]]; then
+  source ${ROOT}/render-etcd.sh ${NODE_IP}
+fi
 source ${ROOT}/render-kubeconfig.sh ${NODE_IP}
 source ${ROOT}/render-apiserver.sh ${NODE_IP}
 source ${ROOT}/render-keepalived.sh ${NODE_IP}

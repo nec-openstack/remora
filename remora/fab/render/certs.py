@@ -23,7 +23,7 @@ def gen_certs_or_keypairs(target, script_name, *options):
     helpers.run_script(
         script_name,
         *options,
-        local_env=helpers.generate_certs_local_env(target)
+        local_env=helpers.generate_certs_local_env()
     )
 
 
@@ -37,11 +37,11 @@ def gen_client_certs(target, *options):
 
 @task
 @runs_once
-def etcd_ca():
+def etcd():
     require('stage')
-    gen_certs_or_keypairs(
-        'etcd',
-        'gen-cert-ca.sh'
+    helpers.run_script(
+        'certs/etcd/render.sh',
+        local_env=helpers.generate_certs_local_env()
     )
 
 
@@ -53,35 +53,6 @@ def kubernetes_ca():
         'kubernetes',
         'gen-cert-ca.sh'
     )
-
-
-@task
-@runs_once
-def etcd_server():
-    require('stage')
-    gen_certs_or_keypairs(
-        'etcd',
-        'gen-cert-etcd-server.sh',
-    )
-
-
-@task
-@runs_once
-def etcd_client():
-    require('stage')
-    gen_client_certs(
-        'etcd',
-        'etcd-client',
-        '"/CN=etcd-client"'
-    )
-
-
-@task
-@runs_once
-def etcd():
-    execute(etcd_ca)
-    execute(etcd_server)
-    execute(etcd_client)
 
 
 @task(alias='sa')
@@ -109,39 +80,19 @@ def apiserver():
     )
     gen_client_certs(
         'kubernetes',
-        'apiserver-kubelet-client',
-        '"/O=system:masters/CN=kube-apiserver-kubelet-client"'
-    )
-
-
-@task
-@runs_once
-def controller_manager():
-    require('stage')
-    gen_client_certs(
-        'kubernetes',
-        'controller-manager',
-        '"/CN=system:kube-controller-manager"'
-    )
-
-
-@task
-@runs_once
-def scheduler():
-    require('stage')
-    gen_client_certs(
-        'kubernetes',
-        'scheduler',
-        '"/CN=system:kube-scheduler"'
+        'kubelet-client',
+        '"/O=system:masters/CN=kube-kubelet-client"'
     )
 
 
 @task(alias='k8s')
 @runs_once
 def kubernetes():
-    execute(kubernetes_ca)
-    execute(service_account)
-    execute(apiserver)
+    require('stage')
+    helpers.run_script(
+        'certs/kubernetes/render.sh',
+        local_env=helpers.generate_certs_local_env()
+    )
 
 
 @task(default=True)

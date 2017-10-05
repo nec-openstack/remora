@@ -42,6 +42,7 @@ kubernetes:
   addons: "kube-proxy kube-dns"
 
 etcd:
+  selfhosted: "false"
   version: "v3.1.8"
   image_repo: "quay.io/coreos/etcd"
   certs_dir: "/etc/etcd/pki"

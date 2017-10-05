@@ -3,6 +3,10 @@
 set -eu
 export LC_ALL=C
 
+if [[ ${ETCD_SELFHOSTED} == 'true' ]]; then
+  ETCD_SERVERS="https://${ETCD_CLUSTER_IP}:2379"
+fi
+
 KUBE_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-apiserver.yaml
 SERVER_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/apiserver.crt | base64)
 SERVER_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/apiserver.key | base64)
@@ -11,8 +15,8 @@ ETCD_CLIENT_CA=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/ca.crt | base64)
 ETCD_CLIENT_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd-client.crt | base64)
 ETCD_CLIENT_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd-client.key | base64)
 SA_PUB_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/sa.pub | base64)
-KUBELET_CLIENT_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/apiserver-kubelet-client.crt | base64)
-KUBELET_CLIENT_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/apiserver-kubelet-client.key | base64)
+KUBELET_CLIENT_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/kubelet-client.crt | base64)
+KUBELET_CLIENT_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/kubernetes/kubelet-client.key | base64)
 
 cat << EOF > $KUBE_TEMPLATE
 ---
@@ -25,8 +29,8 @@ data:
   etcd-client.crt: ${ETCD_CLIENT_CERT}
   etcd-client.key: ${ETCD_CLIENT_KEY}
   service-account.pub: ${SA_PUB_KEY}
-  apiserver-kubelet-client.crt: ${KUBELET_CLIENT_CERT}
-  apiserver-kubelet-client.key: ${KUBELET_CLIENT_KEY}
+  kubelet-client.crt: ${KUBELET_CLIENT_CERT}
+  kubelet-client.key: ${KUBELET_CLIENT_KEY}
 kind: Secret
 metadata:
   name: kube-apiserver
@@ -72,10 +76,10 @@ spec:
         - --etcd-certfile=/etc/kubernetes/secrets/etcd-client.crt
         - --etcd-keyfile=/etc/kubernetes/secrets/etcd-client.key
         - --etcd-quorum-read=true
-        - --etcd-servers=https://${ETCD_CLUSTER_IP}:2379
+        - --etcd-servers=${ETCD_SERVERS}
         - --insecure-port=0
-        - --kubelet-client-certificate=/etc/kubernetes/secrets/apiserver-kubelet-client.crt
-        - --kubelet-client-key=/etc/kubernetes/secrets/apiserver-kubelet-client.key
+        - --kubelet-client-certificate=/etc/kubernetes/secrets/kubelet-client.crt
+        - --kubelet-client-key=/etc/kubernetes/secrets/kubelet-client.key
         - --secure-port=${KUBE_INTERNAL_PORT}
         - --service-account-key-file=/etc/kubernetes/secrets/service-account.pub
         - --service-cluster-ip-range=${KUBE_SERVICE_IP_RANGE}
