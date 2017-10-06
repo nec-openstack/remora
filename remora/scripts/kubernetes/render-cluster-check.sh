@@ -24,6 +24,7 @@ while [[ \${CLUSTER_STATUS} != 'Running' ]]; do
     get pod -l "tier==control-plane" -o go-template="\${template}" \\
     | sort | uniq \\
   )
+  sleep 3
 done
 
 echo
