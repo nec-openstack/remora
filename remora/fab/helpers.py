@@ -122,10 +122,15 @@ def generate_etcd_env():
     return ['export ETCD_SERVERS="{}"'.format(etcd_servers)]
 
 
+def master_list():
+    servers = ' '.join(env.roledefs['master'])
+    return ['export KUBE_MASTERS="{0}"'.format(servers)]
+
+
 def generate_local_env():
     local_env = ['export LOCAL_ASSETS_DIR="%s"' % constants.assets_dir()]
     local_assets_env = generate_local_assets_env(env.host)
-    return local_env + local_assets_env + generate_etcd_env()
+    return local_env + local_assets_env + generate_etcd_env() + master_list()
 
 
 def is_selfhosted_etcd():

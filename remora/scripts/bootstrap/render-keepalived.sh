@@ -40,6 +40,15 @@ vrrp_instance VI {
   priority 101
   nopreempt
   advert_int 1
+EOF
+if [[ ${HAPROXY_KEEPALIVED_USE_UNICAST} == 'true' ]]; then
+  echo "  unicast_peer {" >> ${TEMPLATE}
+  for address in ${KUBE_MASTERS}; do
+      echo "    ${address}" >> ${TEMPLATE}
+  done
+  echo "  }" >> ${TEMPLATE}
+fi
+cat << EOF >> $TEMPLATE
   authentication {
     auth_type PASS
     auth_pass ${HAPROXY_KEEPALIVED_AUTH_PASSWORD:-'himitsu'}
