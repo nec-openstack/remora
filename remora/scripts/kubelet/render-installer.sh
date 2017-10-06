@@ -14,7 +14,7 @@ ROOT=$(dirname "${BASH_SOURCE}")
 
 mkdir -p /etc/kubernetes
 cp ${ROOT}/kubelet.yaml /etc/kubernetes/
-grep 'certificate-authority-data' /etc/kubernetes/kubelet.yaml | awk '{print $2}' | base64 | tr -d > /etc/kubernetes/ca.crt
+grep 'certificate-authority-data' /etc/kubernetes/kubelet.yaml | awk '{print $2}' | base64 -d > /etc/kubernetes/ca.crt
 cp ${ROOT}/kubelet.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable kubelet
