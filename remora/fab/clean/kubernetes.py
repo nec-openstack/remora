@@ -11,6 +11,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from fabric.api import parallel
 from fabric.api import require
 from fabric.api import settings
 from fabric.api import sudo
@@ -20,6 +21,7 @@ from remora.fab.clean import utils
 
 
 @task(default=True)
+@parallel
 def all():
     require('stage')
     script = 'ip link show dev {0} > /dev/null 2>&1 && ip link delete dev {0}'

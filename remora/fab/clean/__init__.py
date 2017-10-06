@@ -13,6 +13,7 @@
 
 from fabric.api import env
 from fabric.api import execute
+from fabric.api import parallel
 from fabric.api import reboot
 from fabric.api import require
 from fabric.api import runs_once
@@ -25,6 +26,7 @@ from remora.fab.clean import kubernetes
 
 
 @task
+@parallel
 def dependency():
     require('stage')
     with settings(warn_only=True):

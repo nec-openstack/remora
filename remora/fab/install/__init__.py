@@ -16,6 +16,7 @@ import os
 from fabric.api import env
 from fabric.api import execute
 from fabric.api import local
+from fabric.api import parallel
 from fabric.api import put
 from fabric.api import roles
 from fabric.api import runs_once
@@ -49,6 +50,7 @@ def install(target, local_files):
 
 
 @task
+@parallel
 def kubelet():
     install(
         'kubelet',

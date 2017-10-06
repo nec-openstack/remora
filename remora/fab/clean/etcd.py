@@ -11,6 +11,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from fabric.api import parallel
 from fabric.api import require
 from fabric.api import settings
 from fabric.api import sudo
@@ -18,6 +19,7 @@ from fabric.api import task
 
 
 @task(default=True)
+@parallel
 def all():
     require('stage')
     with settings(warn_only=True):
