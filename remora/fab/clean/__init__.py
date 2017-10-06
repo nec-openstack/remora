@@ -31,9 +31,13 @@ def dependency():
     require('stage')
     with settings(warn_only=True):
         sudo('rm -rf {0}'.format(env['configs']['temp_dir']))
-        sudo('systemctl stop docker && systemctl disable docker')
-        sudo('rm -rf /var/lib/docker')
-        sudo('systemctl daemon-reload && systemctl enable docker')
+        if env['configs'].get('clean', {}).get('mode', 'soft') == 'soft':
+            sudo('docker rm -f `docker ps -a -q`')
+        else:
+            sudo('systemctl stop docker && systemctl disable docker')
+            sudo('rm -rf /var/lib/docker')
+            sudo('systemctl daemon-reload && systemctl enable docker')
+
         reboot()
 
 
