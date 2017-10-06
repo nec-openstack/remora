@@ -17,12 +17,6 @@ roledefs:
   master: *masters
   worker: *workers
 
-# HAproxy and Keepalived is not required to install for one master node
-# cluster.
-haproxy:
-  keepalived_net_range: 16
-  keepalived_net_device: eth0
-
 kubernetes:
   # If you have one master node, public_service_ip will be same as master node
   # address.

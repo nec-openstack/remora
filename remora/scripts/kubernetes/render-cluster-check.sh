@@ -26,5 +26,20 @@ while [[ \${CLUSTER_STATUS} != 'Running' ]]; do
   )
 done
 
-echo "All control-planes are running"
+echo
+echo
+echo "================================"
+echo " All control-planes are running "
+echo "================================"
+echo
+echo "DaemonSets"
+echo "--------------------------------"
+${LOCAL_KUBECTL} get daemonset -n kube-system -l "tier==control-plane"
+echo
+echo "Deployments"
+echo "--------------------------------"
+${LOCAL_KUBECTL} get deployments -n kube-system -l "tier==control-plane"
+echo
+echo
+
 EOF

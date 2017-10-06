@@ -16,7 +16,10 @@ data:
   keepalived.cfg: |
     vrrp_instance VI {
       state BACKUP
-      interface ${HAPROXY_KEEPALIVED_NET_DEVICE}
+      interface __NET_IFACE__
+      track_interface {
+        __NET_IFACE__
+      }
       garp_master_delay 5
       virtual_router_id ${HAPROXY_KEEPALIVED_VRID:-"1"}
       priority 101
@@ -27,7 +30,7 @@ data:
         auth_pass ${HAPROXY_KEEPALIVED_AUTH_PASSWORD:-'himitsu'}
       }
       virtual_ipaddress {
-        ${KUBE_PUBLIC_SERVICE_IP}/${HAPROXY_KEEPALIVED_NET_RANGE}   dev ${HAPROXY_KEEPALIVED_NET_DEVICE}
+        ${KUBE_PUBLIC_SERVICE_IP}
       }
     }
   haproxy.cfg: |
@@ -76,7 +79,7 @@ spec:
     spec:
       containers:
       - name: bootstrap-keepalived
-        image: yuanying/keepalived:latest
+        image: yuanying/keepalived:v0.2.1
         securityContext:
           capabilities:
             add: ["NET_ADMIN", "NET_BROADCAST"]
@@ -84,15 +87,21 @@ spec:
         - mountPath: /etc/keepalived/keepalived.cfg
           subPath: keepalived.cfg
           name: kube-keepalived-config
-          readOnly: true
+          readOnly: false
         - mountPath: /var/lock
           name: var-lock
           readOnly: false
         command:
+        - /start.sh
         - /usr/bin/flock
         - /var/lock/keepalived.lock
         - -c
         - "/usr/sbin/keepalived -f /etc/keepalived/keepalived.cfg -l -D -P -n"
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
       - name: bootstrap-haproxy
         image: haproxy:alpine
         volumeMounts:

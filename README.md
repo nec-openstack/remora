@@ -61,12 +61,6 @@ roledefs:
   master: *masters
   worker: *workers
 
-haproxy:
-  # network range which keepalived use
-  keepalived_net_range: 16
-  # network interface which keepalived use
-  keepalived_net_device: eth0
-
 kubernetes:
   # Public kubernetes service address
   public_service_ip: 192.168.1.101

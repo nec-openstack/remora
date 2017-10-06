@@ -17,8 +17,6 @@ roledefs:
   - 192.168.201.121
 
 haproxy:
-  keepalived_net_range: 16
-  keepalived_net_device: eth0
   keepalived_vrid: "21"
   keepalived_auth_password: "himtsudesune"
 
