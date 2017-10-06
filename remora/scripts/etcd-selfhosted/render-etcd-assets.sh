@@ -5,11 +5,11 @@ export LC_ALL=C
 
 KUBE_TEMPLATE=${LOCAL_MANIFESTS_DIR}/etcd-assets.yaml
 
-ETCD_CA=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/ca.crt | base64)
-ETCD_SERVER_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd.crt | base64)
-ETCD_SERVER_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd.key | base64)
-ETCD_CLIENT_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd-client.crt | base64)
-ETCD_CLIENT_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd-client.key | base64)
+ETCD_CA=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/ca.crt | base64 | tr -d '\n')
+ETCD_SERVER_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd.crt | base64 | tr -d '\n')
+ETCD_SERVER_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd.key | base64 | tr -d '\n')
+ETCD_CLIENT_CERT=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd-client.crt | base64 | tr -d '\n')
+ETCD_CLIENT_KEY=$(cat ${LOCAL_ASSETS_DIR}/certs/etcd/etcd-client.key | base64 | tr -d '\n')
 
 cat << EOF > $KUBE_TEMPLATE
 ---

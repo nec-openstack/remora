@@ -8,15 +8,15 @@ if [[ ${ETCD_SELFHOSTED} == 'true' ]]; then
 fi
 
 KUBE_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-apiserver.yaml
-SERVER_CERT=$(cat ${KUBE_APISERVER_CERT} | base64)
-SERVER_KEY=$(cat ${KUBE_APISERVER_KEY} | base64)
-CA=$(cat ${KUBE_CA_CERT} | base64)
-ETCD_CLIENT_CA=$(cat ${ETCD_CA_CERT} | base64)
-ETCD_CLIENT_CERT=$(cat ${ETCD_CLIENT_CERT} | base64)
-ETCD_CLIENT_KEY=$(cat ${ETCD_CLIENT_KEY} | base64)
-SA_PUB_KEY=$(cat ${KUBE_SA_PUB_KEY} | base64)
-KUBELET_CLIENT_CERT=$(cat ${KUBE_KUBELET_CLIENT_CERT} | base64)
-KUBELET_CLIENT_KEY=$(cat ${KUBE_KUBELET_CLIENT_KEY} | base64)
+SERVER_CERT=$(cat ${KUBE_APISERVER_CERT} | base64 | tr -d '\n')
+SERVER_KEY=$(cat ${KUBE_APISERVER_KEY} | base64 | tr -d '\n')
+CA=$(cat ${KUBE_CA_CERT} | base64 | tr -d '\n')
+ETCD_CLIENT_CA=$(cat ${ETCD_CA_CERT} | base64 | tr -d '\n')
+ETCD_CLIENT_CERT=$(cat ${ETCD_CLIENT_CERT} | base64 | tr -d '\n')
+ETCD_CLIENT_KEY=$(cat ${ETCD_CLIENT_KEY} | base64 | tr -d '\n')
+SA_PUB_KEY=$(cat ${KUBE_SA_PUB_KEY} | base64 | tr -d '\n')
+KUBELET_CLIENT_CERT=$(cat ${KUBE_KUBELET_CLIENT_CERT} | base64 | tr -d '\n')
+KUBELET_CLIENT_KEY=$(cat ${KUBE_KUBELET_CLIENT_KEY} | base64 | tr -d '\n')
 
 cat << EOF > $KUBE_TEMPLATE
 ---

@@ -4,9 +4,9 @@ set -eu
 export LC_ALL=C
 
 KUBECONFIG_TEMPLATE=${KUBELET_ASSETS_DIR}/kubelet.yaml
-CA_DATA=$(cat ${CA_CERT} | base64)
-CLIENT_CERTS_DATA=$(cat ${KUBELET_ASSETS_DIR}/kubelet.crt | base64)
-CLIENT_KEY_DATA=$(cat ${KUBELET_ASSETS_DIR}/kubelet.key | base64)
+CA_DATA=$(cat ${CA_CERT} | base64 | tr -d '\n')
+CLIENT_CERTS_DATA=$(cat ${KUBELET_ASSETS_DIR}/kubelet.crt | base64 | tr -d '\n')
+CLIENT_KEY_DATA=$(cat ${KUBELET_ASSETS_DIR}/kubelet.key | base64 | tr -d '\n')
 
 mkdir -p $(dirname $KUBECONFIG_TEMPLATE)
 cat << EOF > $KUBECONFIG_TEMPLATE

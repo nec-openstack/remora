@@ -4,9 +4,9 @@ set -eu
 export LC_ALL=C
 
 KUBECONFIG_TEMPLATE=${KUBE_ASSETS_DIR}/kubeconfig
-CA_DATA=$(cat ${KUBE_CA_CERT} | base64)
-CLIENT_CERTS_DATA=$(cat ${KUBE_ADMIN_CERT} | base64)
-CLIENT_KEY_DATA=$(cat ${KUBE_ADMIN_KEY} | base64)
+CA_DATA=$(cat ${KUBE_CA_CERT} | base64 | tr -d '\n')
+CLIENT_CERTS_DATA=$(cat ${KUBE_ADMIN_CERT} | base64 | tr -d '\n')
+CLIENT_KEY_DATA=$(cat ${KUBE_ADMIN_KEY} | base64 | tr -d '\n')
 
 echo "TEMPLATE: $KUBECONFIG_TEMPLATE"
 mkdir -p $(dirname $KUBECONFIG_TEMPLATE)
