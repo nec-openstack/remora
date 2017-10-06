@@ -15,6 +15,7 @@ docker:
 haproxy:
   keepalived_vrid: "1"
   keepalived_auth_password: "himitsu"
+  keepalived_use_unicast: "true"
 
 kubernetes:
   version: v1.7.4

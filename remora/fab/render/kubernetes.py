@@ -21,12 +21,12 @@ from remora.fab import helpers
 
 
 def generate_local_env():
-    return helpers.generate_local_env() + apiserver_list()
+    return helpers.generate_local_env() + master_list()
 
 
-def apiserver_list():
+def master_list():
     servers = ' '.join(env.roledefs['master'])
-    return ['export HAPROXY_BACKENDS="{0}"'.format(servers)]
+    return ['export KUBE_MASTERS="{0}"'.format(servers)]
 
 
 def render(script_name, *options):

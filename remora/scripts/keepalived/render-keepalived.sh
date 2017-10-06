@@ -25,6 +25,15 @@ data:
       priority 101
       nopreempt
       advert_int 1
+EOF
+if [[ ${HAPROXY_KEEPALIVED_USE_UNICAST} == 'true' ]]; then
+  echo "      unicast_peer {" >> ${KUBE_TEMPLATE}
+  for address in ${KUBE_MASTERS}; do
+      echo "        ${address}" >> ${KUBE_TEMPLATE}
+  done
+  echo "      }" >> ${KUBE_TEMPLATE}
+fi
+cat << EOF >> $KUBE_TEMPLATE
       authentication {
         auth_type PASS
         auth_pass ${HAPROXY_KEEPALIVED_AUTH_PASSWORD:-'himitsu'}
@@ -52,7 +61,7 @@ data:
 EOF
 
 size=1
-for address in ${HAPROXY_BACKENDS}; do
+for address in ${KUBE_MASTERS}; do
     echo "            server api${size} ${address}:${KUBE_INTERNAL_PORT} check" >> ${KUBE_TEMPLATE}
     size=$((size+1))
 done
