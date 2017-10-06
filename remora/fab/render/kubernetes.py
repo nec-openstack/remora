@@ -40,15 +40,14 @@ def render(script_name, *options):
 @task(default=True)
 @runs_once
 def all():
-    execute(proxy)
     execute(network)
-    execute(dns)
     execute(apiserver)
     execute(controller_manager)
     execute(scheduler)
     execute(checkpointer)
     execute(keepalived)
     execute(kubernetes)
+    execute(addons)
 
 
 @task
@@ -113,12 +112,14 @@ def proxy():
 
 @task
 @runs_once
-def dns():
+def addons():
     require('stage')
-    render(
-        'kube-dns/render.sh',
-        env.host
-    )
+    addons = env['configs']['kubernetes'].get('addons', [])
+    for addon in addons:
+        render(
+            '{}/render.sh'.format(addon),
+            env.host
+        )
 
 
 @task

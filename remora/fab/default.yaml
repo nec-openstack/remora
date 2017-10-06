@@ -38,7 +38,7 @@ kubernetes:
   cloud_provider: ""
   cloud_config: ""
   upstream_nameservers: '[\"8.8.8.8\", \"8.8.4.4\"]'
-  addons: "kube-proxy kube-dns"
+  addons: ["kube-proxy", "kube-dns"]
 
 etcd:
   selfhosted: "false"
