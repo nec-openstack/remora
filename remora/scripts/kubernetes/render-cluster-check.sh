@@ -35,11 +35,11 @@ echo "================================"
 echo
 echo "DaemonSets"
 echo "--------------------------------"
-${LOCAL_KUBECTL} get daemonset -n kube-system -l "tier==control-plane"
+${LOCAL_KUBECTL} --kubeconfig ${KUBE_ASSETS_DIR}/kubeconfig get daemonset -n kube-system -l "tier==control-plane"
 echo
 echo "Deployments"
 echo "--------------------------------"
-${LOCAL_KUBECTL} get deployments -n kube-system -l "tier==control-plane"
+${LOCAL_KUBECTL} --kubeconfig ${KUBE_ASSETS_DIR}/kubeconfig get deployments -n kube-system -l "tier==control-plane"
 echo
 echo
 
