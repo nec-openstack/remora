@@ -10,4 +10,5 @@ mkdir -p ${ETCD_ASSETS_DIR}
 
 source ${ROOT}/render-etcd-certs.sh ${NODE_IP}
 source ${ROOT}/render-etcd-server.sh ${NODE_IP}
+source ${ROOT}/render-etcdctl-config.sh
 source ${ROOT}/render-installer.sh

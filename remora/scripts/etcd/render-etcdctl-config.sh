@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -eu
+export LC_ALL=C
+
+TEMPLATE=${LOCAL_ASSETS_DIR}/etcdctl.env
+
+cat <<EOF > ${TEMPLATE}
+export ETCDCTL_API=3
+export ETCDCTL_WRITE_OUT="table"
+export ETCDCTL_ENDPOINTS="${ETCD_SERVERS}"
+export ETCDCTL_CACERT=${ETCD_CA_CERT}
+export ETCDCTL_CERT=${ETCD_CLIENT_CERT}
+export ETCDCTL_KEY=${ETCD_CLIENT_KEY}
+EOF
