@@ -12,6 +12,13 @@ Note that this is a hard requirement.
 * Source: http://git.openstack.org/cgit/openstack/remora
 * Bugs: http://bugs.launchpad.net/remora
 
+## Prerequisite
+
+You will need following softwares.
+
+-   Python 3.5 or later and pip
+-   kubectl 1.7.x or later
+
 ## Supported Linux distribution
 
 -   Ubuntu 16.04
@@ -33,7 +40,11 @@ composition.
 -   Machine03(192.168.1.121): Kubernetes Worker
 -   Machine04(192.168.1.122): Kubernetes Worker
 
+You will be working on a local machine that can `ssh` into each machines.
+
 ### 1. Clone this repository and write config file
+
+Please clone this repository into your local machine.
 
 ```bash
 $ git clone https://github.com/nec-openstack/remora.git
