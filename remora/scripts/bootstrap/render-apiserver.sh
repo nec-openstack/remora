@@ -65,6 +65,7 @@ spec:
     - mountPath: /var/lock
       name: var-lock
       readOnly: false
+${KUBE_CLOUD_CONFIG_MOUNT:-""}
   volumes:
   - name: secrets
     hostPath:
@@ -75,4 +76,5 @@ spec:
   - name: var-lock
     hostPath:
       path: /var/lock
+${KUBE_CLOUD_CONFIG_VOLUME:-""}
 EOF

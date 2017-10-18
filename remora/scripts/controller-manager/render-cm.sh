@@ -3,6 +3,26 @@
 set -eu
 export LC_ALL=C
 
+CONFIGURE_CLOUD_ROUTES=false
+
+#FIXME(yuanying): make this be configmap
+if [[ ${KUBE_CLOUD_PROVIDER} == "openstack" ]]; then
+  KUBE_CLOUD_CONFIG_BASENAME=$(basename ${KUBE_CLOUD_CONFIG})
+  KUBE_CLOUD_CONFIG_DIRNAME=$(dirname ${KUBE_CLOUD_CONFIG})
+  KUBE_CLOUD_CONFIG_MOUNT="
+        - mountPath: "${KUBE_CLOUD_CONFIG}"
+          name: kube-cloud-config
+          subPath: "${KUBE_CLOUD_CONFIG_BASENAME}"
+          readOnly: false
+"
+  KUBE_CLOUD_CONFIG_VOLUME="
+      - name: kube-cloud-config
+        hostPath:
+          path: "${KUBE_CLOUD_CONFIG_DIRNAME}"
+"
+  CONFIGURE_CLOUD_ROUTES=true
+fi
+
 KUBE_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-controller-manager.yaml
 
 CA=$(cat ${KUBE_CA_CERT} | base64 | tr -d '\n')
@@ -95,7 +115,7 @@ spec:
         - --cloud-provider=
         - --cluster-cidr=${KUBE_CLUSTER_CIDR}
         - --node-cidr-mask-size=${KUBE_NODE_CIDR_MASK_SIZE}
-        - --configure-cloud-routes=false # FIXME:(yuanying) Change true if kubenet is used.
+        - --configure-cloud-routes=${CONFIGURE_CLOUD_ROUTES}
         - --leader-elect=true
         - --root-ca-file=/etc/kubernetes/secrets/ca.crt
         - --use-service-account-credentials=true
@@ -116,6 +136,7 @@ spec:
         - name: ssl-host
           mountPath: /etc/ssl/certs
           readOnly: true
+${KUBE_CLOUD_CONFIG_MOUNT:-""}
       nodeSelector:
         node-role.kubernetes.io/master: ""
       securityContext:
@@ -135,6 +156,7 @@ spec:
       - name: ssl-host
         hostPath:
           path: /usr/share/ca-certificates
+${KUBE_CLOUD_CONFIG_VOLUME:-""}
       dnsPolicy: Default # Don't use cluster DNS.
 
 EOF

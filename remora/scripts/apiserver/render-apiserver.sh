@@ -3,6 +3,23 @@
 set -eu
 export LC_ALL=C
 
+#FIXME(yuanying): make this be configmap
+if [[ ${KUBE_CLOUD_PROVIDER} == "openstack" ]]; then
+  KUBE_CLOUD_CONFIG_BASENAME=$(basename ${KUBE_CLOUD_CONFIG})
+  KUBE_CLOUD_CONFIG_DIRNAME=$(dirname ${KUBE_CLOUD_CONFIG})
+  KUBE_CLOUD_CONFIG_MOUNT="
+        - mountPath: "${KUBE_CLOUD_CONFIG}"
+          name: kube-cloud-config
+          subPath: "${KUBE_CLOUD_CONFIG_BASENAME}"
+          readOnly: false
+"
+  KUBE_CLOUD_CONFIG_VOLUME="
+      - name: kube-cloud-config
+        hostPath:
+          path: "${KUBE_CLOUD_CONFIG_DIRNAME}"
+"
+fi
+
 if [[ ${ETCD_SELFHOSTED} == 'true' ]]; then
   ETCD_SERVERS="https://${ETCD_CLUSTER_IP}:2379"
 fi
@@ -103,6 +120,7 @@ spec:
         - mountPath: /var/lock
           name: var-lock
           readOnly: false
+${KUBE_CLOUD_CONFIG_MOUNT:-""}
       hostNetwork: true
       nodeSelector:
         node-role.kubernetes.io/master: ""
@@ -122,6 +140,7 @@ spec:
       - name: var-lock
         hostPath:
           path: /var/lock
+${KUBE_CLOUD_CONFIG_VOLUME:-""}
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 1

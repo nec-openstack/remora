@@ -2,13 +2,16 @@
 user: ubuntu
 
 local:
-  assets_dir: "~/.kube/assets"
+  assets_dir: "~/.kube/openstack"
 
 masters: &masters
   - 172.16.2.121
-workers: &workers
+  - 172.16.2.122
   - 172.16.2.123
-  - 172.16.2.124
+workers: &workers
+  - 172.16.2.131
+  - 172.16.2.132
+  - 172.16.2.133
 
 roledefs:
   bootstrap:
@@ -18,13 +21,8 @@ roledefs:
   worker: *workers
 
 kubernetes:
-  # If you have one master node, public_service_ip will be same as master node
-  # address.
-  public_service_ip: 172.16.2.121
+  public_service_ip: 172.16.2.101
   network_plugin: "kubenet"
-  # `port` and `internal_port` must be same for single master node cluster.
-  port: 6443
-  internal_port: 6443
   cloud_provider: "openstack"
   # cloud_config file path must be under /etc/kubernetes directory to share
   # with each kubelet, apiserver and controller_manager.
@@ -37,6 +35,6 @@ openstack:
   region_name: RegionOne
   tenant_name: demo
   user_domain_id: default
-  subnet_id: c5912e06-db5f-4ece-8d4a-bc3eb07019da
-  floating_network_id: d3fa92c4-b47f-4043-9578-77e30f761019
-  router_id: fe49e9c6-9b60-45d3-881e-4cd5a826cffb
+  subnet_name: k8s-subnet
+  floating_network_name: public
+  router_name: k8s-router

@@ -3,6 +3,11 @@
 set -eu
 export LC_ALL=C
 
+CONFIGURE_CLOUD_ROUTES=false
+if [[ ${KUBE_CLOUD_PROVIDER} == "openstack" ]]; then
+  CONFIGURE_CLOUD_ROUTES=true
+fi
+
 export KUBE_CM_TEMPLATE=${KUBE_BOOTSTRAP_MANIFESTS_DIR}/kube-controller-manager.bootstrap.yaml
 mkdir -p $(dirname $KUBE_CM_TEMPLATE)
 cat << EOF > $KUBE_CM_TEMPLATE
@@ -24,7 +29,7 @@ spec:
     - --cloud-config=${KUBE_CLOUD_CONFIG:-""}
     - --cluster-cidr=${KUBE_CLUSTER_CIDR}
     - --node-cidr-mask-size=${KUBE_NODE_CIDR_MASK_SIZE}
-    - --configure-cloud-routes=false
+    - --configure-cloud-routes=${CONFIGURE_CLOUD_ROUTES}
     - --kubeconfig=/etc/kubernetes/bootstrap/kubeconfig-bootstrap
     - --leader-elect=true
     - --root-ca-file=/etc/kubernetes/bootstrap/secrets/kubernetes/ca.crt
@@ -39,6 +44,7 @@ spec:
     - name: ssl-host
       mountPath: /etc/ssl/certs
       readOnly: true
+${KUBE_CLOUD_CONFIG_MOUNT:-""}
   hostNetwork: true
   volumes:
   - name: kubernetes
@@ -47,4 +53,5 @@ spec:
   - name: ssl-host
     hostPath:
       path: /usr/share/ca-certificates
+${KUBE_CLOUD_CONFIG_VOLUME:-""}
 EOF

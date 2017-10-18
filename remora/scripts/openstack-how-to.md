@@ -6,7 +6,7 @@ glance image-create --name ubuntu-docker \
                     --file=ubuntu-xenial-docker-ec2-noclouds.qcow2
 
 nova flavor-create k2.master k2m 2048 20 1
-nova flavor-create k2.worker k2w 2048 20 1
+nova flavor-create k2.worker k2w 4096 20 1
 
 openstack keypair create k8s-key \
   --public-key ~/.ssh/id_rsa.pub
@@ -35,7 +35,22 @@ openstack port create master01-port \
   --security-group k8s-sg \
   --allowed-address ip-address=10.244.0.0/16 \
   --allowed-address ip-address=10.254.0.0/24 \
+  --allowed-address ip-address=172.16.2.101 \
   --fixed-ip subnet=k8s-subnet,ip-address=172.16.2.121
+
+openstack port create master02-port \
+  --network k8s-net \
+  --security-group k8s-sg \
+  --allowed-address ip-address=10.244.0.0/16 \
+  --allowed-address ip-address=172.16.2.101 \
+  --fixed-ip subnet=k8s-subnet,ip-address=172.16.2.122
+
+openstack port create master03-port \
+  --network k8s-net \
+  --security-group k8s-sg \
+  --allowed-address ip-address=10.244.0.0/16 \
+  --allowed-address ip-address=172.16.2.101 \
+  --fixed-ip subnet=k8s-subnet,ip-address=172.16.2.123
 
 openstack port create worker01-port \
   --network k8s-net \
@@ -63,6 +78,18 @@ openstack server create master01 \
   --flavor k2.master \
   --key-name k8s-key \
   --nic port-id=$(openstack port show master01-port -f value -c id)
+
+openstack server create master02 \
+  --image ubuntu-docker \
+  --flavor k2.master \
+  --key-name k8s-key \
+  --nic port-id=$(openstack port show master02-port -f value -c id)
+
+openstack server create master03 \
+  --image ubuntu-docker \
+  --flavor k2.master \
+  --key-name k8s-key \
+  --nic port-id=$(openstack port show master03-port -f value -c id)
 
 openstack server create worker01 \
   --image ubuntu-docker \
