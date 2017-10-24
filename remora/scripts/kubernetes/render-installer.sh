@@ -11,9 +11,10 @@ set -eu
 export LC_ALL=C
 ROOT=$(dirname "${BASH_SOURCE}")
 
+echo "Start to wait for Bootstrapping Kubernetes API (https://${KUBE_PUBLIC_SERVICE_IP}:${KUBE_PORT}/healthz)"
 until curl -skf "https://${KUBE_PUBLIC_SERVICE_IP}:${KUBE_PORT}/healthz"
 do
-    echo "Waiting for Kubernetes API..."
+    echo "Still waiting for Bootstrapping Kubernetes API..."
     sleep 5
 done
 
