@@ -1,0 +1,23 @@
+---
+user: vagrant
+
+local:
+  assets_dir: "~/.kube/vagrant"
+
+
+masters: &masters
+  - 192.168.43.101
+workers: &workers
+  - 192.168.43.102
+  - 192.168.43.103
+
+roledefs:
+  bootstrap:
+  - 192.168.43.101
+  etcd: *masters
+  master: *masters
+  worker: *workers
+
+kubernetes:
+  version: v1.8.1
+  public_service_ip: 192.168.43.100

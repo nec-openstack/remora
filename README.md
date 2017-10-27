@@ -3,14 +3,8 @@
 Remora is command-line tool and library to manage kubernetes cluster on
 any cloud and baremetal.
 
-Please fill here a long description which must be at least 3 lines wrapped on
-80 cols, so that distribution package maintainers can use it in their packages.
-Note that this is a hard requirement.
-
-* Free software: Apache license
-* Documentation: http://docs.openstack.org/developer/remora
-* Source: http://git.openstack.org/cgit/openstack/remora
-* Bugs: http://bugs.launchpad.net/remora
+You can see [Quick Start Guide](doc/quickstart.md) which uses Vagrant to
+install and run Kubernetes cluster.
 
 ## Prerequisite
 

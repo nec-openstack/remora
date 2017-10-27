@@ -62,3 +62,6 @@ remora/scripts/images
 remora/scripts/userdata/*.yaml
 
 .DS_Store
+
+# vagrant
+.vagrant/
