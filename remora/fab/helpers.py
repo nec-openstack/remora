@@ -71,6 +71,10 @@ def construct_env(env_data, default_env_data=None):
 
     env_data = merge_dicts(env_data, default_env_data)
     env['configs'] = env_data
+    fabric_override = env_data.get('fabric', None)
+    if fabric_override is not None:
+        for k, v in fabric_override.items():
+            env[k] = v
     env['user'] = env_data.get('user', None)
     roledefs = env_data.get('roledefs', None)
     del env_data['roledefs']
