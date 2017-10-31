@@ -1,0 +1,47 @@
+---
+node_groups:
+  master:
+    spec:
+      kubernetes:
+        labels:
+          - "node-role.kubernetes.io/master"
+        taints:
+          - "node-role.kubernetes.io/master=:NoSchedule"
+    nodes:
+    - "192.168.1.111"
+    - "192.168.1.112"
+  master_arm64:
+    spec:
+      kubernetes:
+        labels:
+          - "node-role.kubernetes.io/master"
+        taints:
+          - "node-role.kubernetes.io/master=:NoSchedule"
+        image:
+          repository: "gcr.io/google_containers/hyperkube-arm64"
+    nodes:
+    - "192.168.1.113"
+  worker:
+    nodes:
+    - "192.168.1.121"
+  worker_arm64:
+    spec:
+      kubernetes:
+        image:
+          repository: "gcr.io/google_containers/hyperkube-arm64"
+    nodes:
+    - "192.168.1.131"
+  worker_arm:
+    spec:
+      kubernetes:
+        image:
+          repository: "gcr.io/google_containers/hyperkube-arm"
+    nodes:
+    - "192.168.1.141"
+
+spec:
+  kubernetes:
+    image:
+      repository: "gcr.io/google_containers/hyperkube"
+      tag: "v1.8.2"
+      pullPolicy: "Always"
