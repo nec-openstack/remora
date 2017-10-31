@@ -14,19 +14,17 @@
 from cliff import command
 from oslo_log import log as logging
 
-from fabric.api import execute
 
 from remora.cli import utils
-from remora.fab.certs import generate
 
+class Kubelet(command.Command):
+    """Render kubelet assets"""
 
-class GenerateCerts(command.Command):
-    """Generate a cluster certs"""
+    log = logging.getLogger(__name__ + ".Kubelet")
 
-    log = logging.getLogger(__name__ + ".GenerateCerts")
+    @utils.cluster_config
+    def take_action(self, parsed_args, configs):
 
-    @utils.fabric_env
-    def take_action(self, parsed_args):
-
-        execute(generate.all)
+        print(configs)
+        print(parsed_args)
         return "ok"

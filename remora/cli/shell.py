@@ -20,16 +20,13 @@ from cliff import app
 from cliff import commandmanager
 
 import remora
-from remora.cli.v1 import certs
-from remora.cli.v1 import cluster
-from remora.common import config
+from remora.cli.v1 import render
 # from remora.v1 import client
 
 
 class RemoraCommandManager(commandmanager.CommandManager):
     SHELL_COMMANDS = {
-        "cluster create": cluster.CreateCluster,
-        "certs generate": certs.GenerateCerts,
+        "render kubelet": render.Kubelet,
     }
 
     def load_commands(self, namespace):
@@ -75,8 +72,6 @@ class RemoraShell(app.App):
 def main(args=None):
     if args is None:
         args = sys.argv[1:]
-    # FIXME(yuanying)
-    config.init([])
     return RemoraShell().run(args)
 
 

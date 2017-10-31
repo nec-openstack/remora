@@ -1,0 +1,78 @@
+---
+nodeGroups:
+  master:
+    spec:
+      kubernetes:
+        labels:
+          - "node-role.kubernetes.io/master"
+        taints:
+          - "node-role.kubernetes.io/master=:NoSchedule"
+
+spec:
+  kubernetes:
+    image:
+      repository: "gcr.io/google_containers/hyperkube"
+      tag: "v1.8.2"
+      pullPolicy: "Always"
+
+    clusterCIDR: 10.244.0.0/16
+    nodeCIDRMaskSize: 24
+    serviceClusterIPRange: 10.254.0.0/24
+    privateServiceIP: 10.254.0.1  # TODO(yuanying): Should be calculated
+    clusterDNS: 10.254.0.10       # TODO(yuanying): Should be calculated
+
+    additionalHostnames: []
+    additionalServiceIPs: []
+
+    network:
+      plugin: "cni"
+      cniPlugin: "flannel"
+    port:
+      public: 6443
+      internal: 6444
+
+    admissionControl: "Initializers,NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota"
+    storageBackend: etcd3
+    logLevel: 2
+    cloudProvider: ""
+    cloudConfig: ""
+    upstreamNameservers: ["8.8.8.8", "8.8.4.4"]
+    addons: ["kube-proxy", "kube-dns"]
+
+  local:
+    kubeconfig: "~/.kube/config"
+    kubectl: "kubectl" # TODO(yuanying): remove dependency of kubectl
+
+  docker:
+    path: "/usr/bin/docker"
+
+  keepalived:
+    image:
+      repository: "yuanying/keepalived"
+      tag: "v0.2.1"
+      pullPolicy: "Always"
+    vrid: "1"
+    authPassword: "himitsu"
+    useUnicast: "true"
+
+  haproxy:
+    image:
+      repository: "haproxy"
+      tag: "alpine"
+      pullPolicy: "Always"
+
+  etcd:
+    image:
+      repository: "quay.io/coreos/etcd"
+      tag: "v3.1.8"
+      pullPolicy: "Always"
+    selfhosted: "false"
+    clusterIP: 10.254.0.20             # TODO(yuanying): Should be calculated
+    bootstrapClusterIP: 10.254.0.30   # TODO(yuanying): Should be calculated
+
+  flannel:
+    image:
+      repository: "quay.io/coreos/flannel"
+      tag: "v0.8.0"
+      pullPolicy: "Always"
+    backendType: vxlan

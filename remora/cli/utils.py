@@ -38,3 +38,21 @@ def fabric_env(func):
         return func(self, parsed_args)
 
     return wrapper
+
+
+def cluster_config(func):
+    @functools.wraps(func)
+    def wrapper(self, parsed_args):
+        cluster_config = self.app.options.cluster_config
+        if not cluster_config:
+            self.log.error("Cluster Config is not specified")
+        if not os.path.exists(cluster_config):
+            self.log.error("Cluster Config is not exist: {}".format(
+                cluster_config))
+
+        with open(self.app.options.cluster_config) as f:
+            configs = yaml.load(f)
+            # TODO(yuanying): merge default.yaml
+        return func(self, parsed_args, configs)
+
+    return wrapper
