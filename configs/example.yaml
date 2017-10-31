@@ -26,6 +26,9 @@ nodeGroups:
       kubernetes:
         image:
           repository: "gcr.io/google_containers/hyperkube-arm64"
+      labels:
+        - "node-role.kubernetes.io/master-arm64"
+        - "node-role.kubernetes.io/master"
     nodes:
     - "192.168.1.131"
   worker_arm:
@@ -44,3 +47,6 @@ spec:
       repository: "gcr.io/google_containers/hyperkube"
       tag: "v1.8.2"
       pullPolicy: "Always"
+  labels:
+    - "node-role.kubernetes.io/master-default"
+    - "node-role.kubernetes.io/master"
