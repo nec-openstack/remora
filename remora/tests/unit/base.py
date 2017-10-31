@@ -15,11 +15,6 @@ import mock
 import testtools
 
 
-from remora.common import config
-
-config.init([])
-
-
 class TestCase(testtools.TestCase):
 
     def setUp(self):

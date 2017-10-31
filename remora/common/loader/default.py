@@ -22,7 +22,6 @@ from stevedore import extension as extensionmanager
 
 from remora.common import exception
 from remora.common.loader import base
-from remora.common import utils
 
 LOG = log.getLogger(__name__)
 

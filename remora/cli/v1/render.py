@@ -14,8 +14,8 @@
 from cliff import command
 from oslo_log import log as logging
 
-
 from remora.cli import utils
+
 
 class Kubelet(command.Command):
     """Render kubelet assets"""

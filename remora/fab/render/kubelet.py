@@ -11,15 +11,12 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import os
-
 from fabric.api import env
 from fabric.api import execute
 from fabric.api import runs_once
 from fabric.api import task
 from fabric.operations import require
 
-from remora.fab import constants
 from remora.fab import helpers
 
 

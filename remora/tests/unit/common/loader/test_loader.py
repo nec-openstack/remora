@@ -79,27 +79,3 @@ class TestLoader(base.TestCase):
         loader_manager = default.DefaultLoader(namespace='TESTING')
         self.assertRaises(exception.LoadingError, loader_manager.load,
                           name='bad_driver')
-
-    def test_load_loadable_with_opts(self):
-        fake_driver = drivermanager.DriverManager.make_test_instance(
-            extension=stevedore_extension.Extension(
-                name="fake",
-                entry_point="%s:%s" % (FakeLoadableWithOpts.__module__,
-                                       FakeLoadableWithOpts.__name__),
-                plugin=FakeLoadableWithOpts,
-                obj=None),
-            namespace="TESTING")
-
-        loader_manager = default.DefaultLoader(namespace='TESTING')
-        with mock.patch.object(drivermanager,
-                               "DriverManager") as m_driver_manager:
-            m_driver_manager.return_value = fake_driver
-            loaded_driver = loader_manager.load(name='fake')
-
-        self.assertIsInstance(loaded_driver, FakeLoadableWithOpts)
-
-        self.assertEqual(
-            "fake_with_opts", loaded_driver.config.get("test_opt"))
-
-        self.assertEqual(
-            "fake_with_opts", loaded_driver.config.test_opt)

@@ -19,7 +19,6 @@ from fabric.api import runs_once
 from fabric.api import task
 from fabric.operations import require
 
-from remora.fab import constants
 from remora.fab import helpers
 
 

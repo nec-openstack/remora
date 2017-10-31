@@ -19,22 +19,6 @@ from fabric.operations import require
 from remora.fab import helpers
 
 
-def cert_env_list():
-    etcd_assets_dir = constants.etcd_assets_dir(env.host)
-    return [
-        'export ETCD_SERVER_KEY="{}"'.format(
-            os.path.join(etcd_assets_dir, 'etcd-server.key')
-        ),
-        'export ETCD_SERVER_CERT_REQ="{}"'.format(
-            os.path.join(etcd_assets_dir, 'etcd-server.csr')
-        ),
-        'export ETCD_SERVER_CERT="{}"'.format(
-            os.path.join(etcd_assets_dir, 'etcd-server.crt')
-        ),
-        'export ETCD_ASSETS_DIR="{}"'.format(etcd_assets_dir),
-    ]
-
-
 @task
 @runs_once
 def etcd():
@@ -42,46 +26,6 @@ def etcd():
     helpers.run_script(
         'certs/etcd/render.sh',
         local_env=helpers.generate_local_env()
-    )
-
-
-@task
-@runs_once
-def kubernetes_ca():
-    require('stage')
-    gen_certs_or_keypairs(
-        'kubernetes',
-        'gen-cert-ca.sh'
-    )
-
-
-@task(alias='sa')
-@runs_once
-def service_account():
-    require('stage')
-    gen_certs_or_keypairs(
-        'kubernetes',
-        'gen-keypair-sa.sh'
-    )
-
-
-@task
-@runs_once
-def apiserver():
-    require('stage')
-    gen_client_certs(
-        'kubernetes',
-        'admin',
-        '"/O=system:masters/CN=kubernetes-admin"'
-    )
-    gen_certs_or_keypairs(
-        'kubernetes',
-        'gen-cert-apiserver.sh',
-    )
-    gen_client_certs(
-        'kubernetes',
-        'kubelet-client',
-        '"/O=system:masters/CN=kube-kubelet-client"'
     )
 
 
