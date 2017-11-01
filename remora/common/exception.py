@@ -22,7 +22,7 @@ SHOULD include dedicated exception logging.
 
 """
 
-from oslo_log import log as logging
+import logging
 import six
 
 from remora.i18n import _, _LE

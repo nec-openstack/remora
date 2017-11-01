@@ -16,14 +16,14 @@
 
 from __future__ import unicode_literals
 
-from oslo_log import log
+import logging
 from stevedore import driver as drivermanager
 from stevedore import extension as extensionmanager
 
 from remora.common import exception
 from remora.common.loader import base
 
-LOG = log.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 
 
 class DefaultLoader(base.BaseLoader):
