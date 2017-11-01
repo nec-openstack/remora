@@ -18,41 +18,22 @@ from __future__ import unicode_literals
 
 import mock
 
-from oslo_config import cfg
 from stevedore import driver as drivermanager
 from stevedore import extension as stevedore_extension
 
 from remora.common import exception
 from remora.common.loader import default
-from remora.common.loader import loadable
 import remora.tests.unit.base as base
 
 
-class FakeLoadable(loadable.Loadable):
-
-    @classmethod
-    def get_config_opts(cls):
-        return []
-
-
-class FakeLoadableWithOpts(loadable.Loadable):
-
-    @classmethod
-    def get_config_opts(cls):
-        return [
-            cfg.StrOpt("test_opt", default="fake_with_opts"),
-        ]
+class FakeLoadable(object):
+    pass
 
 
 class TestLoader(base.TestCase):
 
     def setUp(self):
         super(TestLoader, self).setUp()
-
-        def _fake_parse(self, *args, **kw):
-            return cfg.ConfigOpts._parse_cli_opts(cfg.CONF, [])
-
-        cfg.CONF._parse_cli_opts = _fake_parse
 
     def test_load_loadable_no_opt(self):
         fake_driver = drivermanager.DriverManager.make_test_instance(
