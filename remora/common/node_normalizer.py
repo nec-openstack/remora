@@ -68,6 +68,26 @@ def normarize(user_config):
     return nodes
 
 
+def filter(nodes, labels=[]):
+    """Filter nodes which matches labels"""
+    labels = set(labels)
+    filterd_nodes = {}
+    for k, spec in nodes.items():
+        node_labels = set(spec.get('labels', []))
+        matched_labels = labels & node_labels
+        if matched_labels == labels:
+            filterd_nodes[k] = spec
+    return filterd_nodes
+
+
+def etcd_servers(nodes):
+    return filter(nodes, ['node-role.remora/etcd'])
+
+
+def master_nodes(nodes):
+    return filter(nodes, ['node-role.kubernetes.io/master'])
+
+
 def calculated_nodes(user_config):
     """
     Return nodes dict which contains calculated values

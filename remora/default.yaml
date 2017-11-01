@@ -2,11 +2,11 @@
 nodeGroups:
   master:
     spec:
-      kubernetes:
-        labels:
-          - "node-role.kubernetes.io/master"
-        taints:
-          - "node-role.kubernetes.io/master=:NoSchedule"
+      labels:
+        - "node-role.kubernetes.io/master"
+        - "node-role.remora/etcd"
+      taints:
+        - "node-role.kubernetes.io/master=:NoSchedule"
 
 spec:
   kubernetes:

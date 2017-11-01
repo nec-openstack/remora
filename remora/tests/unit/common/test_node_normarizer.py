@@ -89,3 +89,46 @@ class TestExtractNodesFromNodeGroups(base.TestCase):
         )
         for v in output.values():
             self.assertEqual(expected_spec, v)
+
+
+class TestFilter(base.TestCase):
+
+    def filter_master_nodes(self):
+        nodes = {
+            'a': {
+                'labels': ['node-role.kubernetes.io/master', 'zzzz=ssss']
+            },
+            'b': {
+                'labels': ['ccc=ddd']
+            }
+        }
+        output = node_normalizer.filter(
+            nodes,
+            ['node-role.kubernetes.io/master']
+        )
+        self.assertEqual(output.keys(), ['a'])
+
+    def filter_master_etcd_nodes(self):
+        ma = ['node-role.kubernetes.io/master', 'node-role.remora/etcd']
+        m  = ['node-role.kubernetes.io/master']
+        a  = ['node-role.remora/etcd']
+        x  = ['ccc']
+        nodes = {
+            'a': {
+                'labels': ['aaa', *ma]
+            },
+            'b': {
+                'labels': m
+            },
+            'd': {
+                'labels': a
+            },
+            'e': {
+                'labels': x
+            },
+        }
+        output = node_normalizer.filter(
+            nodes,
+            ma
+        )
+        self.assertEqual(output.keys(), ['a'])

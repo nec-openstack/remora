@@ -1,22 +1,16 @@
 ---
 nodeGroups:
   master:
-    spec:
-      kubernetes:
-        labels:
-          - "node-role.kubernetes.io/master"
-        taints:
-          - "node-role.kubernetes.io/master=:NoSchedule"
     nodes:
     - "192.168.1.111"
     - "192.168.1.112"
   master_arm64:
     spec:
+      labels:
+        - "node-role.kubernetes.io/master"
+      taints:
+        - "node-role.kubernetes.io/master=:NoSchedule"
       kubernetes:
-        labels:
-          - "node-role.kubernetes.io/master"
-        taints:
-          - "node-role.kubernetes.io/master=:NoSchedule"
         image:
           repository: "gcr.io/google_containers/hyperkube-arm64"
     nodes:
