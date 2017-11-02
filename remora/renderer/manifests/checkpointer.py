@@ -17,6 +17,5 @@ class PodCheckpointerRenderer(object):
     def __init__(self):
         super(PodCheckpointerRenderer, self).__init__()
 
-
     def render(user_config):
         pass

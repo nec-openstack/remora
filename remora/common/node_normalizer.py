@@ -89,8 +89,8 @@ def master_nodes(nodes):
 
 
 def calculated_nodes(user_config):
-    """
-    Return nodes dict which contains calculated values
-    such as etcd server list
+    """Return nodes dict
+
+    Nodes dict contains calculated values such as etcd server list
     """
     return normarize(user_config)

@@ -12,7 +12,6 @@
 #    under the License.
 
 import copy
-import os
 
 from remora.common import node_normalizer
 from remora import constants
@@ -58,7 +57,7 @@ class TestExtractNodesFromNodeGroups(base.TestCase):
         )
 
     def test_dict_contains_node_groups_spec(self):
-        expected_spec = { 'expected': 'hoge' }
+        expected_spec = {'expected': 'hoge'}
         node_groups = {
             'master': {
                 'spec': expected_spec,
@@ -71,8 +70,8 @@ class TestExtractNodesFromNodeGroups(base.TestCase):
             self.assertEqual(expected_spec, v)
 
     def test_dict_contains_default_spec(self):
-        default_spec = { 'default': 'spec' }
-        node_spec = { 'node': 'spec' }
+        default_spec = {'default': 'spec'}
+        node_spec = {'node': 'spec'}
         expected_spec = {
             'default': 'spec',
             'node': 'spec'
@@ -110,9 +109,9 @@ class TestFilter(base.TestCase):
 
     def filter_master_etcd_nodes(self):
         ma = ['node-role.kubernetes.io/master', 'node-role.remora/etcd']
-        m  = ['node-role.kubernetes.io/master']
-        a  = ['node-role.remora/etcd']
-        x  = ['ccc']
+        m = ['node-role.kubernetes.io/master']
+        a = ['node-role.remora/etcd']
+        x = ['ccc']
         nodes = {
             'a': {
                 'labels': ['aaa', *ma]

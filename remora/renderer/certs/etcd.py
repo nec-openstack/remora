@@ -17,6 +17,5 @@ class EtcdCertsRenderer(object):
     def __init__(self):
         super(EtcdCertsRenderer, self).__init__()
 
-
     def render(user_config):
         pass

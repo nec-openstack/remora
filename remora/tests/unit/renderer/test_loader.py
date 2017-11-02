@@ -11,12 +11,10 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import copy
-import os
 
-from remora.renderer import loader
 from remora.renderer.certs import etcd
 from remora.renderer.certs import kubernetes
+from remora.renderer import loader
 from remora.renderer.manifests import apiserver
 from remora.renderer.manifests import checkpointer
 from remora.renderer.manifests import controller_manager

@@ -17,6 +17,5 @@ class KeepalivedRenderer(object):
     def __init__(self):
         super(KeepalivedRenderer, self).__init__()
 
-
     def render(user_config):
         pass

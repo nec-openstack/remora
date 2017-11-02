@@ -17,6 +17,5 @@ class KubeSchedulerRenderer(object):
     def __init__(self):
         super(KubeSchedulerRenderer, self).__init__()
 
-
     def render(user_config):
         pass

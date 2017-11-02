@@ -17,6 +17,5 @@ class KubeProxyRenderer(object):
     def __init__(self):
         super(KubeProxyRenderer, self).__init__()
 
-
     def render(user_config):
         pass

@@ -17,6 +17,5 @@ class KubernetesCertsRenderer(object):
     def __init__(self):
         super(KubernetesCertsRenderer, self).__init__()
 
-
     def render(user_config):
         pass

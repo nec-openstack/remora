@@ -17,6 +17,5 @@ class KubeControllerManagerRenderer(object):
     def __init__(self):
         super(KubeControllerManagerRenderer, self).__init__()
 
-
     def render(user_config):
         pass

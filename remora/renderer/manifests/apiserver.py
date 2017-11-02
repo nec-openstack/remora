@@ -17,6 +17,5 @@ class KubeApiServerRenderer(object):
     def __init__(self):
         super(KubeApiServerRenderer, self).__init__()
 
-
     def render(user_config):
         pass
