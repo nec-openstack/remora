@@ -57,5 +57,5 @@ class TestDefaultK8sManifestsRendererLoader(base.TestCase):
 
         for r in renderers:
             with self.subTest(r=r):
-                renderer = renderer_loader.load(r[0])
+                renderer = renderer_loader.load(r[0], user_config={})
                 self.assertIsInstance(renderer, r[1])

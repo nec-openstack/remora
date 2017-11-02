@@ -42,6 +42,9 @@ nodeGroups:
     - "192.168.1.141"
 
 spec:
+  local:
+    assets_dir: "~/.kube/example"
+
   kubernetes:
     image:
       repository: "gcr.io/google_containers/hyperkube"

@@ -11,11 +11,11 @@
 #   License for the specific language governing permissions and limitations
 #   under the License.
 
+from remora.renderer import manifests
 
-class KeepalivedRenderer(object):
+
+class KeepalivedRenderer(manifests.BaseRenderer):
     """docstring for KeepalivedRenderer."""
-    def __init__(self):
-        super(KeepalivedRenderer, self).__init__()
 
-    def render(user_config):
-        pass
+    file_path = 'kube-apiserver.yaml'
+    template_path = 'kube-apiserver.yaml.j2'

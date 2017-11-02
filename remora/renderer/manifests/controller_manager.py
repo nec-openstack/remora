@@ -11,11 +11,11 @@
 #   License for the specific language governing permissions and limitations
 #   under the License.
 
+from remora.renderer import manifests
 
-class KubeControllerManagerRenderer(object):
+
+class KubeControllerManagerRenderer(manifests.BaseRenderer):
     """docstring for KubeControllerManagerRenderer."""
-    def __init__(self):
-        super(KubeControllerManagerRenderer, self).__init__()
 
-    def render(user_config):
-        pass
+    file_path = 'kube-apiserver.yaml'
+    template_path = 'kube-apiserver.yaml.j2'

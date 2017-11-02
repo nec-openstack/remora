@@ -78,3 +78,7 @@ class RemoraException(Exception):
 
 class LoadingError(RemoraException):
     msg_fmt = _("Error loading plugin '%(name)s'")
+
+
+class AssetsDirNotSpecified(RemoraException):
+    msg_fmt = _("Error assets_dir is not configured: spec.local.assets_dir")
