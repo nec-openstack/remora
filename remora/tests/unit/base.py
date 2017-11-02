@@ -12,10 +12,10 @@
 #    under the License.
 
 import mock
-import testtools
+import unittest
 
 
-class TestCase(testtools.TestCase):
+class TestCase(unittest.TestCase):
 
     def setUp(self):
         super(TestCase, self).setUp()

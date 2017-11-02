@@ -11,16 +11,12 @@
 #   License for the specific language governing permissions and limitations
 #   under the License.
 
-from remora.common.loader import default
 
-
-class DefaultCertsRendererLoader(default.DefaultLoader):
+class KubeApiServerRenderer(object):
+    """docstring for KubeApiServerRenderer."""
     def __init__(self):
-        super(DefaultCertsRendererLoader, self).__init__(
-            namespace='remora_certs_renderers')
+        super(KubeApiServerRenderer, self).__init__()
 
 
-class DefaultK8sManifestsRendererLoader(default.DefaultLoader):
-    def __init__(self):
-        super(DefaultK8sManifestsRendererLoader, self).__init__(
-            namespace='remora_k8s_manifests_renderers')
+    def render(user_config):
+        pass

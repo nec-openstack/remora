@@ -17,20 +17,47 @@ import os
 from remora.renderer import loader
 from remora.renderer.certs import etcd
 from remora.renderer.certs import kubernetes
+from remora.renderer.manifests import apiserver
+from remora.renderer.manifests import checkpointer
+from remora.renderer.manifests import controller_manager
+from remora.renderer.manifests import keepalived
+from remora.renderer.manifests import proxy
+from remora.renderer.manifests import scheduler
 import remora.tests.unit.base as base
 
 
 class TestDefaultCertsRendererLoader(base.TestCase):
 
-    def test_etcd_certs_renderer_available(self):
+    def test_renderer_available(self):
         renderer_loader = loader.DefaultCertsRendererLoader()
-        etcd_certs_renderer = renderer_loader.load('etcd')
-        self.assertIsInstance(etcd_certs_renderer, etcd.EtcdCertsRenderer)
+        renderers = [
+            ('etcd', etcd.EtcdCertsRenderer),
+            ('kubernetes', kubernetes.KubernetesCertsRenderer),
+        ]
 
-    def test_k8s_certs_renderer_available(self):
-        renderer_loader = loader.DefaultCertsRendererLoader()
-        k8s_certs_renderer = renderer_loader.load('kubernetes')
-        self.assertIsInstance(
-            k8s_certs_renderer,
-            kubernetes.KubernetesCertsRenderer
-        )
+        for r in renderers:
+            with self.subTest(r=r):
+                renderer = renderer_loader.load(r[0])
+                self.assertIsInstance(renderer, r[1])
+
+
+class TestDefaultK8sManifestsRendererLoader(base.TestCase):
+
+    def test_renderer_available(self):
+        renderer_loader = loader.DefaultK8sManifestsRendererLoader()
+        renderers = [
+            ('kube_apiserver', apiserver.KubeApiServerRenderer),
+            (
+                'kube_controller_manager',
+                controller_manager.KubeControllerManagerRenderer
+            ),
+            ('kube_scheduler', scheduler.KubeSchedulerRenderer),
+            ('kube_proxy', proxy.KubeProxyRenderer),
+            ('pod_checkpointer', checkpointer.PodCheckpointerRenderer),
+            ('keepalived', keepalived.KeepalivedRenderer),
+        ]
+
+        for r in renderers:
+            with self.subTest(r=r):
+                renderer = renderer_loader.load(r[0])
+                self.assertIsInstance(renderer, r[1])
