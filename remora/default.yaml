@@ -9,6 +9,7 @@ nodeGroups:
         - "node-role.kubernetes.io/master=:NoSchedule"
 
 spec:
+  arch: ['amd64']
   kubernetes:
     image:
       repository: "gcr.io/google_containers/hyperkube"

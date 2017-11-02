@@ -10,6 +10,7 @@ nodeGroups:
         - "node-role.kubernetes.io/master"
       taints:
         - "node-role.kubernetes.io/master=:NoSchedule"
+        - "beta.kubernetes.io/arch=arm64=:NoSchedule"
       kubernetes:
         image:
           repository: "gcr.io/google_containers/hyperkube-arm64"
@@ -20,6 +21,8 @@ nodeGroups:
     - "192.168.1.121"
   worker_arm64:
     spec:
+      taints:
+        - "beta.kubernetes.io/arch=arm64=:NoSchedule"
       kubernetes:
         image:
           repository: "gcr.io/google_containers/hyperkube-arm64"
@@ -27,6 +30,8 @@ nodeGroups:
     - "192.168.1.131"
   worker_arm:
     spec:
+      taints:
+        - "beta.kubernetes.io/arch=arm=:NoSchedule"
       kubernetes:
         image:
           repository: "gcr.io/google_containers/hyperkube-arm"
