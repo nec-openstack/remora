@@ -53,11 +53,14 @@ def all():
 
 
 @task
-@roles('etcd')
+@runs_once
 def correct_hostname():
-    hostname = run('hostname').stdout
-    hostnames = env.get('etcd_hosts', {})
-    hostnames[env.host] = hostname
+    hostnames = env.configs.get('etcd', {}).get('hosts', None)
+    if hostnames is None:
+        hostnames = {}
+        etcds = env.roledefs.get('etcd', [])
+        for etcd in etcds:
+            hostnames[etcd] = etcd
     env['etcd_hosts'] = hostnames
 
 
