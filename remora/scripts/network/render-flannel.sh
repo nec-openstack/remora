@@ -72,10 +72,21 @@ data:
   cni-conf.json: |
     {
       "name": "cbr0",
-      "type": "flannel",
-      "delegate": {
-        "isDefaultGateway": true
-      }
+      "plugins": [
+        {
+          "type": "flannel",
+          "delegate": {
+            "hairpinMode": true,
+            "isDefaultGateway": true
+          }
+        },
+        {
+          "type": "portmap",
+          "capabilities": {
+            "portMappings": true
+          }
+        }
+      ]
     }
   net-conf.json: |
     {
@@ -103,11 +114,42 @@ spec:
       hostNetwork: true
       nodeSelector:
         beta.kubernetes.io/arch: amd64
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
       serviceAccountName: flannel
+      initContainers:
+      - name: install-cni
+        image: ${FLANNEL_IMAGE_REPO}:${FLANNEL_VERSION}
+        command:
+        - cp
+        args:
+        - -f
+        - /etc/kube-flannel/cni-conf.json
+        - /etc/cni/net.d/10-flannel.conflist
+        volumeMounts:
+        - name: cni
+          mountPath: /etc/cni/net.d
+        - name: flannel-cfg
+          mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
         image: ${FLANNEL_IMAGE_REPO}:${FLANNEL_VERSION}
-        command: [ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr", "--iface=\$(POD_IP)"]
+        command:
+        - /opt/bin/flanneld
+        args:
+        - --ip-masq
+        - --kube-subnet-mgr
+        - --iface
+        - \$(POD_IP)
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "50Mi"
+          limits:
+            cpu: "100m"
+            memory: "50Mi"
         securityContext:
           privileged: true
         env:
@@ -128,18 +170,6 @@ spec:
           mountPath: /run
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
-      - name: install-cni
-        image: ${FLANNEL_IMAGE_REPO}:${FLANNEL_VERSION}
-        command: [ "/bin/sh", "-c", "set -e -x; cp -f /etc/kube-flannel/cni-conf.json /etc/cni/net.d/10-flannel.conf; while true; do sleep 3600; done" ]
-        volumeMounts:
-        - name: cni
-          mountPath: /etc/cni/net.d
-        - name: flannel-cfg
-          mountPath: /etc/kube-flannel/
-      tolerations:
-      - key: node-role.kubernetes.io/master
-        operator: Exists
-        effect: NoSchedule
       volumes:
         - name: run
           hostPath:

@@ -50,6 +50,6 @@ etcd:
   discovery_service_url: "https://discovery.etcd.io/new?size={0}"
 
 flannel:
-  version: v0.8.0
+  version: "v0.9.1-amd64"
   image_repo: quay.io/coreos/flannel
   backend_type: vxlan

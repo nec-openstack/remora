@@ -74,6 +74,6 @@ spec:
   flannel:
     image:
       repository: "quay.io/coreos/flannel"
-      tag: "v0.8.0"
+      tag: "v0.9.1-amd64"
       pullPolicy: "Always"
     backendType: vxlan
