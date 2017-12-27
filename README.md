@@ -88,7 +88,7 @@ on the top of OpenStack.
 Remora requires some dependencies, so it's needed to install.
 
 ```bash
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
 
 And also Remora will use `kubectl` command. So please install `kubectl`.
