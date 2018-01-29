@@ -164,7 +164,7 @@ spec:
           mountPath: /etc/cni/net.d
         - name: host-cni-bin
           mountPath: /host/opt/cni/bin/
-        - name: kube-flannel-cfg
+        - name: flannel-cfg
           mountPath: /flannel.conflist.default
           subPath: cni-conf.json
       volumes:
