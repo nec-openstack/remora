@@ -53,3 +53,5 @@ flannel:
   version: "v0.9.1-amd64"
   image_repo: quay.io/coreos/flannel
   backend_type: vxlan
+  cni_version: "v0.3.0"
+  cni_image_repo: "quay.io/coreos/flannel-cni"

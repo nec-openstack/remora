@@ -119,20 +119,6 @@ spec:
         operator: Exists
         effect: NoSchedule
       serviceAccountName: flannel
-      initContainers:
-      - name: install-cni
-        image: ${FLANNEL_IMAGE_REPO}:${FLANNEL_VERSION}
-        command:
-        - cp
-        args:
-        - -f
-        - /etc/kube-flannel/cni-conf.json
-        - /etc/cni/net.d/10-flannel.conflist
-        volumeMounts:
-        - name: cni
-          mountPath: /etc/cni/net.d
-        - name: flannel-cfg
-          mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
         image: ${FLANNEL_IMAGE_REPO}:${FLANNEL_VERSION}
@@ -170,6 +156,21 @@ spec:
           mountPath: /run
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
+      - name: install-cni
+        image: image: ${FLANNEL_CNI_IMAGE_REPO}:${FLANNEL_CNI_VERSION}
+        command: ["/install-cni.sh"]
+        env:
+        # The CNI network config to install on each node.
+        - name: CNI_NETWORK_CONFIG
+            valueFrom:
+            configMapKeyRef:
+                name: kube-flannel-cfg
+                key: cni-conf.json
+        volumeMounts:
+        - name: cni
+          mountPath: /etc/cni/net.d
+        - name: host-cni-bin
+          mountPath: /host/opt/cni/bin/
       volumes:
         - name: run
           hostPath:
@@ -180,6 +181,9 @@ spec:
         - name: flannel-cfg
           configMap:
             name: kube-flannel-cfg
+        - name: host-cni-bin
+          hostPath:
+            path: /opt/cni/bin
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 1
