@@ -122,7 +122,7 @@ spec:
       initContainers:
       - name: install-cni-bin
         image: ${FLANNEL_CNI_IMAGE_REPO}:${FLANNEL_CNI_VERSION}
-        command: ['sh', '-c', '"cp /opt/cni/bin/* /tmp/"']
+        command: ['sh', '-c', '"cp /opt/cni/bin/* /host/opt/cni/bin/"']
         volumeMounts:
         - name: host-cni-bin
           mountPath: /host/opt/cni/bin/
