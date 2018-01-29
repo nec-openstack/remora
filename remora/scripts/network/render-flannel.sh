@@ -159,18 +159,14 @@ spec:
       - name: install-cni
         image: ${FLANNEL_CNI_IMAGE_REPO}:${FLANNEL_CNI_VERSION}
         command: ["/install-cni.sh"]
-        env:
-        # The CNI network config to install on each node.
-        - name: CNI_NETWORK_CONFIG
-          valueFrom:
-            configMapKeyRef:
-              name: kube-flannel-cfg
-              key: cni-conf.json
         volumeMounts:
         - name: cni
           mountPath: /etc/cni/net.d
         - name: host-cni-bin
           mountPath: /host/opt/cni/bin/
+        - name: kube-flannel-cfg
+          mountPath: /flannel.conflist.default
+          subPath: cni-conf.json
       volumes:
         - name: run
           hostPath:
