@@ -157,7 +157,7 @@ spec:
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
       - name: install-cni
-        image: image: ${FLANNEL_CNI_IMAGE_REPO}:${FLANNEL_CNI_VERSION}
+        image: ${FLANNEL_CNI_IMAGE_REPO}:${FLANNEL_CNI_VERSION}
         command: ["/install-cni.sh"]
         env:
         # The CNI network config to install on each node.
