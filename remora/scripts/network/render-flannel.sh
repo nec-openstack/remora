@@ -96,6 +96,25 @@ data:
       }
     }
 ---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: kube-flannel-cni-sh
+  namespace: kube-system
+  labels:
+    tier: node
+    k8s-app: flannel
+data:
+  install-cni-bin.sh: |
+    #!/bin/sh
+
+    set -e -x;
+
+    if [ -w "/host/opt/cni/bin/" ]; then
+        cp /opt/cni/bin/* /host/opt/cni/bin/;
+        echo "Wrote CNI binaries to /host/opt/cni/bin/";
+    fi;
+---
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
@@ -122,10 +141,13 @@ spec:
       initContainers:
       - name: install-cni-bin
         image: ${FLANNEL_CNI_IMAGE_REPO}:${FLANNEL_CNI_VERSION}
-        command: ['sh', '-c', '"cp /opt/cni/bin/* /host/opt/cni/bin/"']
+        command: ['sh', '/bin/install-cni-bin.sh']
         volumeMounts:
         - name: host-cni-bin
           mountPath: /host/opt/cni/bin/
+        - name: kube-flannel-cni-sh
+          mountPath: /bin/install-cni-bin.sh
+          subPath: install-cni-bin.sh
       - name: install-cni-conf
         image: ${FLANNEL_IMAGE_REPO}:${FLANNEL_VERSION}
         command:
@@ -186,6 +208,9 @@ spec:
         - name: flannel-cfg
           configMap:
             name: kube-flannel-cfg
+        - name: kube-flannel-cni-sh
+          configMap:
+            name: kube-flannel-cni-sh
         - name: host-cni-bin
           hostPath:
             path: /opt/cni/bin
