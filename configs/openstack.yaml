@@ -28,6 +28,12 @@ kubernetes:
   # with each kubelet, apiserver and controller_manager.
   cloud_config: /etc/kubernetes/openstack.conf
 
+etcd:
+  hosts:
+    "172.16.2.121": cow001.local
+    "172.16.2.122": cow002.local
+    "172.16.2.123": cow003.local
+
 openstack:
   auth_url: http://192.168.11.197/identity/v3/
   username: demo

@@ -66,6 +66,11 @@ roledefs:
   master: *masters
   worker: *workers
 
+etcd:
+  hosts:
+    "192.168.1.111": cow001.local
+    "192.168.1.112": cow002.local
+
 kubernetes:
   # Public kubernetes service address
   public_service_ip: 192.168.1.101

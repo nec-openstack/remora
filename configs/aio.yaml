@@ -34,5 +34,9 @@ openstack:
   floating_network_id: d3fa92c4-b47f-4043-9578-77e30f761019
   router_id: fe49e9c6-9b60-45d3-881e-4cd5a826cffb
 
+etcd:
+  hosts:
+    "192.168.201.101": cow001.local
+
 flannel:
   backend_type: host-gw
