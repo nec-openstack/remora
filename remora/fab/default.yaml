@@ -29,6 +29,7 @@ kubernetes:
   additional_service_ips: []
   network_plugin: "cni"
   cni_plugin: "flannel"
+  volume_plugin_dir: "/var/lib/kubelet/volumeplugins"
   port: 6443
   internal_port: 6444
   admission_control: "NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota"
