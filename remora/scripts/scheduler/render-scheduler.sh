@@ -20,7 +20,7 @@ spec:
       k8s-app: kube-scheduler
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: remora:kube-scheduler
 roleRef:
@@ -38,7 +38,7 @@ metadata:
   name: kube-scheduler
   namespace: kube-system
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kube-scheduler

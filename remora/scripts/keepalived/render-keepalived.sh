@@ -68,7 +68,7 @@ done
 
 cat << EOF >> $KUBE_TEMPLATE
 ---
-apiVersion: "extensions/v1beta1"
+apiVersion: "apps/v1"
 kind: DaemonSet
 metadata:
   name: kube-keepalived
@@ -77,6 +77,10 @@ metadata:
     tier: control-plane
     k8s-app: kube-keepalived
 spec:
+  selector:
+    matchLabels:
+      tier: control-plane
+      k8s-app: kube-keepalived
   template:
     metadata:
       labels:
@@ -93,14 +97,15 @@ spec:
           capabilities:
             add: ["NET_ADMIN", "NET_BROADCAST"]
         volumeMounts:
-        - mountPath: /etc/keepalived/keepalived.cfg
+        - mountPath: /etc/keepalived.template/keepalived.cfg
           subPath: keepalived.cfg
           name: kube-keepalived-config
-          readOnly: false
         - mountPath: /var/lock
           name: var-lock
           readOnly: false
         command:
+        - mkdir -p /etc/keepalived &&
+        - cp /etc/keepalived.template/keepalived.cfg /etc/keepalived/keepalived.cfg &&
         - /start.sh
         - /usr/bin/flock
         - /var/lock/keepalived.lock

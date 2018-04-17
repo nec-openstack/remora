@@ -6,7 +6,7 @@ export LC_ALL=C
 KUBE_WEAVE_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-cni-weave.yaml
 mkdir -p $(dirname $KUBE_WEAVE_TEMPLATE)
 cat << EOF > $KUBE_WEAVE_TEMPLATE
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: weave-net

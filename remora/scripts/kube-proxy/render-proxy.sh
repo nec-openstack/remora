@@ -7,7 +7,7 @@ KUBE_PROXY_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-proxy.yaml
 cat << EOF > $KUBE_PROXY_TEMPLATE
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: remora:node-proxier
 roleRef:
@@ -53,7 +53,7 @@ data:
       user:
         tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   labels:

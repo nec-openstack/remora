@@ -54,7 +54,7 @@ metadata:
   namespace: kube-system
 type: Opaque
 ---
-apiVersion: "extensions/v1beta1"
+apiVersion: "apps/v1"
 kind: DaemonSet
 metadata:
   name: kube-apiserver

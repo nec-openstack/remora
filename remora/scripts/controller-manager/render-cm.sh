@@ -43,7 +43,7 @@ spec:
       k8s-app: kube-controller-manager
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: remora:kube-controller-manager
 roleRef:
@@ -71,7 +71,7 @@ metadata:
   namespace: kube-system
 type: Opaque
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kube-controller-manager

@@ -9,7 +9,7 @@ cat << EOF > $KUBE_TEMPLATE
 ---
 # FIXME(yuanying): Fix to apply correct ClusterRole
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: remora:etcd-operator
 roleRef:
@@ -27,7 +27,7 @@ metadata:
   name: etcd-operator
   namespace: kube-system
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: etcd-operator

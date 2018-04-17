@@ -9,7 +9,7 @@ cat << EOF > $KUBE_TEMPLATE
 ---
 # FIXME(yuanying): Fix to apply correct ClusterRole
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: remora:pod-checkpointer
 roleRef:
@@ -56,7 +56,7 @@ data:
       user:
         tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
 ---
-apiVersion: "extensions/v1beta1"
+apiVersion: "apps/v1"
 kind: DaemonSet
 metadata:
   name: pod-checkpointer

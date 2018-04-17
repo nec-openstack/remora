@@ -8,7 +8,7 @@ mkdir -p $(dirname $KUBE_FLANNEL_TEMPLATE)
 cat << EOF > $KUBE_FLANNEL_TEMPLATE
 ---
 kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: flannel
   labels:
@@ -36,7 +36,7 @@ rules:
       - patch
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: flannel
   labels:
@@ -115,7 +115,7 @@ data:
         echo "Wrote CNI binaries to /host/opt/cni/bin/";
     fi;
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: kube-flannel-ds
