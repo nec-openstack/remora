@@ -63,6 +63,10 @@ metadata:
     tier: control-plane
     k8s-app: kube-apiserver
 spec:
+  selector:
+    matchLabels:
+      tier: control-plane
+      k8s-app: kube-apiserver
   template:
     metadata:
       labels:

@@ -124,6 +124,10 @@ metadata:
     tier: node
     k8s-app: flannel
 spec:
+  selector:
+    matchLabels:
+      tier: node
+      k8s-app: flannel
   template:
     metadata:
       labels:

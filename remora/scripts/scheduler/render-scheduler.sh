@@ -48,6 +48,10 @@ metadata:
     k8s-app: kube-scheduler
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      tier: control-plane
+      k8s-app: kube-scheduler
   template:
     metadata:
       labels:

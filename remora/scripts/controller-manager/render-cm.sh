@@ -81,6 +81,10 @@ metadata:
     k8s-app: kube-controller-manager
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      tier: control-plane
+      k8s-app: kube-controller-manager
   template:
     metadata:
       labels:

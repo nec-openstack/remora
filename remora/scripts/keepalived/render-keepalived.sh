@@ -104,13 +104,14 @@ spec:
           name: var-lock
           readOnly: false
         command:
-        - mkdir -p /etc/keepalived &&
-        - cp /etc/keepalived.template/keepalived.cfg /etc/keepalived/keepalived.cfg &&
-        - /start.sh
-        - /usr/bin/flock
-        - /var/lock/keepalived.lock
-        - -c
-        - "/usr/sbin/keepalived -f /etc/keepalived/keepalived.cfg -l -D -P -n"
+        - "/bin/sh"
+        - "-ec"
+        - |
+          mkdir -p /etc/keepalived
+          NET_IFACE=\$(ip -f inet -o addr | grep \${POD_IP} | cut -d' ' -f 2)
+          sed s/__NET_IFACE__/\${NET_IFACE}/g /etc/keepalived.template/keepalived.cfg > /etc/keepalived/keepalived.cfg
+          /usr/bin/flock /var/lock/keepalived.lock -c \
+            "/usr/sbin/keepalived -f /etc/keepalived/keepalived.cfg -l -D -P -n"
         env:
         - name: POD_IP
           valueFrom:

@@ -65,6 +65,10 @@ metadata:
     tier: control-plane
     k8s-app: pod-checkpointer
 spec:
+  selector:
+    matchLabels:
+      tier: control-plane
+      k8s-app: pod-checkpointer
   template:
     metadata:
       labels:
