@@ -72,7 +72,7 @@ ExecStart=${DOCKER_PATH} run \\
         --client-ca-file=/etc/kubernetes/ca.crt \\
         --cgroup-driver=${KUBE_CGROUP_DRIVER:-""} \\
         --pod-manifest-path=/etc/kubernetes/manifests \\
-        --volume-plugin-dir= ${KUBE_VOLUME_PLUGIN_DIR} \\
+        --volume-plugin-dir=${KUBE_VOLUME_PLUGIN_DIR} \\
         ${KUBELET_NODE_LABELS} \\
         ${KUBELET_REGISTER_WITH_TAINTS} \\
         --v=${KUBE_LOG_LEVEL:-"2"}
