@@ -48,7 +48,7 @@ etcd:
   certs_dir: "/etc/etcd/pki"
   cluster_ip: 10.254.0.20
   bootstrap_cluster_ip: 10.254.0.30
-  discovery_service_url: "https://discovery.etcd.io/new?size={0}"
+  heartbeat_interval:: 100
 
 flannel:
   version: "v0.10.0-amd64"
