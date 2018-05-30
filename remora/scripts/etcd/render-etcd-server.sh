@@ -39,6 +39,7 @@ spec:
     - --peer-trusted-ca-file=/etc/etcd/pki/ca.crt
     - --data-dir=/var/lib/etcd
     - --heartbeat-interval=${ETCD_HEARTBEAT_INTERVAL}
+    - --election-timeout=${ETCD_ELECTION_TIMEOUT}
     volumeMounts:
     - mountPath: /var/lib/etcd
       name: etcd

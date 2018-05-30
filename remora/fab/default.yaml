@@ -49,6 +49,7 @@ etcd:
   cluster_ip: 10.254.0.20
   bootstrap_cluster_ip: 10.254.0.30
   heartbeat_interval: 100
+  election_timeout: 500
 
 flannel:
   version: "v0.10.0-amd64"
