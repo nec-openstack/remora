@@ -65,7 +65,6 @@ ExecStart=${DOCKER_PATH} run \\
         --cluster-dns=${KUBE_CLUSTER_DNS_IP} \\
         --cluster-domain=cluster.local \\
         --kubeconfig=/etc/kubernetes/kubelet.yaml \\
-        --require-kubeconfig=true \\
         --cloud-provider=${KUBE_CLOUD_PROVIDER:-""} \\
         --cloud-config=${KUBE_CLOUD_CONFIG:-""} \\
         --authorization-mode=Webhook \\
