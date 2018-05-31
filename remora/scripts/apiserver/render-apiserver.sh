@@ -95,9 +95,8 @@ spec:
         - --etcd-cafile=/etc/kubernetes/secrets/etcd-client-ca.crt
         - --etcd-certfile=/etc/kubernetes/secrets/etcd-client.crt
         - --etcd-keyfile=/etc/kubernetes/secrets/etcd-client.key
-        - --etcd-quorum-read=true
         - --etcd-servers=${ETCD_SERVERS}
-        - --insecure-port=0
+        - --kubelet-certificate-authority=/etc/kubernetes/secrets/ca.crt
         - --kubelet-client-certificate=/etc/kubernetes/secrets/kubelet-client.crt
         - --kubelet-client-key=/etc/kubernetes/secrets/kubelet-client.key
         - --secure-port=${KUBE_INTERNAL_PORT}
