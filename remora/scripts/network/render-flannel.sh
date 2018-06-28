@@ -96,25 +96,6 @@ data:
       }
     }
 ---
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: kube-flannel-cni-sh
-  namespace: kube-system
-  labels:
-    tier: node
-    k8s-app: flannel
-data:
-  install-cni-bin.sh: |
-    #!/bin/sh
-
-    set -e -x;
-
-    if [ -w "/host/opt/cni/bin/" ]; then
-        cp /opt/cni/bin/* /host/opt/cni/bin/;
-        echo "Wrote CNI binaries to /host/opt/cni/bin/";
-    fi;
----
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -143,16 +124,7 @@ spec:
         effect: NoSchedule
       serviceAccountName: flannel
       initContainers:
-      - name: install-cni-bin
-        image: ${FLANNEL_CNI_IMAGE_REPO}:${FLANNEL_CNI_VERSION}
-        command: ['sh', '/bin/install-cni-bin.sh']
-        volumeMounts:
-        - name: host-cni-bin
-          mountPath: /host/opt/cni/bin/
-        - name: kube-flannel-cni-sh
-          mountPath: /bin/install-cni-bin.sh
-          subPath: install-cni-bin.sh
-      - name: install-cni-conf
+      - name: install-cni
         image: ${FLANNEL_IMAGE_REPO}:${FLANNEL_VERSION}
         command:
         - cp
@@ -193,10 +165,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        - name: POD_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
         volumeMounts:
         - name: run
           mountPath: /run
@@ -212,14 +180,4 @@ spec:
         - name: flannel-cfg
           configMap:
             name: kube-flannel-cfg
-        - name: kube-flannel-cni-sh
-          configMap:
-            name: kube-flannel-cni-sh
-        - name: host-cni-bin
-          hostPath:
-            path: /opt/cni/bin
-  updateStrategy:
-    rollingUpdate:
-      maxUnavailable: 1
-    type: RollingUpdate
 EOF

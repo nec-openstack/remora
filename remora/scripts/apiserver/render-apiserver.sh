@@ -84,7 +84,7 @@ spec:
         - /var/lock/api-server.lock
         - /hyperkube
         - apiserver
-        - --admission-control=${KUBE_ADMISSION_CONTROL}
+        - --enable-admission-plugins=${KUBE_ADMISSION_CONTROL}
         - --advertise-address=\$(POD_IP)
         - --allow-privileged=true
         - --authorization-mode=Node,RBAC
