@@ -5,27 +5,10 @@ export LC_ALL=C
 
 CONFIGURE_CLOUD_ROUTES=false
 
-#FIXME(yuanying): make this be configmap
-if [[ ${KUBE_CLOUD_PROVIDER} == "openstack" ]]; then
-  KUBE_CLOUD_CONFIG_BASENAME=$(basename ${KUBE_CLOUD_CONFIG})
-  KUBE_CLOUD_CONFIG_DIRNAME=$(dirname ${KUBE_CLOUD_CONFIG})
-  KUBE_CLOUD_CONFIG_MOUNT="
-        - mountPath: "${KUBE_CLOUD_CONFIG}"
-          name: kube-cloud-config
-          subPath: "${KUBE_CLOUD_CONFIG_BASENAME}"
-          readOnly: false
-"
-  KUBE_CLOUD_CONFIG_VOLUME="
-      - name: kube-cloud-config
-        hostPath:
-          path: "${KUBE_CLOUD_CONFIG_DIRNAME}"
-"
-  CONFIGURE_CLOUD_ROUTES=true
-fi
-
 KUBE_TEMPLATE=${LOCAL_MANIFESTS_DIR}/kube-controller-manager.yaml
 
 CA=$(cat ${KUBE_CA_CERT} | base64 | tr -d '\n')
+CA_KEY=$(cat ${KUBE_CA_KEY} | base64 | tr -d '\n')
 SA_KEY=$(cat ${KUBE_SA_KEY} | base64 | tr -d '\n')
 
 cat << EOF > $KUBE_TEMPLATE
@@ -64,6 +47,7 @@ metadata:
 apiVersion: v1
 data:
   ca.crt: ${CA}
+  ca.key: ${CA_KEY}
   service-account.key: ${SA_KEY}
 kind: Secret
 metadata:
@@ -111,21 +95,23 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
       - name: kube-controller-manager
+        resources:
+          requests:
+            cpu: 200m
         image: ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
         command:
         - ./hyperkube
         - controller-manager
         - --allocate-node-cidrs=true
-        - --cloud-provider=
         - --cluster-cidr=${KUBE_CLUSTER_CIDR}
-        - --node-cidr-mask-size=${KUBE_NODE_CIDR_MASK_SIZE}
-        - --configure-cloud-routes=${CONFIGURE_CLOUD_ROUTES}
+        - --cluster-signing-cert-file=/etc/kubernetes/secrets/ca.crt
+        - --cluster-signing-key-file=/etc/kubernetes/secrets/ca.key
+        - --controllers=*,bootstrapsigner,tokencleaner
         - --leader-elect=true
+        - --node-cidr-mask-size=${KUBE_NODE_CIDR_MASK_SIZE}
         - --root-ca-file=/etc/kubernetes/secrets/ca.crt
-        - --use-service-account-credentials=true
         - --service-account-private-key-file=/etc/kubernetes/secrets/service-account.key
-        - --cloud-provider=${KUBE_CLOUD_PROVIDER:-""}
-        - --cloud-config=${KUBE_CLOUD_CONFIG:-""}
+        - --use-service-account-credentials=true
         - --v=${KUBE_LOG_LEVEL:-"2"}
         livenessProbe:
           httpGet:
@@ -137,10 +123,20 @@ spec:
         - name: secrets
           mountPath: /etc/kubernetes/secrets
           readOnly: true
-        - name: ssl-host
-          mountPath: /etc/ssl/certs
+        - mountPath: /usr/libexec/kubernetes/kubelet-plugins/volume/exec
+          name: flexvolume-dir
+        - mountPath: /usr/share/ca-certificates
+          name: usr-share-ca-certificates
           readOnly: true
-${KUBE_CLOUD_CONFIG_MOUNT:-""}
+        - mountPath: /usr/local/share/ca-certificates
+          name: usr-local-share-ca-certificates
+          readOnly: true
+        - mountPath: /etc/ca-certificates
+          name: etc-ca-certificates
+          readOnly: true
+        - mountPath: /etc/ssl/certs
+          name: ca-certs
+          readOnly: true
       nodeSelector:
         node-role.kubernetes.io/master: ""
       securityContext:
@@ -157,10 +153,26 @@ ${KUBE_CLOUD_CONFIG_MOUNT:-""}
       - name: secrets
         secret:
           secretName: kube-controller-manager
-      - name: ssl-host
-        hostPath:
+      - hostPath:
+          path: /etc/ssl/certs
+          type: DirectoryOrCreate
+        name: ca-certs
+      - hostPath:
+          path: ${KUBE_VOLUME_PLUGIN_DIR}
+          type: DirectoryOrCreate
+        name: flexvolume-dir
+      - hostPath:
           path: /usr/share/ca-certificates
-${KUBE_CLOUD_CONFIG_VOLUME:-""}
+          type: DirectoryOrCreate
+        name: usr-share-ca-certificates
+      - hostPath:
+          path: /usr/local/share/ca-certificates
+          type: DirectoryOrCreate
+        name: usr-local-share-ca-certificates
+      - hostPath:
+          path: /etc/ca-certificates
+          type: DirectoryOrCreate
+        name: etc-ca-certificates
       dnsPolicy: Default # Don't use cluster DNS.
 
 EOF

@@ -3,23 +3,6 @@
 set -eu
 export LC_ALL=C
 
-#FIXME(yuanying): make this be configmap
-if [[ ${KUBE_CLOUD_PROVIDER} == "openstack" ]]; then
-  KUBE_CLOUD_CONFIG_BASENAME=$(basename ${KUBE_CLOUD_CONFIG})
-  KUBE_CLOUD_CONFIG_DIRNAME=$(dirname ${KUBE_CLOUD_CONFIG})
-  KUBE_CLOUD_CONFIG_MOUNT="
-        - mountPath: "${KUBE_CLOUD_CONFIG}"
-          name: kube-cloud-config
-          subPath: "${KUBE_CLOUD_CONFIG_BASENAME}"
-          readOnly: false
-"
-  KUBE_CLOUD_CONFIG_VOLUME="
-      - name: kube-cloud-config
-        hostPath:
-          path: "${KUBE_CLOUD_CONFIG_DIRNAME}"
-"
-fi
-
 if [[ ${ETCD_SELFHOSTED} == 'true' ]]; then
   ETCD_SERVERS="https://${ETCD_CLUSTER_IP}:2379"
 fi
@@ -78,24 +61,28 @@ spec:
     spec:
       containers:
       - name: kube-apiserver
+        resources:
+          requests:
+            cpu: 250m
         image: ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
         command:
         - /usr/bin/flock
         - /var/lock/api-server.lock
         - /hyperkube
         - apiserver
-        - --enable-admission-plugins=${KUBE_ADMISSION_CONTROL}
+        - --authorization-mode=Node,RBAC
         - --advertise-address=\$(POD_IP)
         - --allow-privileged=true
-        - --authorization-mode=Node,RBAC
         - --bind-address=0.0.0.0
         - --client-ca-file=/etc/kubernetes/secrets/ca.crt
-        - --cloud-provider=${KUBE_CLOUD_PROVIDER:-""}
-        - --cloud-config=${KUBE_CLOUD_CONFIG:-""}
+        - --disable-admission-plugins=${KUBE_DISABLE_ADMISSION_PLUGINS}
+        - --enable-admission-plugins=${KUBE_ENABLE_ADMISSION_PLUGINS}
+        - --enable-bootstrap-token-auth=true
         - --etcd-cafile=/etc/kubernetes/secrets/etcd-client-ca.crt
         - --etcd-certfile=/etc/kubernetes/secrets/etcd-client.crt
         - --etcd-keyfile=/etc/kubernetes/secrets/etcd-client.key
         - --etcd-servers=${ETCD_SERVERS}
+        - --insecure-port=0
         - --kubelet-certificate-authority=/etc/kubernetes/secrets/ca.crt
         - --kubelet-client-certificate=/etc/kubernetes/secrets/kubelet-client.crt
         - --kubelet-client-key=/etc/kubernetes/secrets/kubelet-client.key
@@ -103,7 +90,6 @@ spec:
         - --service-account-key-file=/etc/kubernetes/secrets/service-account.pub
         - --service-cluster-ip-range=${KUBE_SERVICE_IP_RANGE}
         - --storage-backend=${KUBE_STORAGE_BACKEND}
-        - --tls-ca-file=/etc/kubernetes/secrets/ca.crt
         - --tls-cert-file=/etc/kubernetes/secrets/apiserver.crt
         - --tls-private-key-file=/etc/kubernetes/secrets/apiserver.key
         - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
@@ -114,8 +100,17 @@ spec:
             fieldRef:
               fieldPath: status.podIP
         volumeMounts:
+        - mountPath: /etc/ca-certificates
+          name: etc-ca-certificates
+          readOnly: true
         - mountPath: /etc/ssl/certs
-          name: ssl-certs-host
+          name: ca-certs
+          readOnly: true
+        - mountPath: /usr/share/ca-certificates
+          name: usr-share-ca-certificates
+          readOnly: true
+        - mountPath: /usr/local/share/ca-certificates
+          name: usr-local-share-ca-certificates
           readOnly: true
         - mountPath: /etc/kubernetes/secrets
           name: secrets
@@ -123,7 +118,6 @@ spec:
         - mountPath: /var/lock
           name: var-lock
           readOnly: false
-${KUBE_CLOUD_CONFIG_MOUNT:-""}
       hostNetwork: true
       nodeSelector:
         node-role.kubernetes.io/master: ""
@@ -134,16 +128,28 @@ ${KUBE_CLOUD_CONFIG_MOUNT:-""}
         operator: Exists
         effect: NoSchedule
       volumes:
-      - name: ssl-certs-host
-        hostPath:
+      - hostPath:
+          path: /etc/ssl/certs
+          type: DirectoryOrCreate
+        name: ca-certs
+      - hostPath:
           path: /usr/share/ca-certificates
+          type: DirectoryOrCreate
+        name: usr-share-ca-certificates
+      - hostPath:
+          path: /usr/local/share/ca-certificates
+          type: DirectoryOrCreate
+        name: usr-local-share-ca-certificates
+      - hostPath:
+          path: /etc/ca-certificates
+          type: DirectoryOrCreate
+        name: etc-ca-certificates
       - name: secrets
         secret:
           secretName: kube-apiserver
       - name: var-lock
         hostPath:
           path: /var/lock
-${KUBE_CLOUD_CONFIG_VOLUME:-""}
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 1

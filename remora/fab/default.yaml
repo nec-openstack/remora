@@ -18,7 +18,7 @@ haproxy:
   keepalived_use_unicast: "true"
 
 kubernetes:
-  version: v1.11.0
+  version: v1.11.1
   hyperkube_image_repo: gcr.io/google_containers/hyperkube
   cluster_cidr: 10.244.0.0/16
   node_cidr_mask_size: 24
@@ -32,7 +32,8 @@ kubernetes:
   volume_plugin_dir: "/var/lib/kubelet/volumeplugins"
   port: 6443
   internal_port: 6444
-  admission_control: "NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota"
+  enable_admission_plugins: NodeRestriction
+  disable_admission_plugins: PersistentVolumeLabel
   storage_backend: etcd3
   certs_dir: "/etc/kubernetes/pki"
   log_level: 2
@@ -40,6 +41,7 @@ kubernetes:
   cloud_config: ""
   upstream_nameservers: '[\"8.8.8.8\", \"8.8.4.4\"]'
   addons: ["kube-proxy", "kube-dns"]
+  cgroup_driver: cgroupfs
 
 etcd:
   selfhosted: "false"

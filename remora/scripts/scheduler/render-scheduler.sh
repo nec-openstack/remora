@@ -78,6 +78,9 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
       - name: kube-scheduler
+        resources:
+          requests:
+            cpu: 100m
         image: ${KUBE_HYPERKUBE_IMAGE_REPO}:${KUBE_VERSION}
         command:
         - ./hyperkube

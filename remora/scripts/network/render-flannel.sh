@@ -157,6 +157,10 @@ spec:
         securityContext:
           privileged: true
         env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
         - name: POD_NAME
           valueFrom:
             fieldRef:

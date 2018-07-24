@@ -33,6 +33,44 @@ metadata:
   labels:
     app: kube-proxy
 data:
+  config.conf: |-
+    apiVersion: kubeproxy.config.k8s.io/v1alpha1
+    bindAddress: 0.0.0.0
+    clientConnection:
+      acceptContentTypes: ""
+      burst: 10
+      contentType: application/vnd.kubernetes.protobuf
+      kubeconfig: /var/lib/kube-proxy/kubeconfig.conf
+      qps: 5
+    clusterCIDR: ${KUBE_CLUSTER_CIDR}
+    configSyncPeriod: 15m0s
+    conntrack:
+      max: null
+      maxPerCore: 32768
+      min: 131072
+      tcpCloseWaitTimeout: 1h0m0s
+      tcpEstablishedTimeout: 24h0m0s
+    enableProfiling: false
+    healthzBindAddress: 0.0.0.0:10256
+    hostnameOverride: ""
+    iptables:
+      masqueradeAll: false
+      masqueradeBit: 14
+      minSyncPeriod: 0s
+      syncPeriod: 30s
+    ipvs:
+      excludeCIDRs: null
+      minSyncPeriod: 0s
+      scheduler: ""
+      syncPeriod: 30s
+    kind: KubeProxyConfiguration
+    metricsBindAddress: 127.0.0.1:10249
+    mode: ""
+    nodePortAddresses: null
+    oomScoreAdj: -999
+    portRange: ""
+    resourceContainer: /kube-proxy
+    udpIdleTimeout: 250ms
   kubeconfig.conf: |
     apiVersion: v1
     kind: Config
@@ -80,8 +118,7 @@ spec:
         command:
         - /hyperkube
         - proxy
-        - --kubeconfig=/var/lib/kube-proxy/kubeconfig.conf
-        - --cluster-cidr=${KUBE_CLUSTER_CIDR}
+        - --config=/var/lib/kube-proxy/config.conf
         - --hostname-override=\$(NODE_NAME)
         env:
           - name: NODE_NAME
@@ -93,10 +130,11 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/kube-proxy
           name: kube-proxy
-        # TODO: Make this a file hostpath mount
         - mountPath: /run/xtables.lock
           name: xtables-lock
-          readOnly: false
+        - mountPath: /lib/modules
+          name: lib-modules
+          readOnly: true
       hostNetwork: true
       serviceAccountName: kube-proxy
       tolerations:
@@ -106,12 +144,18 @@ spec:
         operator: Exists
         effect: NoSchedule
       volumes:
-      - name: kube-proxy
-        configMap:
+      - configMap:
+          defaultMode: 420
           name: kube-proxy
-      - name: xtables-lock
-        hostPath:
+        name: kube-proxy
+      - hostPath:
           path: /run/xtables.lock
+          type: FileOrCreate
+        name: xtables-lock
+      - hostPath:
+          path: /lib/modules
+          type: ""
+        name: lib-modules
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 1

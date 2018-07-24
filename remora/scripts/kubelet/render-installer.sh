@@ -14,9 +14,10 @@ ROOT=\$(dirname "\${BASH_SOURCE}")
 
 mkdir -p /etc/kubernetes
 cp \${ROOT}/kubelet.yaml /etc/kubernetes/
-if [[ -f \${ROOT}/cloud.ini ]]; then
-  cp \${ROOT}/cloud.ini ${KUBE_CLOUD_CONFIG}
-fi
+cp \${ROOT}/kubelet.crt /etc/kubernetes/
+cp \${ROOT}/kubelet.key /etc/kubernetes/
+mkdir -p /var/lib/kubelet
+cp \${ROOT}/config.yaml /var/lib/kubelet/
 grep 'certificate-authority-data' /etc/kubernetes/kubelet.yaml | awk '{print \$2}' | base64 -d > /etc/kubernetes/ca.crt
 cp \${ROOT}/kubelet.service /etc/systemd/system/
 systemctl daemon-reload

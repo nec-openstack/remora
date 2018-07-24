@@ -20,6 +20,6 @@ done
 
 ${LOCAL_KUBECTL} \\
   --record \\
-  --kubeconfig ${KUBE_ASSETS_DIR}/kubeconfig \\
+  --kubeconfig=${KUBE_ASSETS_DIR}/kubeconfig \\
   apply -R -f ${KUBE_MANIFESTS_DIR}/
 EOF
