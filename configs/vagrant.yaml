@@ -6,22 +6,23 @@ local:
 
 
 masters: &masters
-  - 192.168.43.101
+  - 192.168.43.111
+  - 192.168.43.112
 workers: &workers
-  - 192.168.43.102
-  - 192.168.43.103
+  - 192.168.43.113
+  - 192.168.43.114
 
 roledefs:
   bootstrap:
-  - 192.168.43.101
+  - 192.168.43.111
   etcd: *masters
   master: *masters
   worker: *workers
 
 etcd:
   hosts:
-    "192.168.43.101": cow001.local
+    "192.168.43.111": node01.local
 
 kubernetes:
-  version: v1.8.1
-  public_service_ip: 192.168.43.100
+  version: v1.11.1
+  public_service_ip: 192.168.43.110

@@ -19,26 +19,12 @@ end
 
 SCRIPT = <<-EOF
 echo "#{public_key}" >> ~vagrant/.ssh/authorized_keys
-swapoff /dev/sda2
-sed -i -e "/swap/d" /etc/fstab
 EOF
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "envimation/ubuntu-xenial-docker"
-  config.vm.box_url = "https://atlas.hashicorp.com/envimation/boxes/ubuntu-xenial-docker"
+  config.vm.box = "ubuntu/bionic64"
 
-  config.vm.define :master do |master|
-    master.vm.hostname = "master"
-    master.vm.provider "virtualbox" do |v, override|
-      v.customize ["modifyvm", :id, "--memory", "2048"]
-    end
-
-    master.vm.network :private_network, ip: "192.168.43.101"
-
-    master.vm.provision :shell, inline: SCRIPT
-  end
-
-  [[:worker01, 102], [:worker02, 103]].each do |worker|
+  [[:node01, 111], [:node02, 112], [:node03, 113], [:node04, 114]].each do |worker|
     config.vm.define worker[0] do |w|
       w.vm.hostname = worker[0].to_s
       w.vm.provider "virtualbox" do |v, override|
@@ -48,6 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       w.vm.network :private_network, ip: "192.168.43.#{worker[1]}"
 
       w.vm.provision :shell, inline: SCRIPT
+      w.vm.provision "docker", images: ["busybox"]
     end
   end
 

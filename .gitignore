@@ -65,3 +65,4 @@ remora/scripts/userdata/*.yaml
 
 # vagrant
 .vagrant/
+/ubuntu-bionic-18.04-cloudimg-console.log
