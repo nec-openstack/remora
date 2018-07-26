@@ -137,6 +137,7 @@ spec:
         - mountPath: /etc/ssl/certs
           name: ca-certs
           readOnly: true
+      priorityClassName: system-cluster-critical
       nodeSelector:
         node-role.kubernetes.io/master: ""
       securityContext:

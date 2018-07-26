@@ -119,6 +119,7 @@ spec:
           name: var-lock
           readOnly: false
       hostNetwork: true
+      priorityClassName: system-cluster-critical
       nodeSelector:
         node-role.kubernetes.io/master: ""
       tolerations:

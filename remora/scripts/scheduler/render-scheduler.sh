@@ -106,6 +106,7 @@ spec:
             port: 10251  # Note: Using default port. Update if --port option is set differently.
           initialDelaySeconds: 15
           timeoutSeconds: 15
+      priorityClassName: system-cluster-critical
       nodeSelector:
         node-role.kubernetes.io/master: ""
       securityContext:

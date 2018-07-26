@@ -136,6 +136,7 @@ spec:
           name: lib-modules
           readOnly: true
       hostNetwork: true
+      priorityClassName: system-node-critical
       serviceAccountName: kube-proxy
       tolerations:
       - key: CriticalAddonsOnly
