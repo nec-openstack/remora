@@ -22,7 +22,7 @@ authorization:
   webhook:
     cacheAuthorizedTTL: 5m0s
     cacheUnauthorizedTTL: 30s
-cgroupDriver: cgroupfs
+cgroupDriver: ${KUBE_CGROUP_DRIVER:-""}
 cgroupsPerQOS: true
 clusterDNS:
 - ${KUBE_CLUSTER_DNS_IP}
@@ -76,4 +76,6 @@ staticPodPath: /etc/kubernetes/manifests
 streamingConnectionIdleTimeout: 4h0m0s
 syncFrequency: 1m0s
 volumeStatsAggPeriod: 1m0s
+tlsCertFile: /etc/kubernetes/kubelet.crt
+tlsPrivateKeyFile: /etc/kubernetes/kubelet.key
 EOF

@@ -60,14 +60,10 @@ ExecStart=${DOCKER_PATH} run \\
     /hyperkube kubelet \\
         --kubeconfig=/etc/kubernetes/kubelet.yaml \\
         --config=/var/lib/kubelet/config.yaml \\
-        --cgroup-driver=${KUBE_CGROUP_DRIVER:-""} \\
         --cni-bin-dir=/opt/cni/bin \\
         --cni-conf-dir=/etc/cni/net.d \\
         --network-plugin=${KUBE_NETWORK_PLUGIN} \\
-        --resolv-conf=/run/systemd/resolve/resolv.conf \\
         --hostname-override=${NODE_IP} \\
-        --tls-cert-file=/etc/kubernetes/kubelet.crt \\
-        --tls-private-key-file=/etc/kubernetes/kubelet.key \\
         ${KUBELET_NODE_LABELS} \\
         ${KUBELET_REGISTER_WITH_TAINTS} \\
         --v=${KUBE_LOG_LEVEL:-"2"}

@@ -63,6 +63,7 @@ LOCAL_ASSETS_PATH = {
     'ETCD_SERVER_CERT_REQ': 'etcd/node-{}/etcd.csr',
 
     'KUBELET_ASSETS_DIR': 'kubelet/node-{}',
+    'KUBELET_OPENSSL_CONFIG': 'kubelet/node-{}/openssl.cnf',
     'KUBELET_CLIENT_KEY': 'kubelet/node-{}/kubelet.key',
     'KUBELET_CLIENT_CERT': 'kubelet/node-{}/kubelet.crt',
     'KUBELET_CLIENT_CERT_REQ': 'kubelet/node-{}/kubelet.csr',

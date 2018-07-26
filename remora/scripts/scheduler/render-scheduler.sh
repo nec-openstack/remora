@@ -32,6 +32,19 @@ subjects:
   name: kube-scheduler
   namespace: kube-system
 ---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: remora:volume-scheduler
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:volume-scheduler
+subjects:
+- kind: ServiceAccount
+  name: kube-scheduler
+  namespace: kube-system
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
