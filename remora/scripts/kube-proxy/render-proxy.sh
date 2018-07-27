@@ -65,7 +65,7 @@ data:
       syncPeriod: 30s
     kind: KubeProxyConfiguration
     metricsBindAddress: 127.0.0.1:10249
-    mode: ""
+    mode: "${KUBE_PROXY_MODE}"
     nodePortAddresses: null
     oomScoreAdj: -999
     portRange: ""
