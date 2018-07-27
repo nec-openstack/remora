@@ -42,7 +42,7 @@ kubernetes:
   upstream_nameservers: '[\"8.8.8.8\", \"8.8.4.4\"]'
   addons: ["kube-proxy", "kube-dns"]
   cgroup_driver: cgroupfs
-  proxy_mode: "ipvs"
+  proxy_mode: "iptables"
 
 etcd:
   selfhosted: "false"
