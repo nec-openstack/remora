@@ -31,7 +31,6 @@ def dependency():
     require('stage')
     with settings(warn_only=True):
         sudo('rm -rf {0}'.format(env['configs']['temp_dir']))
-        sudo('rm -rf /var/lib/kubelet')
         if env['configs'].get('clean', {}).get('mode', 'soft') == 'soft':
             sudo('docker rm -f `docker ps -a -q`')
         else:
@@ -39,6 +38,7 @@ def dependency():
             sudo('rm -rf /var/lib/docker')
             sudo('systemctl daemon-reload && systemctl enable docker')
 
+        sudo('rm -rf /var/lib/kubelet')
         reboot()
 
 
